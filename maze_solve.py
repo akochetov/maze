@@ -41,7 +41,7 @@ from orientation import Orientation
 from direction import Direction
 from maze_map import MazeMap
 
-maze_file = 'maze20x20 - linefollow - large loop.txt'
+maze_file = 'maze10x10.txt'
 maze_state = MazeState(maze_file)
 car = Car(maze_state, Orientation.SOUTH)
 maze_map = MazeMap(car)
