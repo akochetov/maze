@@ -65,10 +65,11 @@ def right_hand_search():
             car.move(Direction.LEFT)
 
 for i in range(0,1000):
-    time.sleep(0.3)
+    time.sleep(0.1)
     maze_state.save(sys.stdout)
 
     if car.is_out():
+        print(maze_map.get_shortest_path())
         exit()
 
     left_hand_search()
