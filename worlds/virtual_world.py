@@ -1,3 +1,6 @@
+from worlds.world_base import WorldBase
+from brains.orientation import Orientation
+
 class MazePoint:
     """
     "Enum" for maze objects and their transcoding from string (chars) to objects such as wall, empty space, source and goal
@@ -15,7 +18,7 @@ class MazePoint:
     POS = '*'
 
 
-class MazeState(object):
+class VirtualWorld(WorldBase):
     """
     Maze. Loads it's state and interacts with obcejts in maze, such as cars and sensors
     """
@@ -27,6 +30,7 @@ class MazeState(object):
         self.position = [0, 0]
         self.goal = [0, 0]
         self.state = []
+        self.orientation = Orientation.SOUTH
 
         if file is None:
             return
@@ -37,6 +41,9 @@ class MazeState(object):
         except:
             pass
         f.close()
+
+    def set_orientation(self, orientation):
+        self.orientation = orientation
 
     def refresh_points(self):
         """
@@ -101,8 +108,15 @@ class MazeState(object):
             for char in line:
                 output.write(char)
             output.write('\n')
+    
 
-    def move(self, west, east, south, north):
+    def move(self):
+        return self._move(self.orientation == Orientation.WEST,
+                       self.orientation == Orientation.EAST,
+                       self.orientation == Orientation.SOUTH,
+                       self.orientation == Orientation.NORTH)
+
+    def _move(self, west, east, south, north):
         """
         Tries to move an object (Car) in a maze. If destination is a wall - no move will happen
         :param west: True or False. Whether to move west.
@@ -139,7 +153,7 @@ class MazeState(object):
         """
         return self.state[x][y] == MazePoint.WALL
 
-    def is_out(self):
+    def is_out(self, sensors):
         """
         Checks whether current position is now out of maze (exit found)
         :return: True if exit is found, False otherwise

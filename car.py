@@ -1,7 +1,8 @@
-from sensor import Sensor
-from orientation import Orientation
-from direction import Direction
-
+from sensors.distance_sensor import Sensor
+from brains.orientation import Orientation
+from brains.direction import Direction
+from chassis.chassis_base import ChassisBase
+from worlds.world_base import WorldBase
 
 class Car(object):
 
@@ -13,7 +14,7 @@ class Car(object):
     Car. Has sensors and has a maze reference.
     Interacts with maze through sensors and moves within maze.
     """
-    def __init__(self, maze_state, orientation):
+    def __init__(self, world, chassis, orientation):
         """
         Constructor. Set instance vars: maze and orientation. Create and setup sensors
         :param maze_state: MazeState instance
@@ -23,13 +24,14 @@ class Car(object):
         self.on_rotate = []
         self.on_crossing = []
 
-        self.maze = maze_state
+        self.world = world
+        self.chassis = chassis
         self.orientation = orientation
 
         self.sensors = [
-            Sensor(maze_state,Orientation.rotate_ccw(orientation)),
-            Sensor(maze_state,orientation),
-            Sensor(maze_state,Orientation.rotate_cw(orientation))
+            Sensor(world,Orientation.rotate_ccw(orientation)),
+            Sensor(world,orientation),
+            Sensor(world,Orientation.rotate_cw(orientation))
         ]
 
     def get_crossing_data(self):
@@ -44,7 +46,9 @@ class Car(object):
         """
 
         # rotate car
+        self.chassis.rotate(90 if cw else -90)
         self.orientation = Orientation.rotate(self.orientation, cw)
+        self.world.set_orientation(self.orientation)
 
         # "rotate" sensors too
         for sensor in self.sensors:
@@ -68,31 +72,33 @@ class Car(object):
         """
         Move car one step in Direction.
         In case it is FORWARD, moves where current Orientation is heading.
-        If LEFT or RIGHT, turns first (changes Orientation) and then makes one step forward.
+        If LEFT or RIGHT, turns first (changes Orientation) and quits.
         :param direction: Direction where to move
         """
         if direction == Direction.LEFT:
             self.rotate_ccw()
+            return
         if direction == Direction.RIGHT:
             self.rotate_cw()
+            return
 
         sensors = self.get_crossing_data()
-        if (self.maze.move(self.orientation == Orientation.WEST,
-                       self.orientation == Orientation.EAST,
-                       self.orientation == Orientation.SOUTH,
-                       self.orientation == Orientation.NORTH)):
-            self.trigger_on_move()
+        self.chassis.move(100)
+        self.trigger_on_move()
 
-            # detect if we reached crossing and if so - fire events
-            if direction == Direction.FORWARD and sensors != self.get_crossing_data() and self.get_crossing_data() != Car.SENSOR_FWD:
-                self.trigger_on_crossing()
+        # detect if we reached crossing and if so - fire events
+        if sensors != self.get_crossing_data() and self.get_crossing_data() != Car.SENSOR_FWD:
+            self.trigger_on_crossing()
+
+    def is_moving(self):
+        self.chassis.is_moving()
 
     def is_out(self):
         """
         Checks whether car is now out of maze (exit found)
         :return: True if exit is found, False otherwise
         """
-        return self.maze.is_out()
+        return self.world.is_out(self.sensors)
 
 
     def trigger_on_move(self):

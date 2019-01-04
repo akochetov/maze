@@ -1,4 +1,4 @@
-from orientation import Orientation
+from brains.orientation import Orientation
 
 class Sensor(object):
     """

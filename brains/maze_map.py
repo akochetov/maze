@@ -1,5 +1,5 @@
-from orientation import Orientation
-from a_star import get_shortest_path
+from brains.orientation import Orientation
+from brains.a_star import get_shortest_path
 
 class MazeNode(object):
     def __init__(self, id, distance, orientation):

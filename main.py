@@ -32,51 +32,47 @@ HW:
  * line following sensor
  * optical distance sensors (not immediately)
  * small powerbank
+ 
+TODO:
+ * develop line follow virtual sensor class
+ * develop line follow HW class
+ * add line follow support to a car
+ * add motor virtual class
+ * add motor HW class
+ * add motor support to a car
+ * add config for everything. make it py file this time
+ * make sure sensors only work from maze state
 '''
 
 
-from maze_state import MazeState
+from worlds.virtual_world import VirtualWorld
 from car import Car
-from orientation import Orientation
-from direction import Direction
-from maze_map import MazeMap
+from brains.orientation import Orientation
+from brains.direction import Direction
+from brains.maze_map import MazeMap
+from chassis.virtual_chassis import VirtualChassis
+from brains.hand_search_brain import HandSearchBrain
 
-maze_file = 'maze10x10.txt'
-maze_state = MazeState(maze_file)
-car = Car(maze_state, Orientation.SOUTH)
+maze_file = 'maze20x20 - linefollow - large loop.txt'
+maze_world = VirtualWorld(maze_file)
+chassis = VirtualChassis(maze_world, 0.1)
+car = Car(maze_world, chassis, Orientation.SOUTH)
 maze_map = MazeMap(car)
-
-def left_hand_search():
-    if car.sensors[0].get_distance():
-        car.move(Direction.LEFT)
-    else:
-        if car.sensors[1].get_distance():
-            car.move(Direction.FORWARD)
-        else:
-            car.move(Direction.RIGHT)
-
-def right_hand_search():
-    if car.sensors[2].get_distance():
-        car.move(Direction.RIGHT)
-    else:
-        if car.sensors[1].get_distance():
-            car.move(Direction.FORWARD)
-        else:
-            car.move(Direction.LEFT)
+brain = HandSearchBrain()
+    
+brain.think(car)
 
 for i in range(0,1000):
-    time.sleep(0.1)
-    maze_state.save(sys.stdout)
-
-    if car.is_out():
+    if not brain.is_still_thinking():
         print(maze_map.get_shortest_path())
         exit()
 
-    left_hand_search()
-    #right_hand_search()
+    time.sleep(0.1)
+    maze_world.save(sys.stdout)
+    print()
+    print()
 
-    print()
-    print()
+
 
 
 
