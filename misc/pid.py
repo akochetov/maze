@@ -10,6 +10,7 @@ class PID:
 
 		self.integral = 0
 		self.last_error = last_error
+		self.before_last_error = last_error
 
 		self.reset_time()
 
@@ -27,9 +28,10 @@ class PID:
 
 		error = desired_value - actual_value
 		self.integral = self.integral + (error * iteration)
-		derivative = (error - self.last_error) / iteration
+		derivative = (error - self.before_last_error) / iteration
 
 		if self.last_error != error:
+			self.error_before_last = self.last_error
 			self.last_error = error
 			self.reset_time()
 

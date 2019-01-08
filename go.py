@@ -1,15 +1,15 @@
 import RPi.GPIO as GPIO
 from time import sleep
 from datetime import datetime
-import settings
+import misc.settings as settings
 from chassis.pwm_motor import PWMMotor
-from pid import PID
-from sensors import RPiLineSensorRow5
-from state_action import StateAction
+from misc.pid import PID
+from sensors.rpi_line_sensor_source import RPiLineSensorSource
+from misc.state_action import StateAction
 
 GPIO.setmode(GPIO.BCM)
 
-sensor = RPiLineSensorRow5(settings.LINE_SENSORS)
+sensor = RPiLineSensorSource(settings.LINE_SENSORS)
 
 pid = PID(*settings.PID)
 state_action = StateAction(settings.STATE_ERROR, settings.STATE_ACTION)
@@ -65,6 +65,21 @@ try:
 			rmotor.rotate(True, r)
 		else:
 			print('{}\tAction: {}'.format(datetime.now(), todo))
+			if todo == "stop":
+				lmotor.stop()
+				rmotor.stop()
+			if todo == "90" or todo == "-90":
+				lmotor.rotate(todo == "90", settings.LEFT_MOTOR_POWER*1.5)
+				rmotor.rotate(todo == "-90", settings.RIGHT_MOTOR_POWER*1.5)
+				sleep(0.2)
+				lmotor.stop()
+				rmotor.stop()
+			if todo == "180":
+				lmotor.rotate(True, settings.LEFT_MOTOR_POWER*1.5)
+				rmotor.rotate(False, settings.RIGHT_MOTOR_POWER*1.5)
+				sleep(0.4)
+				lmotor.stop()
+				rmotor.stop()
 			# more complex action required: turn around, crossing etc
 			if todo == last_state_action:
 				state_action_reps += 1
