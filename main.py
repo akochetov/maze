@@ -55,7 +55,7 @@ from brains.hand_search_brain import HandSearchBrain
 
 maze_file = 'maze20x20 - linefollow - large loop.txt'
 maze_world = VirtualWorld(maze_file)
-chassis = VirtualChassis(maze_world, 0.1)
+chassis = VirtualChassis(maze_world, 0.5)
 car = Car(maze_world, chassis, Orientation.SOUTH)
 maze_map = MazeMap(car)
 brain = HandSearchBrain()
@@ -65,9 +65,9 @@ brain.think(car)
 for i in range(0,1000):
     if not brain.is_still_thinking():
         print(maze_map.get_shortest_path())
-        exit()
+        break
 
-    time.sleep(0.1)
+    time.sleep(0.5)
     maze_world.save(sys.stdout)
     print()
     print()
