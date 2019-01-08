@@ -1,7 +1,7 @@
 from time import time
 
 class PID:
-	
+
 	def __init__(self, pk, ik, dk, last_error = 0):
 		self.pk = pk
 		self.ik = ik
@@ -12,7 +12,7 @@ class PID:
 		self.last_error = last_error
 
 		self.reset_time()
-		
+
 
 	def reset_time(self):
 		self.iteration_time = self.get_time()
@@ -28,7 +28,9 @@ class PID:
 		error = desired_value - actual_value
 		self.integral = self.integral + (error * iteration)
 		derivative = (error - self.last_error) / iteration
-		self.last_error = error
 
-		self.reset_time()
-		return self.pk * error + self.ik * self.integral + self.dk * derivative# + bias		
+		if self.last_error != error:
+			self.last_error = error
+			self.reset_time()
+
+		return self.pk * error + self.ik * self.integral + self.dk * derivative# + bias
