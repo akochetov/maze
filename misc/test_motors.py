@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 from time import sleep
 from datetime import  datetime
-from pwm_motor import PWMMotor
+from chassis.pwm_motor import PWMMotor
 
 #initializing motors
 try:

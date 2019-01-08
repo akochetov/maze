@@ -14,7 +14,7 @@ class Car(object):
     Car. Has sensors and has a maze reference.
     Interacts with maze through sensors and moves within maze.
     """
-    def __init__(self, world, chassis, orientation):
+    def __init__(self, world, chassis, sensors, orientation):
         """
         Constructor. Set instance vars: maze and orientation. Create and setup sensors
         :param maze_state: MazeState instance
@@ -28,16 +28,10 @@ class Car(object):
         self.chassis = chassis
         self.orientation = orientation
 
-        self.sensors = [
-            Sensor(world,Orientation.rotate_ccw(orientation)),
-            Sensor(world,orientation),
-            Sensor(world,Orientation.rotate_cw(orientation))
-        ]
+        self.sensors = sensors
 
     def get_crossing_data(self):
-        return  (Car.SENSOR_LEFT if self.sensors[0].get_distance() else 0) +\
-                (Car.SENSOR_FWD if self.sensors[1].get_distance() else 0) +\
-                (Car.SENSOR_RIGHT if self.sensors[2].get_distance() else 0)
+        return 0
 
     def rotate(self, cw):
         """
@@ -52,7 +46,7 @@ class Car(object):
 
         # "rotate" sensors too
         for sensor in self.sensors:
-            sensor.orientation = Orientation.rotate(sensor.orientation, cw)
+            sensor.source.orientation = Orientation.rotate(sensor.source.orientation, cw)
 
         self.trigger_on_rotate()
 
@@ -82,13 +76,13 @@ class Car(object):
             self.rotate_cw()
             return
 
-        sensors = self.get_crossing_data()
+        #sensors = self.get_crossing_data()
         self.chassis.move(100)
         self.trigger_on_move()
 
         # detect if we reached crossing and if so - fire events
-        if sensors != self.get_crossing_data() and self.get_crossing_data() != Car.SENSOR_FWD:
-            self.trigger_on_crossing()
+        #if sensors != self.get_crossing_data() and self.get_crossing_data() != Car.SENSOR_FWD:
+        #    self.trigger_on_crossing()
 
     def is_moving(self):
         self.chassis.is_moving()

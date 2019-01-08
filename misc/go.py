@@ -2,15 +2,14 @@ import RPi.GPIO as GPIO
 from time import sleep
 from datetime import datetime
 import settings
-from pwm_motor import PWMMotor
+from chassis.pwm_motor import PWMMotor
 from pid import PID
-from line_sensor import LineSensor
+from sensors import RPiLineSensorRow5
 from state_action import StateAction
 
 GPIO.setmode(GPIO.BCM)
 
-sensor = LineSensor(settings.LINE_SENSORS)
-sensor.setup()
+sensor = RPiLineSensorRow5(settings.LINE_SENSORS)
 
 pid = PID(*settings.PID)
 state_action = StateAction(settings.STATE_ERROR, settings.STATE_ACTION)

@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 from time import sleep
-from pwm_motor import PWMMotor
+from chassis.pwm_motor import PWMMotor
 
 freq = 1/30
 pow = 30

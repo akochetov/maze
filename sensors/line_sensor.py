@@ -23,5 +23,18 @@ State   Interpretation                                  Left motor power in %   
 11111   T-shaped crossing. Left and Right. Front - ?
 00000   Out of line. Decide basing on prev value.        ?                           ?
 """
-from line_sensor_source_base import LineSensorSourceBase
+
+class LineSensor(object):
+	def __init__(self, source):
+		"""
+		param source: instance of LineSensorSourceBase inherited class
+		"""
+
+		super().__init__()
+
+		self.source = source
+
+	def get_state(self):
+		return self.source.get_state()
+
 

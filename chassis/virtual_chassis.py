@@ -37,7 +37,7 @@ class VirtualChassis(object):
     def rotate(self, degrees):
         pass
 
-    def move(self, throttle):
+    def move(self):
         self.stop()
         self.move_thread = VirtualMoveThread(self.world, self.move_duration_sec)
         self.move_thread.start()

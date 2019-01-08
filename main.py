@@ -34,11 +34,7 @@ HW:
  * small powerbank
  
 TODO:
- * develop line follow virtual sensor class
- * develop line follow HW class
  * add line follow support to a car
- * add motor virtual class
- * add motor HW class
  * add motor support to a car
  * add config for everything. make it py file this time
  * make sure sensors only work from maze state
@@ -52,11 +48,16 @@ from brains.direction import Direction
 from brains.maze_map import MazeMap
 from chassis.virtual_chassis import VirtualChassis
 from brains.hand_search_brain import HandSearchBrain
+from sensors.virtual_line_sensor_source import VirtualLineSensorSource
+from sensors.line_sensor import LineSensor
+
+ORIENTATION = Orientation.SOUTH
 
 maze_file = 'maze20x20 - linefollow - large loop.txt'
 maze_world = VirtualWorld(maze_file)
 chassis = VirtualChassis(maze_world, 0.5)
-car = Car(maze_world, chassis, Orientation.SOUTH)
+line_sensor = LineSensor(VirtualLineSensorSource(maze_world, ORIENTATION))
+car = Car(maze_world, chassis, [line_sensor], ORIENTATION)
 maze_map = MazeMap(car)
 brain = HandSearchBrain()
     
