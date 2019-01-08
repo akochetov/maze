@@ -38,6 +38,9 @@ class VirtualChassis(object):
         pass
 
     def move(self):
+        if self.is_moving():
+            return True
+
         self.stop()
         self.move_thread = VirtualMoveThread(self.world, self.move_duration_sec)
         self.move_thread.start()

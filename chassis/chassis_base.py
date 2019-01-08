@@ -6,7 +6,7 @@ class ChassisBase(object):
     def rotate(self, degrees):
         pass
 
-    def move(self, throttle):
+    def move(self):
         self._moving = True
         pass
 

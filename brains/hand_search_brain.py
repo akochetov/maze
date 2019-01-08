@@ -20,39 +20,47 @@ class ThinkThread(Thread):
             if not self.awake:
                 break
 
-            sleep(0.1)
+            sleep(0.003)
 
             if self.car.is_out():
                 self.awake = False
                 break
 
-            if not self.car.is_moving():
-                #self.left_hand_search(self.car)
-                self.right_hand_search(self.car)
+            
+            self.left_hand_search(self.car)
+            #self.right_hand_search(self.car)
 
     def exit(self):
         self.awake = False
 
 
     def left_hand_search(self, car):
-        if str(car.sensors[0].get_state()).find("[1, 1, ")>=0:
+        state = str(car.sensors[0].get_state())
+
+        if state.find("[1, 1, ")>=0:
+            car.stop()
             car.move(Direction.LEFT)
             car.move(Direction.FORWARD)
         else:
-            if str(car.sensors[0].get_state()) == "[0, 0, 1, 0, 0]":
+            if state[7] == "1":
                 car.move(Direction.FORWARD)
             else:
+                car.stop()
                 car.move(Direction.RIGHT)
                 car.move(Direction.FORWARD)
 
     def right_hand_search(self, car):
-        if str(car.sensors[0].get_state()).find(", 1, 1]")>=0:
+        state = str(car.sensors[0].get_state())
+
+        if state.find(", 1, 1]")>=0:
+            car.stop()
             car.move(Direction.RIGHT)
             car.move(Direction.FORWARD)
         else:
-            if str(car.sensors[0].get_state()) == "[0, 0, 1, 0, 0]":
+            if state[7] == "1":
                 car.move(Direction.FORWARD)
             else:
+                car.stop()
                 car.move(Direction.LEFT)
                 car.move(Direction.FORWARD)
 

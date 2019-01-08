@@ -55,7 +55,7 @@ ORIENTATION = Orientation.SOUTH
 
 maze_file = 'maze20x20 - linefollow - large loop.txt'
 maze_world = VirtualWorld(maze_file)
-chassis = VirtualChassis(maze_world, 0.5)
+chassis = VirtualChassis(maze_world, 0.1)
 line_sensor = LineSensor(VirtualLineSensorSource(maze_world, ORIENTATION))
 car = Car(maze_world, chassis, [line_sensor], ORIENTATION)
 maze_map = MazeMap(car)
@@ -68,7 +68,7 @@ for i in range(0,1000):
         print(maze_map.get_shortest_path())
         break
 
-    time.sleep(0.5)
+    time.sleep(0.1)
     maze_world.save(sys.stdout)
     print()
     print()

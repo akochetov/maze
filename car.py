@@ -5,11 +5,6 @@ from chassis.chassis_base import ChassisBase
 from worlds.world_base import WorldBase
 
 class Car(object):
-
-    SENSOR_LEFT = 1
-    SENSOR_FWD = 2
-    SENSOR_RIGHT = 4
-
     """
     Car. Has sensors and has a maze reference.
     Interacts with maze through sensors and moves within maze.
@@ -62,6 +57,11 @@ class Car(object):
         """
         self.rotate(False)
 
+
+    def stop(self):
+        self.chassis.stop()
+
+
     def move(self, direction):
         """
         Move car one step in Direction.
@@ -77,7 +77,7 @@ class Car(object):
             return
 
         #sensors = self.get_crossing_data()
-        self.chassis.move(100)
+        self.chassis.move()
         self.trigger_on_move()
 
         # detect if we reached crossing and if so - fire events

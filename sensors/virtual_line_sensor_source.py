@@ -36,9 +36,9 @@ class VirtualLineSensorSource(LineSensorSourceBase):
             pos[1][0] -= 1
             pos[2][1] += 1
         if self.orientation == Orientation.SOUTH:
-            pos[0][1] -= 1
+            pos[0][1] += 1
             pos[1][0] += 1
-            pos[2][1] += 1
+            pos[2][1] -= 1
 
 		# left and right most sensor - init with same data as two left and right sensors from center
 
