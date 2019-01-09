@@ -109,7 +109,6 @@ class VirtualWorld(WorldBase):
                 output.write(char)
             output.write('\n')
     
-
     def move(self):
         return self._move(self.orientation == Orientation.WEST,
                        self.orientation == Orientation.EAST,

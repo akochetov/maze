@@ -32,7 +32,7 @@ HW:
  * line following sensor
  * optical distance sensors (not immediately)
  * small powerbank
- 
+
 TODO:
  * add line follow support to a car
  * add motor support to a car
@@ -60,10 +60,10 @@ line_sensor = LineSensor(VirtualLineSensorSource(maze_world, ORIENTATION))
 car = Car(maze_world, chassis, [line_sensor], ORIENTATION)
 maze_map = MazeMap(car)
 brain = HandSearchBrain()
-    
+
 brain.think(car)
 
-for i in range(0,1000):
+for i in range(0, 1000):
     if not brain.is_still_thinking():
         print(maze_map.get_shortest_path())
         break
@@ -72,9 +72,3 @@ for i in range(0,1000):
     maze_world.save(sys.stdout)
     print()
     print()
-
-
-
-
-
-
