@@ -4,6 +4,7 @@ from brains.direction import Direction
 from chassis.chassis_base import ChassisBase
 from worlds.world_base import WorldBase
 
+
 class Car(object):
     """
     Car. Has sensors and has a maze reference.
@@ -31,7 +32,7 @@ class Car(object):
     def rotate(self, cw):
         """
         Car turning.
-        :param cw: ClockWise. True or False. In case of False rotates counter clock wise
+        :param cw: ClockWise. True or False. In case of False rotates counter clockwise
         """
 
         # rotate car
@@ -57,10 +58,8 @@ class Car(object):
         """
         self.rotate(False)
 
-
     def stop(self):
         self.chassis.stop()
-
 
     def move(self, direction):
         """
@@ -93,7 +92,6 @@ class Car(object):
         :return: True if exit is found, False otherwise
         """
         return self.world.is_out(self.sensors)
-
 
     def trigger_on_move(self):
         """
