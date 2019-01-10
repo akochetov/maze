@@ -1,5 +1,6 @@
 from misc.orientation import Orientation
 from brains.a_star import get_shortest_path
+from time import time
 
 
 class MazeNode(object):
@@ -13,12 +14,13 @@ class MazeNode(object):
 
 
 class MazePath(object):
-    def __init__(self, orientation):
+    def __init__(self, orientation, time_error):
         self.next_node_id = 0
         self.current_node = MazeNode(self.next_node_id, 0, orientation)
         self.nodes = dict()
-        self.coordinates = dict()
+        self.coordinates = []
         self.path = [self.current_node]
+        self.time_error = time_error
 
     def add_node(self, orientation, distance):
         self.next_node_id += 1
@@ -80,20 +82,33 @@ class MazePath(object):
         return [x, y]
 
     def add_coordinates(self, orientation=Orientation.NORTH, distance=0):
-        self.coordinates[
-            str(self.get_coordinates(orientation, distance))
-            ] = self.current_node
+        coord = self.get_coordinates(orientation, distance)
+        # if len(self.coordinates) == 0:
+        #    self.coordinates.append([0, 0, self.current_node])
+        #    return
 
-        # print(
-        #    'add_coordinates: {}',
-        #    str(self.get_coordinates(orientation, distance))
-        #    )
+        self.coordinates.append(
+            [coord[0], coord[1], self.current_node]
+                )
+
+        print(
+            'add_coordinates: {}',
+            str(self.get_coordinates(orientation, distance))
+            )
+
+    def find_coordinates(self, pos):
+        for coord in self.coordinates:
+            if coord[0]-self.time_error <= pos[0] <= coord[0]+self.time_error and coord[1]-self.time_error <= pos[1] <= coord[1]+self.time_error:
+                return coord[2]
+
+        return None
 
     def where_i_am(self, orientation=Orientation.NORTH, distance=0):
-        pos = str(self.get_coordinates(orientation, distance))
+        pos = self.get_coordinates(orientation, distance)
 
-        if pos in self.coordinates:
-            return self.coordinates[pos]
+        ret = self.find_coordinates(pos)
+        if ret is not None:
+            return ret
 
         return None
 
@@ -102,24 +117,32 @@ class MazePath(object):
 
 
 class MazeMap(object):
-    def __init__(self, car):
-        self.path = MazePath(car.orientation)
-        self.distance = 0
+    def __init__(self, car, time_error=0):
+        self.time_error = time_error
+        self.path = MazePath(car.orientation, time_error)
+        self.reset_distance()
 
         car.chassis.add_on_move_callback(self.on_move)
         car.chassis.add_on_rotate_callback(self.on_rotate)
         self.__make_node(car.orientation)
 
     def __make_node(self, orientation):
-        if self.distance > 0:
-            self.path.add_node(orientation, self.distance)
+        distance = self.get_distance()
+        if distance > self.time_error:
+            self.path.add_node(orientation, distance)
             self.reset_distance()
 
     def increment_distance(self):
+        # pass
         self.distance += 1
 
     def reset_distance(self):
         self.distance = 0
+        # self.distance = time()
+
+    def get_distance(self):
+        return self.distance
+        # return time() - self.distance
 
     def on_move(self, car):
         self.increment_distance()
@@ -128,13 +151,15 @@ class MazeMap(object):
         self.reset_distance()
 
     def on_crossing(self, car):
-        node = self.path.where_i_am(car.orientation, self.distance)
+        distance = self.get_distance()
+
+        node = self.path.where_i_am(car.orientation, distance)
         if node is None:
             self.__make_node(car.orientation)
         else:
             new_node = node.copy()
             new_node.orientation = car.orientation
-            new_node.distance = self.distance
+            new_node.distance = distance
             self.path.visit_node(new_node)
             self.reset_distance()
 

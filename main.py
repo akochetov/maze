@@ -57,16 +57,17 @@ from chassis.virtual_chassis import VirtualChassis
 from brains.hand_search_brain import HandSearchBrain
 from sensors.virtual_line_sensor_source import VirtualLineSensorSource
 from sensors.line_sensor import LineSensor
+import misc.settings as settings
 
 ORIENTATION = Orientation.SOUTH
 
 # maze_file = 'maze20x20 - linefollow - large loop.txt'
 maze_file = 'maze10x10.txt'
 maze_world = VirtualWorld(maze_file)
-chassis = VirtualChassis(maze_world, 0.5)
+chassis = VirtualChassis(maze_world, 1)
 line_sensor = LineSensor(VirtualLineSensorSource(maze_world, ORIENTATION))
 car = Car(maze_world, chassis, [line_sensor], ORIENTATION)
-maze_map = MazeMap(car)
+maze_map = MazeMap(car, settings.TIME_ERROR)
 brain = HandSearchBrain()
 
 brain.think(car, maze_map)
@@ -76,7 +77,7 @@ for i in range(0, 1000):
         print(maze_map.get_shortest_path())
         break
 
-    time.sleep(0.5)
+    time.sleep(1)
     maze_world.save(sys.stdout)
     print()
     print()

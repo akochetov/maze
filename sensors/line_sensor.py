@@ -43,4 +43,7 @@ class LineSensor(object):
     def is_crossing(self):
         dirs = self.get_directions()
 
-        return Direction.LEFT in dirs or Direction.RIGHT in dirs or len(dirs) == 0
+        return\
+            Direction.LEFT in dirs or\
+            Direction.RIGHT in dirs or\
+            len(dirs) == 0
