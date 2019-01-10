@@ -21,8 +21,14 @@ lmotor = None
 rmotor = None
 
 try:
-    lmotor = PWMMotor(*settings.LEFT_MOTOR.values(),pwm_frequency=settings.PWM)
-    rmotor = PWMMotor(*settings.RIGHT_MOTOR.values(),pwm_frequency=settings.PWM)
+    lmotor = PWMMotor(
+        *settings.LEFT_MOTOR.values(),
+        pwm_frequency=settings.PWM
+        )
+    rmotor = PWMMotor(
+        *settings.RIGHT_MOTOR.values(),
+        pwm_frequency=settings.PWM
+        )
     lmotor.setup()
     rmotor.setup()
 
@@ -39,7 +45,9 @@ try:
 
             if sensors_data != '00000' and sensors_data != '11111':
                 pow = pid.get(settings.STATE_OK, actual)
-                pow = pow if abs(pow) <= settings.POWER else settings.POWER * pow / abs (pow)
+
+                pow = pow if (abs(pow) <= settings.POWER)
+                else settings.POWER * pow / abs(pow)
 
                 print('{}\tSensors: {}\tActual: {} Error: {} PID: {}'.format(
                     datetime.now(),
@@ -51,11 +59,11 @@ try:
             [l, r] = [settings.LEFT_MOTOR_POWER, settings.RIGHT_MOTOR_POWER]
 
             if pow > 0:
-                #l -= int(pow)
+                # l -= int(pow)
                 l -= int(pow)
                 r += int(pow)
             if pow < 0:
-                #r += int(pow)
+                # r += int(pow)
                 l -= int(pow)
                 r += int(pow)
 

@@ -1,18 +1,42 @@
 class ChassisBase(object):
 
     def __init__(self):
-        self._moving = False
-    
+        self.__on_move = []
+        self.__on_rotate = []
+        self.__moving = False
+
     def rotate(self, degrees):
-        pass
+        self.__trigger_on_rotate()
 
     def move(self):
-        self._moving = True
-        pass
+        self.__moving = True
+        self.__trigger_on_move()
 
     def stop(self):
-        self._moving = False
+        self.__moving = False
         pass
 
     def is_moving(self):
-        return self._moving
+        return self.__moving
+
+    def add_on_move_callback(self, on_move):
+        self.__on_move.append(on_move)
+
+    def add_on_rotate_callback(self, on_rotate):
+        self.__on_rotate.append(on_rotate)
+
+    def __trigger_on_move(self):
+        """
+        Triggers on_move events with current orientation
+        :return: None
+        """
+        for on_move in self.__on_move:
+            on_move(self)
+
+    def __trigger_on_rotate(self):
+        """
+        Triggers on_rotate events with current orientation
+        :return: None
+        """
+        for on_rotate in self.__on_rotate:
+            on_rotate(self)

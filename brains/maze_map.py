@@ -1,5 +1,6 @@
-from brains.orientation import Orientation
+from misc.orientation import Orientation
 from brains.a_star import get_shortest_path
+
 
 class MazeNode(object):
     def __init__(self, id, distance, orientation):
@@ -32,7 +33,9 @@ class MazePath(object):
         if node.id not in self.nodes:
             self.nodes[node.id] = []
         reverse_orientation_node = self.current_node.copy()
-        reverse_orientation_node.orientation = Orientation.flip(reverse_orientation_node.orientation)
+        reverse_orientation_node.orientation = Orientation.flip(
+            reverse_orientation_node.orientation
+            )
         reverse_orientation_node.distance = distance
         self.nodes[node.id].append(reverse_orientation_node)
 
@@ -44,7 +47,6 @@ class MazePath(object):
     def visit_node(self, node):
         self.path.append(node)
         self.current_node = node
-
 
     def get_last_visited_node(self):
         return self.path[len(self.path)-1]
@@ -77,10 +79,17 @@ class MazePath(object):
 
         return [x, y]
 
-    def add_coordinates(self, orientation = Orientation.NORTH, distance = 0):
-        self.coordinates[str(self.get_coordinates(orientation, distance))] = self.current_node
+    def add_coordinates(self, orientation=Orientation.NORTH, distance=0):
+        self.coordinates[
+            str(self.get_coordinates(orientation, distance))
+            ] = self.current_node
 
-    def where_i_am(self, orientation = Orientation.NORTH, distance = 0):
+        # print(
+        #    'add_coordinates: {}',
+        #    str(self.get_coordinates(orientation, distance))
+        #    )
+
+    def where_i_am(self, orientation=Orientation.NORTH, distance=0):
         pos = str(self.get_coordinates(orientation, distance))
 
         if pos in self.coordinates:
@@ -88,20 +97,20 @@ class MazePath(object):
 
         return None
 
-    def if_was_here(self, orientation = Orientation.NORTH, distance = 0):
+    def if_was_here(self, orientation=Orientation.NORTH, distance=0):
         return self.where_i_am(orientation, distance) is not None
+
 
 class MazeMap(object):
     def __init__(self, car):
         self.path = MazePath(car.orientation)
         self.distance = 0
 
-        car.on_move.append(self.on_move)
-        car.on_rotate.append(self.on_rotate)
-        car.on_crossing.append(self.on_crossing)
-        self.make_node(car.orientation)
+        car.chassis.add_on_move_callback(self.on_move)
+        car.chassis.add_on_rotate_callback(self.on_rotate)
+        self.__make_node(car.orientation)
 
-    def make_node(self, orientation):
+    def __make_node(self, orientation):
         if self.distance > 0:
             self.path.add_node(orientation, self.distance)
             self.reset_distance()
@@ -112,19 +121,19 @@ class MazeMap(object):
     def reset_distance(self):
         self.distance = 0
 
-    def on_move(self, car, orientation):
+    def on_move(self, car):
         self.increment_distance()
 
-    def on_rotate(self, car, orientation):
+    def on_rotate(self, car):
         self.reset_distance()
 
-    def on_crossing(self, car, orientation):
-        node = self.path.where_i_am(orientation,self.distance)
+    def on_crossing(self, car):
+        node = self.path.where_i_am(car.orientation, self.distance)
         if node is None:
-            self.make_node(orientation)
+            self.__make_node(car.orientation)
         else:
             new_node = node.copy()
-            new_node.orientation = orientation
+            new_node.orientation = car.orientation
             new_node.distance = self.distance
             self.path.visit_node(new_node)
             self.reset_distance()
@@ -137,4 +146,8 @@ class MazeMap(object):
             for neighbor in self.path.nodes[node]:
                 current[neighbor.id] = neighbor.distance
 
-        return get_shortest_path(edges, 0, self.path.get_last_visited_node().id)
+        return get_shortest_path(
+            edges,
+            0,
+            self.path.get_last_visited_node().id
+            )

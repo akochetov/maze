@@ -1,48 +1,54 @@
 from brains.brain_base import BrainBase
-from brains.direction import Direction
+from misc.direction import Direction
 
 from threading import Thread
 from time import sleep
 
+
 class ThinkThread(Thread):
 
-    def __init__(self, car):
+    def __init__(self, car, maze_map, lefthand=True):
         super().__init__()
-        
+
         self.car = car
+        self.maze_map = maze_map
+        self.lefthand = lefthand
 
     def start(self):
         self.awake = True
         return super().start()
 
     def run(self):
-        for i in range(0,1000):
+        for i in range(0, 1000):
             if not self.awake:
                 break
 
-            sleep(0.003)
+            sleep(1/3)
 
             if self.car.is_out():
                 self.awake = False
                 break
 
-            
-            self.left_hand_search(self.car)
-            #self.right_hand_search(self.car)
+            if self.maze_map is not None and self.car.sensors[0].is_crossing():
+                self.maze_map.on_crossing(self.car)
+
+            if self.lefthand:
+                self.left_hand_search(self.car)
+            else:
+                self.right_hand_search(self.car)
 
     def exit(self):
         self.awake = False
 
-
     def left_hand_search(self, car):
-        state = str(car.sensors[0].get_state())
+        dirs = car.sensors[0].get_directions()
 
-        if state.find("[1, 1, ")>=0:
+        if Direction.LEFT in dirs:
             car.stop()
             car.move(Direction.LEFT)
             car.move(Direction.FORWARD)
         else:
-            if state[7] == "1":
+            if Direction.FORWARD in dirs:
                 car.move(Direction.FORWARD)
             else:
                 car.stop()
@@ -50,14 +56,14 @@ class ThinkThread(Thread):
                 car.move(Direction.FORWARD)
 
     def right_hand_search(self, car):
-        state = str(car.sensors[0].get_state())
+        dirs = car.sensors[0].get_directions()
 
-        if state.find(", 1, 1]")>=0:
+        if Direction.RIGHT in dirs:
             car.stop()
             car.move(Direction.RIGHT)
             car.move(Direction.FORWARD)
         else:
-            if state[7] == "1":
+            if Direction.FORWARD in dirs:
                 car.move(Direction.FORWARD)
             else:
                 car.stop()
@@ -66,8 +72,24 @@ class ThinkThread(Thread):
 
 
 class HandSearchBrain(BrainBase):
-    def think(self, car):
-        self.thread = ThinkThread(car)
+    def __init__(self, lefthand=True):
+        """Initiates a left-or-right hand search algorythm
+
+        Keyword Arguments:
+            lefthand {bool} -- Is True, makes left hand search, otherwise
+            right hand search (default: {True})
+        """
+        self.lefthand = lefthand
+
+    def think(self, car, maze_map=None):
+        """Finds the way out using left or right hand searches
+
+        Arguments:
+            car {Car} -- A Car to move around
+            maze_map {MazeMap} -- MazeMap to navigate and make shortest path
+        """
+
+        self.thread = ThinkThread(car, maze_map, self.lefthand)
         self.thread.start()
 
     def is_still_thinking(self):

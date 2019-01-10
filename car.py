@@ -1,6 +1,6 @@
 from sensors.distance_sensor import Sensor
-from brains.orientation import Orientation
-from brains.direction import Direction
+from misc.orientation import Orientation
+from misc.direction import Direction
 from chassis.chassis_base import ChassisBase
 from worlds.world_base import WorldBase
 
@@ -12,27 +12,24 @@ class Car(object):
     """
     def __init__(self, world, chassis, sensors, orientation):
         """
-        Constructor. Set instance vars: maze and orientation. Create and setup sensors
-        :param maze_state: MazeState instance
-        :param orientation: Orientation instance - where car is heading initially
-        """
-        self.on_move = []
-        self.on_rotate = []
-        self.on_crossing = []
+        Constructor. Set instance vars: maze and orientation.
+        Create and setup sensors
 
+        :param maze_state: MazeState instance
+        :param orientation: Orientation instance - where car is heading
+        initially
+        """
         self.world = world
         self.chassis = chassis
         self.orientation = orientation
 
         self.sensors = sensors
 
-    def get_crossing_data(self):
-        return 0
-
     def rotate(self, cw):
         """
         Car turning.
-        :param cw: ClockWise. True or False. In case of False rotates counter clockwise
+        :param cw: ClockWise. True or False. In case of False rotates counter
+        clockwise
         """
 
         # rotate car
@@ -42,9 +39,9 @@ class Car(object):
 
         # "rotate" sensors too
         for sensor in self.sensors:
-            sensor.source.orientation = Orientation.rotate(sensor.source.orientation, cw)
-
-        self.trigger_on_rotate()
+            sensor.source.orientation = Orientation.rotate(
+                sensor.source.orientation, cw
+                )
 
     def rotate_cw(self):
         """
@@ -75,13 +72,7 @@ class Car(object):
             self.rotate_cw()
             return
 
-        #sensors = self.get_crossing_data()
         self.chassis.move()
-        self.trigger_on_move()
-
-        # detect if we reached crossing and if so - fire events
-        #if sensors != self.get_crossing_data() and self.get_crossing_data() != Car.SENSOR_FWD:
-        #    self.trigger_on_crossing()
 
     def is_moving(self):
         self.chassis.is_moving()
@@ -92,27 +83,3 @@ class Car(object):
         :return: True if exit is found, False otherwise
         """
         return self.world.is_out(self.sensors)
-
-    def trigger_on_move(self):
-        """
-        Triggers on_move events with current orientation
-        :return: None
-        """
-        for on_move in self.on_move:
-            on_move(self, self.orientation)
-
-    def trigger_on_rotate(self):
-        """
-        Triggers on_rotate events with current orientation
-        :return: None
-        """
-        for on_rotate in self.on_rotate:
-            on_rotate(self, self.orientation)
-
-    def trigger_on_crossing(self):
-        """
-        Triggers on_crossing events with current orientation
-        :return: None
-        """
-        for on_crossing in self.on_crossing:
-            on_crossing(self, self.orientation)

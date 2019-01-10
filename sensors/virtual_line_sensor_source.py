@@ -1,5 +1,5 @@
 from sensors.line_sensor_source_base import LineSensorSourceBase
-from brains.orientation import Orientation
+from misc.orientation import Orientation
 
 
 class VirtualLineSensorSource(LineSensorSourceBase):
@@ -10,7 +10,8 @@ class VirtualLineSensorSource(LineSensorSourceBase):
         """
         Constructor. Takes maze and initial sensor orientation
         :param maze_state: MazeState instance
-        :param orientation: Orentation instance, pointing initial sensor orientation
+        :param orientation: Orentation instance, pointing initial sensor
+        orientation
         """
         self.maze = maze_world
         self.orientation = orientation
@@ -18,12 +19,17 @@ class VirtualLineSensorSource(LineSensorSourceBase):
     def get_state(self):
         """
         Measures distance in steps to the wall in front of sensor
-        :return: 0 if wall is close and no step can be made, or number of steps to the wall
+        :return: 0 if wall is close and no step can be made, or number of
+        steps to the wall
         """
         ret = [0]*5
-        pos = [self.maze.get_position(),self.maze.get_position(),self.maze.get_position()]
+        pos = [
+            self.maze.get_position(),
+            self.maze.get_position(),
+            self.maze.get_position()
+            ]
 
-        if self.orientation == Orientation.WEST:                
+        if self.orientation == Orientation.WEST:
             pos[0][0] += 1
             pos[1][1] -= 1
             pos[2][0] -= 1
@@ -40,11 +46,14 @@ class VirtualLineSensorSource(LineSensorSourceBase):
             pos[1][0] += 1
             pos[2][1] -= 1
 
-		# left and right most sensor - init with same data as two left and right sensors from center
-
-        for i in range(1,4):
+        # left and right most sensor - init with same data as two left and
+        # right sensors from center
+        for i in range(1, 4):
             try:
-                ret[i] = int(not self.maze.test_if_wall(pos[i-1][0],pos[i-1][1]))
+                ret[i] = int(not self.maze.test_if_wall(
+                    pos[i-1][0],
+                    pos[i-1][1]
+                    ))
             except:
                 pass
 

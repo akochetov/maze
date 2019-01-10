@@ -1,5 +1,5 @@
 from worlds.world_base import WorldBase
-from brains.orientation import Orientation
+from misc.orientation import Orientation
 
 class MazePoint:
     """
