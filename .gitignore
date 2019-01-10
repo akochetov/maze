@@ -1,0 +1,6 @@
+*.pyc
+.vscode/settings.json
+.vs/VSWorkspaceState.json
+.vs/slnx.sqlite
+.vs/Maze/v15/.suo
+.vs/Maze/v16/.suo
