@@ -204,7 +204,7 @@ class MazeMap(object):
             if coord[1] > x_range[1]:
                 x_range[1] = coord[1]
 
-        coord_map = [['-' for i in range(
+        coord_map = [['--' for i in range(
             round(y_range[1] / self.time_error) -
             round(y_range[0] / self.time_error) + 1)] for j in range(
                 round(x_range[1] / self.time_error) -
@@ -241,11 +241,11 @@ class MazeMap(object):
             for j in range(x_range[0], x_range[1] + 1):
                 for jj in range(y_range[0], y_range[1] + 1):
                     try:
-                        if coord_map[jj][j] == '-' or coord_map[jj][j] == 'X':
+                        if coord_map[jj][j] == '--' or coord_map[jj][j] == 'XX':
                             if jj == y_range[1] and j == x_range[1]:
-                                coord_map[jj][j] = str(node.id)
+                                coord_map[jj][j] = ('0'+str(node.id)) if node.id < 10 else str(node.id)
                             else:
-                                coord_map[jj][j] = 'X'
+                                coord_map[jj][j] = 'XX'
                     except:
                         pass
 
