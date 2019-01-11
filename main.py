@@ -67,7 +67,7 @@ maze_world = VirtualWorld(maze_file)
 chassis = VirtualChassis(maze_world, 0.5)
 line_sensor = LineSensor(VirtualLineSensorSource(maze_world, ORIENTATION))
 car = Car(maze_world, chassis, [line_sensor], ORIENTATION)
-maze_map = MazeMap(car, settings.TIME_ERROR)
+maze_map = MazeMap(car, settings.TIME_ERROR, settings.TIME_TO_TURN)
 brain = HandSearchBrain(lefthand=False)
 
 brain.think(car, maze_map)
@@ -80,8 +80,6 @@ for i in range(0, 1000):
         print('Full travelled map:')
         maze_map.save_full_path(sys.stdout)
         print()
-        print('Shortest path on the map:')
-        maze_map.save_shortest_path(sys.stdout)
         break
 
     time.sleep(0.5)

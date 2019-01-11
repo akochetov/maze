@@ -116,8 +116,9 @@ class MazePath(object):
 
 
 class MazeMap(object):
-    def __init__(self, car, time_error=0):
+    def __init__(self, car, time_error=0, time_to_turn=0):
         self.time_error = time_error
+        self.time_to_turn = time_to_turn
         self.path = MazePath(car.orientation, time_error)
         self.reset_distance()
 
@@ -135,7 +136,7 @@ class MazeMap(object):
         pass
         # self.distance += 1
 
-    def reset_distance(self):
+    def reset_distance(self, time_bias=0):
         # self.distance = 0
         self.distance = time()
 
@@ -147,7 +148,7 @@ class MazeMap(object):
         self.increment_distance()
 
     def on_rotate(self, car):
-        self.reset_distance()
+        self.reset_distance(self.time_to_turn)
 
     def on_crossing(self, car):
         distance = self.get_distance()
@@ -158,7 +159,7 @@ class MazeMap(object):
         else:
             new_node = node.copy()
             new_node.orientation = car.orientation
-            new_node.distance = distance
+            new_node.distance = distance if distance >= self.time_error else 0
             self.path.visit_node(new_node)
             self.reset_distance()
 
@@ -181,19 +182,77 @@ class MazeMap(object):
         Saves full path travelled in a stream as text
         :param output: output stream
         """
-        self.__save(self.path.nodes.keys())
+        self.__save(output)
 
-    def save_shortest_path(self, output):
-        """
-        Saves short path in a stream as text
-        :param output: output stream
-        """
-        self.__save(self.get_shortest_path())
-
-    def __save(self, node_ids, output):
+    def __save(self, output):
         '''Internal method to save specific nodes sequence into a file as text
 
         Arguments:
             node_ids {list of int} -- Node IDs which have to be saved
         '''
-        pass
+        x_range = [0, 0]
+        y_range = [0, 0]
+
+        for coord in self.path.coordinates:
+            if coord[0] < y_range[0]:
+                y_range[0] = coord[0]
+            if coord[0] > y_range[1]:
+                y_range[1] = coord[0]
+
+            if coord[1] < x_range[0]:
+                x_range[0] = coord[1]
+            if coord[1] > x_range[1]:
+                x_range[1] = coord[1]
+
+        coord_map = [['-' for i in range(
+            round(y_range[1] / self.time_error) -
+            round(y_range[0] / self.time_error) + 1)] for j in range(
+                round(x_range[1] / self.time_error) -
+                round(x_range[0] / self.time_error) + 1
+                )]
+
+        path = self.path.path
+
+        y_base, x_base = abs(
+            round(x_range[0] / self.time_error)
+            ), abs(
+                round(y_range[0] / self.time_error)
+                )
+
+        x, y = 0, 0
+        for i in range(len(path)):
+            node = path[i]
+
+            xi, yi = self.path.get_xy_from_distance(
+                node.orientation,
+                node.distance)
+
+            xr, yr = round(
+                x / self.time_error
+                ) + x_base, round(
+                    y / self.time_error
+                    ) + y_base
+
+            xir, yir = round(xi / self.time_error), round(yi / self.time_error)
+
+            x_range = [min(xr, xr + xir), max(xr, xr + xir)]
+            y_range = [min(yr, yr + yir), max(yr, yr + yir)]
+
+            for j in range(x_range[0], x_range[1] + 1):
+                for jj in range(y_range[0], y_range[1] + 1):
+                    try:
+                        if coord_map[jj][j] == '-' or coord_map[jj][j] == 'X':
+                            if jj == y_range[1] and j == x_range[1]:
+                                coord_map[jj][j] = str(node.id)
+                            else:
+                                coord_map[jj][j] = 'X'
+                    except:
+                        pass
+
+            x += xi
+            y += yi
+
+        for line in coord_map:
+            for char in line:
+                output.write(char)
+            output.write('\n')
