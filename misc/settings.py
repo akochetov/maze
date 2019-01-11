@@ -50,4 +50,4 @@ STATE_ACTION = {
 STATE_ACTION_REPETITIONS = 2
 
 # maze map settings
-TIME_ERROR = 0
+TIME_ERROR = 0.5

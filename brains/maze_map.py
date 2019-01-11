@@ -1,5 +1,5 @@
 from misc.orientation import Orientation
-from brains.a_star import get_shortest_path
+import brains.a_star as a_star
 from time import time
 
 
@@ -83,22 +83,21 @@ class MazePath(object):
 
     def add_coordinates(self, orientation=Orientation.NORTH, distance=0):
         coord = self.get_coordinates(orientation, distance)
-        # if len(self.coordinates) == 0:
-        #    self.coordinates.append([0, 0, self.current_node])
-        #    return
 
         self.coordinates.append(
             [coord[0], coord[1], self.current_node]
                 )
-
-        print(
-            'add_coordinates: {}',
-            str(self.get_coordinates(orientation, distance))
-            )
+        # print(
+        #    'add_coordinates: {}',
+        #    str(self.get_coordinates(orientation, distance))
+        #    )
 
     def find_coordinates(self, pos):
         for coord in self.coordinates:
-            if coord[0]-self.time_error <= pos[0] <= coord[0]+self.time_error and coord[1]-self.time_error <= pos[1] <= coord[1]+self.time_error:
+            if (coord[0] - self.time_error <= pos[0] and
+                    pos[0] <= coord[0] + self.time_error and
+                    coord[1]-self.time_error <= pos[1] and
+                    pos[1] <= coord[1]+self.time_error):
                 return coord[2]
 
         return None
@@ -133,16 +132,16 @@ class MazeMap(object):
             self.reset_distance()
 
     def increment_distance(self):
-        # pass
-        self.distance += 1
+        pass
+        # self.distance += 1
 
     def reset_distance(self):
-        self.distance = 0
-        # self.distance = time()
+        # self.distance = 0
+        self.distance = time()
 
     def get_distance(self):
-        return self.distance
-        # return time() - self.distance
+        # return self.distance
+        return time() - self.distance
 
     def on_move(self, car):
         self.increment_distance()
@@ -171,8 +170,30 @@ class MazeMap(object):
             for neighbor in self.path.nodes[node]:
                 current[neighbor.id] = neighbor.distance
 
-        return get_shortest_path(
+        return a_star.get_shortest_path(
             edges,
             0,
             self.path.get_last_visited_node().id
             )
+
+    def save_full_path(self, output):
+        """
+        Saves full path travelled in a stream as text
+        :param output: output stream
+        """
+        self.__save(self.path.nodes.keys())
+
+    def save_shortest_path(self, output):
+        """
+        Saves short path in a stream as text
+        :param output: output stream
+        """
+        self.__save(self.get_shortest_path())
+
+    def __save(self, node_ids, output):
+        '''Internal method to save specific nodes sequence into a file as text
+
+        Arguments:
+            node_ids {list of int} -- Node IDs which have to be saved
+        '''
+        pass

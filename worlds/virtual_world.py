@@ -1,9 +1,11 @@
 from worlds.world_base import WorldBase
 from misc.orientation import Orientation
 
+
 class MazePoint:
     """
-    "Enum" for maze objects and their transcoding from string (chars) to objects such as wall, empty space, source and goal
+    "Enum" for maze objects and their transcoding from string (chars) to
+    objects such as wall, empty space, source and goal
     """
     def __init__(self):
         """
@@ -20,11 +22,13 @@ class MazePoint:
 
 class VirtualWorld(WorldBase):
     """
-    Maze. Loads it's state and interacts with obcejts in maze, such as cars and sensors
+    Maze. Loads it's state and interacts with obcejts in maze, such as
+    cars and sensors
     """
-    def __init__(self,file=None):
+    def __init__(self, file=None):
         """
-        Constructor setting up initial position, goal point and optionally loads maze from text file
+        Constructor setting up initial position, goal point and optionally
+        loads maze from text file
         :param file: file to load maze from or None if no load is needed
         """
         self.position = [0, 0]
@@ -64,11 +68,12 @@ class VirtualWorld(WorldBase):
         For now only one car is supported
         :return: List of 2 values, x (row) and y (column)
         """
-        return [self.position[0],self.position[1]]
+        return [self.position[0], self.position[1]]
 
     def set_position(self, x, y):
         """
-        Changes car position in maze. Unmarks previous position (puts space) and marks new one with *
+        Changes car position in maze. Unmarks previous position (puts space)
+        and marks new one with *
         :param x: row where to put a car
         :param y: column where to put a car
         :return:
@@ -108,40 +113,47 @@ class VirtualWorld(WorldBase):
             for char in line:
                 output.write(char)
             output.write('\n')
-    
+
     def move(self):
-        return self._move(self.orientation == Orientation.WEST,
-                       self.orientation == Orientation.EAST,
-                       self.orientation == Orientation.SOUTH,
-                       self.orientation == Orientation.NORTH)
+        return self._move(
+            self.orientation == Orientation.WEST,
+            self.orientation == Orientation.EAST,
+            self.orientation == Orientation.SOUTH,
+            self.orientation == Orientation.NORTH)
 
     def _move(self, west, east, south, north):
         """
-        Tries to move an object (Car) in a maze. If destination is a wall - no move will happen
+        Tries to move an object (Car) in a maze. If destination is a wall - no
+        move will happen
         :param west: True or False. Whether to move west.
         :param east: True or False. Whether to move east.
         :param south: True or False. Whether to move south.
         :param north: True or False. Whether to move north.
         """
         moves = 0
-        if west and self.position[0] > 0 and self.state[self.position[0]][self.position[1] - 1] != MazePoint.WALL:
+        pos = self.position
+        if (west and pos[0] > 0 and
+                self.state[pos[0]][pos[1] - 1] != MazePoint.WALL):
             moves += 1
-            self.set_position(self.position[0], self.position[1] - 1)
+            self.set_position(pos[0], pos[1] - 1)
 
-        if east and self.position[0] < len(self.state[0])-1 and self.state[self.position[0]][self.position[1] + 1] != MazePoint.WALL:
+        if (east and pos[0] < len(self.state[0])-1 and
+                self.state[pos[0]][pos[1] + 1] != MazePoint.WALL):
             moves += 1
-            self.set_position(self.position[0], self.position[1] + 1)
+            self.set_position(pos[0], pos[1] + 1)
 
-        if north and self.position[1] > 0 and self.state[self.position[0] - 1][self.position[1]] != MazePoint.WALL:
+        if (north and pos[1] > 0 and
+                self.state[pos[0] - 1][pos[1]] != MazePoint.WALL):
             moves += 1
-            self.set_position(self.position[0] - 1, self.position[1])
+            self.set_position(pos[0] - 1, pos[1])
 
-        if south and self.position[1] < len(self.state)-1 and self.state[self.position[0] + 1][self.position[1]] != MazePoint.WALL:
+        if (south and pos[1] < len(self.state)-1 and
+                self.state[pos[0] + 1][pos[1]] != MazePoint.WALL):
             moves += 1
-            self.set_position(self.position[0] + 1, self.position[1])
+            self.set_position(pos[0] + 1, pos[1])
 
         # return True if all moves were accomplished
-        return moves == [west,east,north,south].count(True)
+        return moves == [west, east, north, south].count(True)
 
     def test_if_wall(self, x, y):
         """

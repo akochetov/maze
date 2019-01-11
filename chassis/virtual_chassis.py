@@ -20,7 +20,7 @@ class VirtualMoveThread(Thread):
 
     def run(self):
         # if self.world.move():
-        while self.world.move() and self.awake:
+        while self.awake and self.world.move():
             self.chassis.super_move()
             sleep(self.move_duration_sec)
         self.awake = False

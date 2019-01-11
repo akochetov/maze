@@ -61,23 +61,30 @@ import misc.settings as settings
 
 ORIENTATION = Orientation.SOUTH
 
-# maze_file = 'maze20x20 - linefollow - large loop.txt'
-maze_file = 'maze10x10.txt'
+maze_file = 'maze20x20 - linefollow - large loop.txt'
+# maze_file = 'maze10x10.txt'
 maze_world = VirtualWorld(maze_file)
-chassis = VirtualChassis(maze_world, 1)
+chassis = VirtualChassis(maze_world, 0.5)
 line_sensor = LineSensor(VirtualLineSensorSource(maze_world, ORIENTATION))
 car = Car(maze_world, chassis, [line_sensor], ORIENTATION)
 maze_map = MazeMap(car, settings.TIME_ERROR)
-brain = HandSearchBrain()
+brain = HandSearchBrain(lefthand=False)
 
 brain.think(car, maze_map)
 
 for i in range(0, 1000):
     if not brain.is_still_thinking():
+        print('Shortest path:')
         print(maze_map.get_shortest_path())
+        print()
+        print('Full travelled map:')
+        maze_map.save_full_path(sys.stdout)
+        print()
+        print('Shortest path on the map:')
+        maze_map.save_shortest_path(sys.stdout)
         break
 
-    time.sleep(1)
+    time.sleep(0.5)
     maze_world.save(sys.stdout)
     print()
     print()
