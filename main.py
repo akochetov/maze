@@ -61,7 +61,7 @@ from sensors.virtual_line_sensor_source import VirtualLineSensorSource
 
 ORIENTATION = Orientation.SOUTH
 
-virtual = False
+virtual = True
 
 if virtual:
     maze_file = 'maze20x20 - linefollow - large loop.txt'

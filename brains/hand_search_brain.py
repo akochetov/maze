@@ -64,7 +64,6 @@ class ThinkThread(Thread):
             car.move(Direction.FORWARD)
         else:
             if Direction.FORWARD in dirs:
-                # car.stop()
                 car.move(Direction.FORWARD)
             else:
                 car.stop()
