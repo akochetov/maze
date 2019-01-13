@@ -106,6 +106,8 @@ class RPi2WheelsChassis(ChassisBase):
         return True
 
     def stop(self):
+        print('Stopping motors...')
+
         if self.lmotor is not None:
             self.lmotor.stop()
 
