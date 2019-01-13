@@ -78,7 +78,7 @@ class RPi2WheelsChassis(ChassisBase):
         self.sensor_pid = sensor_pid
         self.frequency = frequency
 
-        # print('Initialized RPi chassis: {}'.format(self.__dict__))
+        print('Initialized RPi chassis: {}'.format(self.__dict__))
 
         self.move_thread = RPi2WheelsMoveThread(self)
 
@@ -108,7 +108,9 @@ class RPi2WheelsChassis(ChassisBase):
         return True
 
     def stop(self):
+        import traceback, sys
         print('Stopping motors...')
+        traceback.print_stack(file=sys.stdout)
 
         if self.lmotor is not None:
             self.lmotor.stop()

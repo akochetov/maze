@@ -2,9 +2,9 @@ from misc.direction import Direction
 
 
 class LineSensor(object):
-    LEFT = ["[1, 1, "]
-    RIGHT = [", 1, 1]"]
-    FORWARD = [", 0, 1, 0, ", ", 1, 1, 1, ", ", 0, 1, 1, ", ", 1, 1, 0, "]
+    LEFT = ["[1, 1, 1, "]
+    RIGHT = [", 1, 1, 1]"]
+    FORWARD = [", 0, 1, 0, ", ", 1, 1, 1, ", ", 0, 1, 1, ", ", 1, 1, 0, ", "1, 1, 0, 0, 0", "0, 0, 0, 1, 1"]
 
     def __init__(self, source):
         """
