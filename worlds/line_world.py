@@ -1,16 +1,16 @@
-from world_base import WorldBase
+from worlds.world_base import WorldBase
 from time import time
+
 
 class LineWorld(WorldBase):
 
-    IS_OUT = [1,1,1,1,1]
+    IS_OUT = '[1, 1, 1, 1, 1]'
     CONFIDENCE_TIMEOUT_SEC = 0.5
 
     def __init__(self):
         super().__init__()
 
         self.reset()
-
 
     def reset(self):
         self.sensor_data = 0

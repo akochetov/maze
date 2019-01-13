@@ -59,18 +59,11 @@ from worlds.virtual_world import VirtualWorld
 from chassis.virtual_chassis import VirtualChassis
 from sensors.virtual_line_sensor_source import VirtualLineSensorSource
 
-# physical RPi imports
-from worlds.line_world import LineWorld
-from chassis.rpi_2wheels_chassis import RPi2WheelsChassis
-from sensors.rpi_line_sensor_source import RPiLineSensorSource
-from misc.rpi_line_sensor_pid import RPiLineSensorPID
-from misc.state_action import StateAction
-
 ORIENTATION = Orientation.SOUTH
 
-virtual = True
+virtual = False
 
-if virtual = True:
+if virtual:
     maze_file = 'maze20x20 - linefollow - large loop.txt'
     # maze_file = 'maze10x10.txt'
     maze_world = VirtualWorld(maze_file)
@@ -80,6 +73,13 @@ if virtual = True:
     maze_map = MazeMap(car, settings.TIME_ERROR, settings.TIME_TO_TURN)
     brain = HandSearchBrain(lefthand=False)
 else:
+    # physical RPi imports
+    from worlds.line_world import LineWorld
+    from chassis.rpi_2wheels_chassis import RPi2WheelsChassis
+    from sensors.rpi_line_sensor_source import RPiLineSensorSource
+    from misc.rpi_line_sensor_pid import RPiLineSensorPID
+    from misc.state_action import StateAction
+
     GPIO.setmode(GPIO.BCM)
 
     maze_world = LineWorld()
