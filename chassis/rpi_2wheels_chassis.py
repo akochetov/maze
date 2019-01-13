@@ -78,6 +78,8 @@ class RPi2WheelsChassis(ChassisBase):
         self.sensor_pid = sensor_pid
         self.frequency = frequency
 
+        # print('Initialized RPi chassis: {}'.format(self.__dict__))
+
         self.move_thread = RPi2WheelsMoveThread(self)
 
     def rotate(self, degrees):

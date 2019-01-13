@@ -21,6 +21,9 @@ class RPiLineSensorSource(LineSensorSourceBase):
     def get_state(self):
         ret = [0]*self._pins_number
         for i in range(0, self._pins_number):
-            ret[i] = GPIO.input(self.__sensors[i])
+            if self.__invert:
+                ret[i] = abs(GPIO.input(self.__sensors[i]) - 1)
+            else:
+                ret[i] = GPIO.input(self.__sensors[i])
 
         return ret
