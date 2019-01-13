@@ -10,9 +10,6 @@ class LineSensor(object):
         """
         param source: instance of LineSensorSourceBase inherited class
         """
-
-        super().__init__()
-
         self.source = source
 
     def __find_direction(self, state, direction):

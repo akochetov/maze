@@ -13,8 +13,8 @@ class VirtualLineSensorSource(LineSensorSourceBase):
         :param orientation: Orentation instance, pointing initial sensor
         orientation
         """
+        super().__init__(orientation)
         self.maze = maze_world
-        self.orientation = orientation
 
     def get_state(self):
         """

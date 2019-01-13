@@ -1,4 +1,5 @@
 from misc.pid import PID
+from datetime import datetime
 
 
 class RPiLineSensorPID(object):
@@ -9,14 +10,14 @@ class RPiLineSensorPID(object):
         self.ok_state_value = ok_state_value
 
     def get_pid(self):
-        sensors_data = self.sensor.get_sensors_data()
+        sensors_data = self.sensor.get_state()
 
-        todo = state_action.get_action(sensors_data)
+        todo = self.state_action.get_action(sensors_data)
 
         if todo is None:
-            actual = state_action.get_state(sensors_data)
+            actual = self.state_action.get_state(sensors_data)
 
-            ret = pid.get(self.ok_state_value, actual)
+            ret = self.pid.get(self.ok_state_value, actual)
 
             print('{}\tSensors: {}\tActual: {} Error: {} PID: {}'.format(
                 datetime.now(),

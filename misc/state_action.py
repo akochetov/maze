@@ -9,8 +9,8 @@ class StateAction:
 
         return None
 
-    def get_state(self, sensors_data, default_state):
+    def get_state(self, sensors_data):
         if sensors_data in self.states:
             return self.states[sensors_data]
 
-        return default_state
+        return 0

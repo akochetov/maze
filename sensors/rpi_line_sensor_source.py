@@ -1,4 +1,4 @@
-from line_sensor_source_base import LineSensorSourceBase
+from sensors.line_sensor_source_base import LineSensorSourceBase
 import RPi.GPIO as GPIO
 
 
@@ -6,7 +6,8 @@ class RPiLineSensorSource(LineSensorSourceBase):
     '''
     RPi implementation of digital line sensor with 5 IRs in line
     '''
-    def __init__(self, sensors, invert=False):
+    def __init__(self, sensors, orientation, invert=False):
+        super().__init__(orientation)
         self.__sensors = sensors
         self.__invert = invert
         self._pins_number = len(self.__sensors)

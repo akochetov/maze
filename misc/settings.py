@@ -39,12 +39,15 @@ STATE_ERROR = {
     # "11000": 3,
     "[1, 1, 1, 1, 0]": 3}
 
+# state out
+STATE_OUT = "[0, 0, 0, 0, 0]"
+
 # state actions
 STATE_ACTION = {
-    "0, 0, 0, 0, 0": 0,
-    "1, 1, 0, 0, 0": 90,
-    "0, 0, 0, 1, 1": -90,
-    "1, 1, 1, 1, 1": 180}
+    STATE_OUT: 0,
+    "[1, 1, 0, 0, 0]": 90,
+    "[0, 0, 0, 1, 1]": -90,
+    "[1, 1, 1, 1, 1]": 180}
 
 # how many times in a row action has to repeat to account
 STATE_ACTION_REPETITIONS = 2

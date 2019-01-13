@@ -37,8 +37,8 @@ class RPi2WheelsMoveThread(Thread):
 
         print('Power {} {}'.format(l, r))
 
-        lmotor.rotate(True, l)
-        rmotor.rotate(True, r)
+        chassis.lmotor.rotate(True, l)
+        chassis.rmotor.rotate(True, r)
 
         return True
 
@@ -64,8 +64,10 @@ class RPi2WheelsChassis(ChassisBase):
             sensor_pid,
             frequency
             ):
-        self.lmotor = PWMMotor(*lmotor_settings, pwm_frequency=pwm)
-        self.rmotor = PWMMotor(*rmotor_settings, pwm_frequency=pwm)
+        super().__init__()
+
+        self.lmotor = PWMMotor(*lmotor_settings.values(), pwm_frequency=pwm)
+        self.rmotor = PWMMotor(*rmotor_settings.values(), pwm_frequency=pwm)
         self.lmotor.setup()
         self.rmotor.setup()
 
@@ -82,19 +84,26 @@ class RPi2WheelsChassis(ChassisBase):
         self.stop()
 
         if degrees == 180:
-            lmotor.rotate(False, self.left_motor_power)
-            rmotor.rotate(True, self.right_motor_power)
+            self.lmotor.rotate(False, self.left_motor_power)
+            self.rmotor.rotate(True, self.right_motor_power)
             sleep(self.turn_time * 2)
         else:
-            lmotor.rotate(degrees == 90, self.left_motor_power)
-            rmotor.rotate(degrees == -90, self.right_motor_power)
+            self.lmotor.rotate(degrees == 90, self.left_motor_power)
+            self.rmotor.rotate(degrees == -90, self.right_motor_power)
             sleep(self.turn_time)
 
         self.stop()
 
+    def is_moving(self):
+        return self.move_thread.awake
+
     def move(self):
-        lmotor.rotate(True, l)
-        rmotor.rotate(True, r)
+        if self.is_moving():
+            return True
+
+        self.move_thread = RPi2WheelsMoveThread(self)
+        self.move_thread.start()
+        return True
 
     def stop(self):
         if self.lmotor is not None:

@@ -74,6 +74,7 @@ if virtual:
     brain = HandSearchBrain(lefthand=False)
 else:
     # physical RPi imports
+    import RPi.GPIO as GPIO
     from worlds.line_world import LineWorld
     from chassis.rpi_2wheels_chassis import RPi2WheelsChassis
     from sensors.rpi_line_sensor_source import RPiLineSensorSource
@@ -82,24 +83,27 @@ else:
 
     GPIO.setmode(GPIO.BCM)
 
-    maze_world = LineWorld()
+    maze_world = LineWorld(
+        settings.STATE_OUT,
+        settings.STATE_ACTION_REPETITIONS
+        )
 
     line_sensor = LineSensor(
-        RPiLineSensorSource(*settings.LINE_SENSORS, invert=True)
+        RPiLineSensorSource(settings.LINE_SENSORS, ORIENTATION, invert=True)
     )
 
     state_action = StateAction(settings.STATE_ERROR, settings.STATE_ACTION)
 
     sensor_pid = RPiLineSensorPID(
-        *settings.PID,
+        settings.PID,
         line_sensor,
         state_action,
         settings.STATE_OK
     )
 
     chassis = RPi2WheelsChassis(
-        *settings.LEFT_MOTOR,
-        *settings.RIGHT_MOTOR,
+        settings.LEFT_MOTOR,
+        settings.RIGHT_MOTOR,
         settings.LEFT_MOTOR_POWER,
         settings.RIGHT_MOTOR_POWER,
         settings.TIME_TO_TURN,
@@ -129,7 +133,10 @@ while True:
         break
 
     time.sleep(settings.TIME_ERROR*1)
-    maze_world.save(sys.stdout)
+
+    if virtual:
+        maze_world.save(sys.stdout)
+
     print()
     print()
 
