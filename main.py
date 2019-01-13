@@ -43,8 +43,6 @@ HW:
 TODO:
  * add line follow support to a car
  * add motor support to a car
- * add config for everything. make it py file this time
- * make sure sensors only work from maze state
 '''
 
 
@@ -55,6 +53,7 @@ from misc.direction import Direction
 from brains.maze_map import MazeMap
 from chassis.virtual_chassis import VirtualChassis
 from brains.hand_search_brain import HandSearchBrain
+from brains.path_brain import PathBrain
 from sensors.virtual_line_sensor_source import VirtualLineSensorSource
 from sensors.line_sensor import LineSensor
 import misc.settings as settings
@@ -64,7 +63,7 @@ ORIENTATION = Orientation.SOUTH
 maze_file = 'maze20x20 - linefollow - large loop.txt'
 # maze_file = 'maze10x10.txt'
 maze_world = VirtualWorld(maze_file)
-chassis = VirtualChassis(maze_world, 0.5)
+chassis = VirtualChassis(maze_world, settings.TIME_ERROR*1)
 line_sensor = LineSensor(VirtualLineSensorSource(maze_world, ORIENTATION))
 car = Car(maze_world, chassis, [line_sensor], ORIENTATION)
 maze_map = MazeMap(car, settings.TIME_ERROR, settings.TIME_TO_TURN)
@@ -72,17 +71,22 @@ brain = HandSearchBrain(lefthand=False)
 
 brain.think(car, maze_map)
 
-for i in range(0, 1000):
+while True:
     if not brain.is_still_thinking():
+        maze_map.on_crossing(car)
+        shortest_path = maze_map.get_shortest_path(reverse=True)
         print('Shortest path:')
-        print(maze_map.get_shortest_path())
+        print(shortest_path)
         print()
         print('Full travelled map:')
         maze_map.save_full_path(sys.stdout)
         print()
+        print('Going back. Current orientation: {}'.format(car.orientation))
+        path_brain = PathBrain(shortest_path)
+        path_brain.think(car, maze_map=maze_map)
         break
 
-    time.sleep(0.5)
+    time.sleep(settings.TIME_ERROR*1)
     maze_world.save(sys.stdout)
     print()
     print()

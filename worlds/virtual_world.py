@@ -115,13 +115,41 @@ class VirtualWorld(WorldBase):
             output.write('\n')
 
     def move(self):
-        return self._move(
+        return self.__move(
             self.orientation == Orientation.WEST,
             self.orientation == Orientation.EAST,
             self.orientation == Orientation.SOUTH,
             self.orientation == Orientation.NORTH)
 
-    def _move(self, west, east, south, north):
+    def can_move(self):
+        return self.__can_move(
+            self.orientation == Orientation.WEST,
+            self.orientation == Orientation.EAST,
+            self.orientation == Orientation.SOUTH,
+            self.orientation == Orientation.NORTH)
+
+    def __can_move(self, west, east, south, north):
+        moves = 0
+        pos = self.position
+        if (west and pos[0] > 0 and
+                self.state[pos[0]][pos[1] - 1] != MazePoint.WALL):
+            moves += 1
+
+        if (east and pos[0] < len(self.state[0])-1 and
+                self.state[pos[0]][pos[1] + 1] != MazePoint.WALL):
+            moves += 1
+
+        if (north and pos[1] > 0 and
+                self.state[pos[0] - 1][pos[1]] != MazePoint.WALL):
+            moves += 1
+
+        if (south and pos[1] < len(self.state)-1 and
+                self.state[pos[0] + 1][pos[1]] != MazePoint.WALL):
+            moves += 1
+
+        return moves == [west, east, north, south].count(True)
+
+    def __move(self, west, east, south, north):
         """
         Tries to move an object (Car) in a maze. If destination is a wall - no
         move will happen

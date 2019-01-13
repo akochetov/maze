@@ -18,11 +18,22 @@ class VirtualMoveThread(Thread):
         self.awake = True
         return super().start()
 
-    def run(self):
-        # if self.world.move():
-        while self.awake and self.world.move():
-            self.chassis.super_move()
+    def do(self):
+        if self.world.can_move():
             sleep(self.move_duration_sec)
+
+            # make sure thread was not stopped during sleep
+            if self.awake:
+                self.world.move()
+
+            return True
+
+        return False
+
+    def run(self):
+        while self.awake and self.do():
+            pass
+
         self.awake = False
 
     def exit(self):
@@ -45,22 +56,34 @@ class VirtualChassis(ChassisBase):
     def super_move(self):
         super().move()
 
+    def rotate(self, degrees):
+        super().rotate(degrees)
+        sleep(self.move_duration_sec)
+        super().rotate(degrees)
+
     def move(self):
         if self.is_moving():
             return True
 
-        self.stop()
         self.move_thread = VirtualMoveThread(
             self,
             self.world,
             self.move_duration_sec
             )
 
+        # first move has to be synchronously in virtual world
+        # due to discrete moves
+        self.move_thread.awake = True
+        self.move_thread.do()
+
         self.move_thread.start()
+
         return True
 
     def stop(self):
         self.move_thread.exit()
+        self.move_thread.join()
+        pass
 
     def is_moving(self):
         return self.move_thread.awake

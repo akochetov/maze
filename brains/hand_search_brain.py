@@ -19,11 +19,11 @@ class ThinkThread(Thread):
         return super().start()
 
     def run(self):
-        for i in range(0, 1000):
+        while True:
             if not self.awake:
                 break
 
-            sleep(1/3)
+            sleep(0.01/3)
 
             if self.car.is_out():
                 self.awake = False
@@ -64,6 +64,7 @@ class ThinkThread(Thread):
             car.move(Direction.FORWARD)
         else:
             if Direction.FORWARD in dirs:
+                # car.stop()
                 car.move(Direction.FORWARD)
             else:
                 car.stop()

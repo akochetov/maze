@@ -33,7 +33,6 @@ class Car(object):
         """
 
         # rotate car
-        self.chassis.rotate(90 if cw else -90)
         self.orientation = Orientation.rotate(self.orientation, cw)
         self.world.set_orientation(self.orientation)
 
@@ -42,6 +41,7 @@ class Car(object):
             sensor.source.orientation = Orientation.rotate(
                 sensor.source.orientation, cw
                 )
+        self.chassis.rotate(90 if cw else -90)
 
     def rotate_cw(self):
         """
@@ -69,6 +69,10 @@ class Car(object):
             self.rotate_ccw()
             return
         if direction == Direction.RIGHT:
+            self.rotate_cw()
+            return
+        if direction == Direction.BACK:
+            self.rotate_cw()
             self.rotate_cw()
             return
 
