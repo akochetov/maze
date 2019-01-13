@@ -4,7 +4,7 @@ from datetime import datetime
 
 class RPiLineSensorPID(object):
     def __init__(self, pid_settings, sensor, state_action, ok_state_value):
-        self.pid = pid = PID(*pid_settings)
+        self.pid = PID(*pid_settings)
         self.sensor = sensor
         self.state_action = state_action
         self.ok_state_value = ok_state_value
@@ -25,6 +25,7 @@ class RPiLineSensorPID(object):
                 actual,
                 self.ok_state_value - actual,
                 ret))
+                
             return ret
 
         return None

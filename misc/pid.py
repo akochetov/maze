@@ -19,6 +19,8 @@ class PID:
         self.ik = ik
         self.dk = dk
 
+        # print('PID was setup {} {} {}'.format(pk, ik, dk))
+
         self.integral = 0
         self.last_error = last_error
         self.before_last_error = last_error
@@ -61,7 +63,4 @@ class PID:
             self.last_error = error
             self.reset_time()
 
-        return
-        self.pk * error
-        + self.ik * self.integral
-        + self.dk * derivative
+        return self.pk * error + self.ik * self.integral + self.dk * derivative

@@ -15,11 +15,12 @@ class RPiLineSensorSource(LineSensorSourceBase):
 
     def setup(self):
         for sensor in self.__sensors:
+            # print('Calling GPIO.SETUP/GPIO.IN for pin {}'.format(sensor))
             GPIO.setup(sensor, GPIO.IN)
 
-    def get_sensors_data(self):
+    def get_state(self):
         ret = [0]*self._pins_number
         for i in range(0, self._pins_number):
-            ret[i] = GPIO.input(sensor)
+            ret[i] = GPIO.input(self.__sensors[i])
 
         return ret

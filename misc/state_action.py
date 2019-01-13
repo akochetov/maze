@@ -4,13 +4,18 @@ class StateAction:
         self.actions = actions
 
     def get_action(self, sensors_data):
-        if sensors_data in self.actions:
-            return self.actions[sensors_data]
+        data = str(sensors_data)
+        if data in self.actions:
+            print('Action detected. Signal: {}, action: {}'.format(
+                data, self.actions[data]
+                ))
+            return self.actions[data]
 
         return None
 
     def get_state(self, sensors_data):
-        if sensors_data in self.states:
-            return self.states[sensors_data]
+        data = str(sensors_data)
+        if data in self.states:
+            return self.states[data]
 
         return 0
