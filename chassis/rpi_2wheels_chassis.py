@@ -120,10 +120,10 @@ class RPi2WheelsChassis(ChassisBase):
             self.move_thread.exit()
             self.move_thread.join()
 
-        import traceback
-        import sys
         print('Stopping motors...')
-        traceback.print_stack(file=sys.stdout)
+        # import traceback
+        # import sys
+        # traceback.print_stack(file=sys.stdout)
 
         if self.lmotor is not None:
             self.lmotor.stop()
