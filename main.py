@@ -71,7 +71,7 @@ if virtual:
     line_sensor = LineSensor(VirtualLineSensorSource(maze_world, ORIENTATION))
     car = Car(maze_world, chassis, [line_sensor], ORIENTATION)
     maze_map = MazeMap(car, settings.TIME_ERROR, settings.TIME_TO_TURN)
-    brain = HandSearchBrain(lefthand=False)
+    brain = HandSearchBrain(lefthand=True)
 else:
     # physical RPi imports
     import RPi.GPIO as GPIO

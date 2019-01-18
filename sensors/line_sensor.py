@@ -2,11 +2,15 @@ from misc.direction import Direction
 
 
 class LineSensor(object):
-    LEFT = ["[1, 1, "]  # ["[1, 1, 1, "]
-    RIGHT = [", 1, 1]"]  # [", 1, 1, 1]"]
-    FORWARD = [", 0, 1, 0, ", ", 1, 1, 1, ", ", 0, 1, 1, ", ", 1, 1, 0, "]
-    # FORWARD = [", 0, 1, 0, ", ", 1, 1, 1, ", ", 0, 1, 1, ", ", 1, 1, 0, ",
-    # "1, 1, 0, 0, 0", "0, 0, 0, 1, 1"]
+    LEFT = ["[1, 1, 0, 0, 0]", "[1, 1, 1, 0, 0]", "[1, 1, 0, 1, 1]"]
+    RIGHT = ["[0, 0, 0, 1, 1]", "[0, 0, 1, 1, 1]", "[1, 1, 0, 1, 1]"]
+    FORWARD = [
+        "[1, 1, 1, 0, 0]",
+        "[0, 0, 1, 1, 1]",
+        "[0, 0, 1, 0, 0]",
+        "[0, 1, 1, 1, 0]",
+        "[0, 1, 1, 0, 0]",
+        "[0, 0, 1, 1, 0]"]
 
     def __init__(self, source):
         """
@@ -16,7 +20,7 @@ class LineSensor(object):
 
     def __find_direction(self, state, direction):
         for dir in direction:
-            if state.find(dir) >= 0:
+            if state == dir:
                 return True
 
         return False
