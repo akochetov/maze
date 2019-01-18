@@ -4,10 +4,10 @@ FREQ = 1 / 20
 # motors config
 RIGHT_MOTOR = {"EN": 13, "IN1": 5, "IN2": 6}
 LEFT_MOTOR = {"EN": 19, "IN1": 20, "IN2": 21}
-POWER = 40
+POWER = 35
 LEFT_MOTOR_POWER = POWER
 RIGHT_MOTOR_POWER = POWER+1
-PWM = 40
+PWM = 30
 
 # line sensors
 LINE_SENSORS = [8, 25, 24, 23, 18]
@@ -21,7 +21,7 @@ POWER_SPEED = {
 TAPE_WIDTH = 0.03
 
 # PID coefficients, PK, IK and DK repsectively
-PID = [3.5, 0, 5.5]  # 0.1, 0.05]
+PID = [3, 0, 0]  # 0.1, 0.05]
 
 # state error
 STATE_OK = 0
@@ -31,9 +31,9 @@ STATE_ERROR = {
     # "00011": -3,
     "[1, 1, 0, 0, 0]": -2,
     "[0, 1, 0, 0, 0]": -1.5,
-    "[0, 1, 1, 0, 0]": -0.5,
+    "[0, 1, 1, 0, 0]": -1,
     "[0, 0, 1, 0, 0]": STATE_OK,
-    "[0, 0, 1, 1, 0]": 0.5,
+    "[0, 0, 1, 1, 0]": 1,
     "[0, 0, 0, 1, 0]": 1.5,
     "[0, 0, 0, 1, 1]": 2,
     # "11000": 3,
@@ -54,4 +54,4 @@ STATE_ACTION_REPETITIONS = 2
 
 # maze map settings
 TIME_ERROR = 0.25  # / 2
-TIME_TO_TURN = 0.5
+TIME_TO_TURN = 0.4
