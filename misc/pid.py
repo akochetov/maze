@@ -51,13 +51,15 @@ class PID:
             desired_value {float} -- Desired value of system state
             actual_value {float} -- Actual current value of system state
         """
-        if self.first_call:
-            self.before_last_error = error
-            self.first_call = False
 
         iteration = self.__get_time() - self.iteration_time
 
         error = desired_value - actual_value
+
+        if self.first_call:
+            self.before_last_error = error
+            self.first_call = False
+
         self.integral = self.integral + (error * iteration)
         derivative = (error - self.before_last_error) / iteration
 
