@@ -69,12 +69,12 @@ class RPi2WheelsChassis(ChassisBase):
         self.lmotor = PWMMotor(
             lmotor_settings["EN"],
             lmotor_settings["IN1"],
-            lmotor_settings["IN2"]
+            lmotor_settings["IN2"],
             pwm_frequency=pwm)
         self.rmotor = PWMMotor(
             rmotor_settings["EN"],
             rmotor_settings["IN1"],
-            rmotor_settings["IN2"]
+            rmotor_settings["IN2"],
             pwm_frequency=pwm)
         self.lmotor.setup()
         self.rmotor.setup()
