@@ -24,7 +24,7 @@ class PID:
         self.integral = 0
         self.last_error = last_error
         self.before_last_error = last_error
-
+        self.first_call = True
         self.reset_time()
 
     def reset_time(self):
@@ -51,6 +51,9 @@ class PID:
             desired_value {float} -- Desired value of system state
             actual_value {float} -- Actual current value of system state
         """
+        if self.first_call:
+            self.reset_time()
+            self.first_call = False
 
         iteration = self.__get_time() - self.iteration_time
 

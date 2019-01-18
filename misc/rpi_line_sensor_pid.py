@@ -25,7 +25,7 @@ class RPiLineSensorPID(object):
                 actual,
                 self.ok_state_value - actual,
                 ret))
-                
+
             return ret
 
         return None
