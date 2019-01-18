@@ -64,8 +64,8 @@ ORIENTATION = Orientation.SOUTH
 virtual = False
 
 if virtual:
-    maze_file = 'maze20x20 - linefollow - large loop.txt'
-    # maze_file = 'maze10x10.txt'
+    # maze_file = 'maze20x20 - linefollow - large loop.txt'
+    maze_file = 'maze10x10.txt'
     maze_world = VirtualWorld(maze_file)
     chassis = VirtualChassis(maze_world, settings.TIME_ERROR*1)
     line_sensor = LineSensor(VirtualLineSensorSource(maze_world, ORIENTATION))

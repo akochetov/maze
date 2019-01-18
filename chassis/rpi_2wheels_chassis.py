@@ -108,7 +108,8 @@ class RPi2WheelsChassis(ChassisBase):
         return True
 
     def stop(self):
-        import traceback, sys
+        import traceback
+        import sys
         print('Stopping motors...')
         traceback.print_stack(file=sys.stdout)
 
