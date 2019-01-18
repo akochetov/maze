@@ -102,7 +102,7 @@ class RPi2WheelsChassis(ChassisBase):
             self.rmotor.rotate(degrees == -90, self.right_motor_power)
             sleep(self.turn_time)
 
-        self.stop()
+        # self.stop()
 
     def is_moving(self):
         return self.move_thread.awake
@@ -116,6 +116,10 @@ class RPi2WheelsChassis(ChassisBase):
         return True
 
     def stop(self):
+        if self.is_moving():
+            self.move_thread.exit()
+            self.move_thread.join()
+
         import traceback
         import sys
         print('Stopping motors...')
