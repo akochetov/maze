@@ -61,7 +61,7 @@ from sensors.virtual_line_sensor_source import VirtualLineSensorSource
 
 ORIENTATION = Orientation.SOUTH
 
-virtual = False
+virtual = True
 
 if virtual:
     # maze_file = 'maze20x20 - linefollow - large loop.txt'
@@ -118,27 +118,33 @@ else:
 brain.think(car, maze_map)
 
 while True:
-    if not brain.is_still_thinking():
-        maze_map.on_crossing(car)
-        shortest_path = maze_map.get_shortest_path(reverse=True)
-        print('Shortest path:')
-        print(shortest_path)
+    try:
+        if not brain.is_still_thinking():
+            maze_map.on_crossing(car)
+            shortest_path = maze_map.get_shortest_path(reverse=True)
+            print('Shortest path:')
+            print(shortest_path)
+            print()
+            print('Full travelled map:')
+            maze_map.save_full_path(sys.stdout)
+            print()
+            print('Going back. Current orient.: {}'.format(car.orientation))
+            path_brain = PathBrain(shortest_path)
+            path_brain.think(car, maze_map=maze_map)
+            break
+
+        time.sleep(settings.TIME_ERROR*1)
+
+        if virtual:
+            maze_world.save(sys.stdout)
+
         print()
-        print('Full travelled map:')
-        maze_map.save_full_path(sys.stdout)
         print()
-        print('Going back. Current orientation: {}'.format(car.orientation))
-        path_brain = PathBrain(shortest_path)
-        path_brain.think(car, maze_map=maze_map)
+    except KeyboardInterrupt:
+        print('Interrupted. Exiting.')
+        brain.stop()
+        car.stop()
         break
-
-    time.sleep(settings.TIME_ERROR*1)
-
-    if virtual:
-        maze_world.save(sys.stdout)
-
-    print()
-    print()
 
 if not virtual:
     GPIO.cleanup()

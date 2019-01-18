@@ -94,3 +94,8 @@ class HandSearchBrain(BrainBase):
 
     def is_still_thinking(self):
         return self.thread.awake
+
+    def stop(self):
+        self.thread.exit()
+        self.thread.join()
+        pass

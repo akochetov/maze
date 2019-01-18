@@ -4,3 +4,6 @@ class BrainBase(object):
 
     def is_still_thinking(self):
         pass
+
+    def stop(self):
+        pass
