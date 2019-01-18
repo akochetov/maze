@@ -52,7 +52,7 @@ class PID:
             actual_value {float} -- Actual current value of system state
         """
         if self.first_call:
-            self.reset_time()
+            self.before_last_error = error
             self.first_call = False
 
         iteration = self.__get_time() - self.iteration_time
