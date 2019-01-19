@@ -7,7 +7,7 @@ LEFT_MOTOR = {"EN": 19, "IN1": 20, "IN2": 21}
 POWER = 40
 LEFT_MOTOR_POWER = POWER
 RIGHT_MOTOR_POWER = POWER+1
-PWM = 30
+PWM = 20
 
 # line sensors
 LINE_SENSORS = [8, 25, 24, 23, 18]
@@ -21,7 +21,7 @@ POWER_SPEED = {
 TAPE_WIDTH = 0.03
 
 # PID coefficients, PK, IK and DK repsectively
-PID = [5, 0, 0]  # 0.1, 0.05]
+PID = [5, 2, 0.5]
 
 # state error
 STATE_OK = 0

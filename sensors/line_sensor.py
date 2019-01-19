@@ -71,10 +71,7 @@ class LineSensor(object):
         ):
             ret.append(Direction.RIGHT)
 
-        if (
-            self.__find_direction(state, LineSensor.FORWARD) and
-            self.__if_same_reps()
-        ):
+        if self.__find_direction(state, LineSensor.FORWARD):
             ret.append(Direction.FORWARD)
 
         return ret

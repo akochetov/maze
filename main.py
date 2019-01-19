@@ -61,7 +61,7 @@ from sensors.virtual_line_sensor_source import VirtualLineSensorSource
 
 ORIENTATION = Orientation.SOUTH
 
-virtual = True
+virtual = False
 
 if virtual:
     # maze_file = 'maze20x20 - linefollow - large loop.txt'
@@ -92,8 +92,7 @@ else:
 
     line_sensor = LineSensor(
         RPiLineSensorSource(settings.LINE_SENSORS, ORIENTATION, invert=True),
-        state_trigger_repetitions=settings.STATE_ACTION_REPETITIONS
-        )
+        state_trigger_repetitions=settings.STATE_ACTION_REPETITIONS)
 
     state_action = StateAction(settings.STATE_ERROR, settings.STATE_ACTION)
 

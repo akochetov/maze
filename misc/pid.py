@@ -66,12 +66,14 @@ class PID:
         else:
             self.integral = self.integral + (error * iteration)
 
-        derivative = (error - self.before_last_error) / iteration
+        derivative = (error - self.last_error) / iteration
+        self.last_error = error
+        # derivative = (error - self.before_last_error) / iteration
 
-        if self.last_error != error:
-            self.error_before_last = self.last_error
-            self.last_error = error
-            self.reset_time()
+        # if self.last_error != error:
+        #    self.error_before_last = self.last_error
+        #    self.last_error = error
+        #    self.reset_time()
 
         print('{}\tp: {}\ti: {} d: {}'.format(
             datetime.now(),
