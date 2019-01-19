@@ -21,7 +21,7 @@ POWER_SPEED = {
 TAPE_WIDTH = 0.03
 
 # PID coefficients, PK, IK and DK repsectively
-PID = [5, 2, 0.5]
+PID = [4, 1.5, 1]
 
 # state error
 STATE_OK = 0

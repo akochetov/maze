@@ -62,18 +62,20 @@ class PID:
             self.first_call = False
 
         if actual_value == desired_value:
-            self.integral = 0
+            # experimental - reducing I part as we drive forward correctly
+            self.integral = self.integral / 2
         else:
             self.integral = self.integral + (error * iteration)
 
-        derivative = (error - self.last_error) / iteration
-        self.last_error = error
-        # derivative = (error - self.before_last_error) / iteration
+        derivative = (error - self.before_last_error) / iteration
 
-        # if self.last_error != error:
-        #    self.error_before_last = self.last_error
-        #    self.last_error = error
-        #    self.reset_time()
+        # experimental - reducing D part every iteration
+        self.before_last_error += (error - self.before_last_error) / 4
+
+        if self.last_error != error:
+            self.before_last_error = self.last_error
+            self.last_error = error
+            self.reset_time()
 
         print('{}\tp: {}\ti: {} d: {}'.format(
             datetime.now(),
