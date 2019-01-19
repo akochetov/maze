@@ -61,14 +61,16 @@ from sensors.virtual_line_sensor_source import VirtualLineSensorSource
 
 ORIENTATION = Orientation.SOUTH
 
-virtual = False
+virtual = True
 
 if virtual:
     # maze_file = 'maze20x20 - linefollow - large loop.txt'
     maze_file = 'maze10x10.txt'
     maze_world = VirtualWorld(maze_file)
     chassis = VirtualChassis(maze_world, settings.TIME_ERROR*1)
-    line_sensor = LineSensor(VirtualLineSensorSource(maze_world, ORIENTATION))
+    line_sensor = LineSensor(
+        VirtualLineSensorSource(maze_world, ORIENTATION),
+        state_trigger_repetitions=settings.STATE_ACTION_REPETITIONS)
     car = Car(maze_world, chassis, [line_sensor], ORIENTATION)
     maze_map = MazeMap(car, settings.TIME_ERROR, settings.TIME_TO_TURN)
     brain = HandSearchBrain(lefthand=True)
@@ -89,8 +91,9 @@ else:
         )
 
     line_sensor = LineSensor(
-        RPiLineSensorSource(settings.LINE_SENSORS, ORIENTATION, invert=True)
-    )
+        RPiLineSensorSource(settings.LINE_SENSORS, ORIENTATION, invert=True),
+        state_trigger_repetitions=settings.STATE_ACTION_REPETITIONS
+        )
 
     state_action = StateAction(settings.STATE_ERROR, settings.STATE_ACTION)
 
