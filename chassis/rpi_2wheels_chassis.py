@@ -2,7 +2,11 @@ from chassis.chassis_base import ChassisBase
 from chassis.pwm_motor import PWMMotor
 from misc.log import log
 from time import sleep
+from time import time
 from threading import Thread
+
+# how frequently check sensors state when turning
+TURN_FREQ = 1 / 100
 
 
 class RPi2WheelsMoveThread(Thread):
@@ -91,19 +95,27 @@ class RPi2WheelsChassis(ChassisBase):
 
         self.move_thread = RPi2WheelsMoveThread(self)
 
-    def rotate(self, degrees):
+    def rotate(self, degrees, stop_function=None):
         self.stop()
 
         log('Stopped. Turning...')
 
-        if degrees == 180:
-            self.lmotor.rotate(False, self.left_motor_power)
-            self.rmotor.rotate(True, self.right_motor_power)
-            sleep(self.turn_time * 2)
+        if stop_function is None:
+            if degrees == 180:
+                self.lmotor.rotate(False, self.left_motor_power)
+                self.rmotor.rotate(True, self.right_motor_power)
+                sleep(self.turn_time * 2)
+            else:
+                self.lmotor.rotate(degrees == 90, self.left_motor_power)
+                self.rmotor.rotate(degrees == -90, self.right_motor_power)
+                sleep(self.turn_time)
         else:
-            self.lmotor.rotate(degrees == 90, self.left_motor_power)
-            self.rmotor.rotate(degrees == -90, self.right_motor_power)
-            sleep(self.turn_time)
+            start = time()
+            # first have a sleep equal to half turn to get car started to turn
+            sleep(self.turn_time / 2)
+
+            while not stop_function() and time() - start < self.turn_time * 4:
+                sleep(TURN_FREQ)
 
         log('Turning finished.')
 

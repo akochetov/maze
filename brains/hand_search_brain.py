@@ -43,19 +43,24 @@ class ThinkThread(Thread):
     def exit(self):
         self.awake = False
 
+    def stop_function(self):
+        dirs = car.sensors[0].get_directions()
+
+        return len(dirs) == 1 and Direction.FORWARD in dirs
+
     def left_hand_search(self, car):
         dirs = car.sensors[0].get_directions()
 
         if Direction.LEFT in dirs:
             car.stop()
-            car.move(Direction.LEFT)
+            car.rotate_ccw(self.stop_function)
             car.move(Direction.FORWARD)
         else:
             if Direction.FORWARD in dirs:
                 car.move(Direction.FORWARD)
             else:
                 car.stop()
-                car.move(Direction.RIGHT)
+                car.rotate_cw(self.stop_function)
                 car.move(Direction.FORWARD)
 
     def right_hand_search(self, car):
@@ -63,14 +68,14 @@ class ThinkThread(Thread):
 
         if Direction.RIGHT in dirs:
             car.stop()
-            car.move(Direction.RIGHT)
+            car.rotate_cw(self.stop_function)
             car.move(Direction.FORWARD)
         else:
             if Direction.FORWARD in dirs:
                 car.move(Direction.FORWARD)
             else:
                 car.stop()
-                car.move(Direction.LEFT)
+                car.rotate_ccw(self.stop_function)
                 car.move(Direction.FORWARD)
 
 

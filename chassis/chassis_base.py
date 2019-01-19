@@ -5,7 +5,7 @@ class ChassisBase(object):
         self.__on_rotate = []
         self.__moving = False
 
-    def rotate(self, degrees):
+    def rotate(self, degrees, stop_function=None):
         self.__trigger_on_rotate()
 
     def move(self):

@@ -24,7 +24,7 @@ class Car(object):
 
         self.sensors = sensors
 
-    def rotate(self, cw):
+    def rotate(self, cw, stop_function=None):
         """
         Car turning.
         :param cw: ClockWise. True or False. In case of False rotates counter
@@ -40,15 +40,15 @@ class Car(object):
             sensor.source.orientation = Orientation.rotate(
                 sensor.source.orientation, cw
                 )
-        self.chassis.rotate(90 if cw else -90)
+        self.chassis.rotate(90 if cw else -90, stop_function=stop_function)
 
-    def rotate_cw(self):
+    def rotate_cw(self, stop_function=None):
         """
         Rotate car clock wise
         """
         self.rotate(True)
 
-    def rotate_ccw(self):
+    def rotate_ccw(self, stop_function=None):
         """
         Rotate car counter clock wise
         """
@@ -64,12 +64,7 @@ class Car(object):
         If LEFT or RIGHT, turns first (changes Orientation) and quits.
         :param direction: Direction where to move
         """
-        if direction == Direction.LEFT:
-            self.rotate_ccw()
-            return
-        if direction == Direction.RIGHT:
-            self.rotate_cw()
-            return
+
         if direction == Direction.BACK:
             self.rotate_cw()
             self.rotate_cw()
