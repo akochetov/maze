@@ -1,4 +1,5 @@
 from time import time
+from datetime import datetime
 
 
 class PID:
@@ -60,12 +61,22 @@ class PID:
             self.before_last_error = error
             self.first_call = False
 
-        self.integral = self.integral + (error * iteration)
+        if actual_value == desired_value:
+            self.integral = 0
+        else:
+            self.integral = self.integral + (error * iteration)
+
         derivative = (error - self.before_last_error) / iteration
 
         if self.last_error != error:
             self.error_before_last = self.last_error
             self.last_error = error
             self.reset_time()
+
+        print('{}\tp: {}\ti: {} d: {}'.format(
+            datetime.now(),
+            error,
+            self.integral,
+            derivative))
 
         return self.pk * error + self.ik * self.integral + self.dk * derivative
