@@ -1,3 +1,6 @@
+# Virtual or physical maze
+VIRTUAL = 1
+
 # Logging
 LOG = True
 
