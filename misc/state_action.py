@@ -1,4 +1,4 @@
-from misc.log import log()
+from misc.log import log
 
 
 class StateAction:
