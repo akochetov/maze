@@ -30,6 +30,9 @@ class ThinkThread(Thread):
                 break
 
             if self.maze_map is not None and self.car.sensors[0].is_crossing():
+                print('Crossing detected: {}'.format(
+                    self.car.sensors[0].get_state()
+                    ))
                 self.maze_map.on_crossing(self.car)
 
             if self.lefthand:
