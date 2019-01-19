@@ -93,6 +93,8 @@ class RPi2WheelsChassis(ChassisBase):
     def rotate(self, degrees):
         self.stop()
 
+        print('Stopped. Turning...')
+
         if degrees == 180:
             self.lmotor.rotate(False, self.left_motor_power)
             self.rmotor.rotate(True, self.right_motor_power)
@@ -101,6 +103,8 @@ class RPi2WheelsChassis(ChassisBase):
             self.lmotor.rotate(degrees == 90, self.left_motor_power)
             self.rmotor.rotate(degrees == -90, self.right_motor_power)
             sleep(self.turn_time)
+
+        print('Turning finished.')
 
         # self.stop()
 
