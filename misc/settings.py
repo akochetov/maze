@@ -1,3 +1,6 @@
+# Logging
+LOG = True
+
 # control time interval
 FREQ = 1 / 20
 

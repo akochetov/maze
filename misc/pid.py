@@ -1,5 +1,5 @@
 from time import time
-from datetime import datetime
+from misc.log import log
 
 
 class PID:
@@ -19,8 +19,6 @@ class PID:
         self.pk = pk
         self.ik = ik
         self.dk = dk
-
-        # print('PID was setup {} {} {}'.format(pk, ik, dk))
 
         self.integral = 0
         self.last_error = last_error
@@ -77,8 +75,7 @@ class PID:
             self.last_error = error
             self.reset_time()
 
-        print('{}\tp: {}\ti: {} d: {}'.format(
-            datetime.now(),
+        log('p: {}\ti: {} d: {}'.format(
             error,
             self.integral,
             derivative))

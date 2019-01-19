@@ -1,6 +1,7 @@
 from misc.orientation import Orientation
 from misc.direction import Direction
 import brains.a_star as a_star
+from misc.log import log
 from time import time
 
 
@@ -91,9 +92,8 @@ class MazePath(object):
         self.coordinates.append(
             [coord[0], coord[1], self.current_node]
                 )
-        print(
-            'add_coordinates: {}',
-            str(coord)
+        log(
+            'add_coordinates: {}'.format(coord)
             )
 
     def find_coordinates(self, pos):

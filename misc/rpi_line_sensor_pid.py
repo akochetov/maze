@@ -1,5 +1,5 @@
 from misc.pid import PID
-from datetime import datetime
+from misc.log import log
 
 
 class RPiLineSensorPID(object):
@@ -19,8 +19,7 @@ class RPiLineSensorPID(object):
 
             ret = self.pid.get(self.ok_state_value, actual)
 
-            print('{}\tSensors: {}\tActual: {} Error: {} PID: {}'.format(
-                datetime.now(),
+            log('Sensors: {}\tActual: {} Error: {} PID: {}'.format(
                 sensors_data,
                 actual,
                 self.ok_state_value - actual,

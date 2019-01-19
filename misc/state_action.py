@@ -1,3 +1,6 @@
+from misc.log import log()
+
+
 class StateAction:
     def __init__(self, states, actions):
         self.states = states
@@ -6,7 +9,7 @@ class StateAction:
     def get_action(self, sensors_data):
         data = str(sensors_data)
         if data in self.actions:
-            print('Action detected. Signal: {}, action: {}'.format(
+            log('Action detected. Signal: {}, action: {}'.format(
                 data, self.actions[data]
                 ))
             return self.actions[data]

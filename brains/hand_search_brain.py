@@ -1,6 +1,6 @@
 from brains.brain_base import BrainBase
 from misc.direction import Direction
-
+from misc.log import log
 from threading import Thread
 from time import sleep
 
@@ -30,7 +30,7 @@ class ThinkThread(Thread):
                 break
 
             if self.maze_map is not None and self.car.sensors[0].is_crossing():
-                print('Crossing detected: {}'.format(
+                log('Crossing detected: {}'.format(
                     self.car.sensors[0].get_state()
                     ))
                 self.maze_map.on_crossing(self.car)

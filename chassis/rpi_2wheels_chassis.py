@@ -1,5 +1,6 @@
 from chassis.chassis_base import ChassisBase
 from chassis.pwm_motor import PWMMotor
+from misc.log import log
 from time import sleep
 from threading import Thread
 
@@ -35,7 +36,7 @@ class RPi2WheelsMoveThread(Thread):
             l -= int(pow)
             r += int(pow)
 
-        print('Power {} {}'.format(l, r))
+        log('Power {} {}'.format(l, r))
 
         chassis.lmotor.rotate(True, l)
         chassis.rmotor.rotate(True, r)
@@ -86,14 +87,14 @@ class RPi2WheelsChassis(ChassisBase):
         self.sensor_pid = sensor_pid
         self.frequency = frequency
 
-        print('Initialized RPi chassis: {}'.format(self.__dict__))
+        log('Initialized RPi chassis: {}'.format(self.__dict__))
 
         self.move_thread = RPi2WheelsMoveThread(self)
 
     def rotate(self, degrees):
         self.stop()
 
-        print('Stopped. Turning...')
+        log('Stopped. Turning...')
 
         if degrees == 180:
             self.lmotor.rotate(False, self.left_motor_power)
@@ -104,9 +105,7 @@ class RPi2WheelsChassis(ChassisBase):
             self.rmotor.rotate(degrees == -90, self.right_motor_power)
             sleep(self.turn_time)
 
-        print('Turning finished.')
-
-        # self.stop()
+        log('Turning finished.')
 
     def is_moving(self):
         return self.move_thread.awake
@@ -124,7 +123,7 @@ class RPi2WheelsChassis(ChassisBase):
             self.move_thread.exit()
             self.move_thread.join()
 
-        print('Stopping motors...')
+        log('Stopping motors...')
         # import traceback
         # import sys
         # traceback.print_stack(file=sys.stdout)
@@ -144,4 +143,4 @@ class RPi2WheelsChassis(ChassisBase):
             self.rmotor.stop()
             self.rmotor.cleanup()
 
-        print('GPIO PWMs de-initialized.')
+        log('GPIO PWMs de-initialized.')
