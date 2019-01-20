@@ -118,8 +118,11 @@ class RPiLineSensorSource(LineSensorSourceBase):
             self.__if_same_reps()
         ):
             self.out_reps += 1
-            if self.out_reps > self.state_trigger_repetitions:
+            if self.out_reps >= self.state_trigger_repetitions:
                 ret = None
+            else:
+                ret = []
+            log(self.__dict__)
         else:
             self.out_reps = 0
 

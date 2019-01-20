@@ -10,10 +10,10 @@ FREQ = 1 / 20
 # motors config
 RIGHT_MOTOR = {"EN": 13, "IN1": 5, "IN2": 6}
 LEFT_MOTOR = {"EN": 19, "IN1": 20, "IN2": 21}
-POWER = 30
+POWER = 35
 LEFT_MOTOR_POWER = POWER
 RIGHT_MOTOR_POWER = POWER+1
-PWM = 20
+PWM = 25
 
 # line sensors
 LINE_SENSORS = [8, 25, 24, 23, 18]
@@ -28,7 +28,7 @@ TAPE_WIDTH = 0.03
 
 # PID coefficients, PK, IK and DK repsectively
 # PID = [4, 1.5, 1]  # this quite worked
-PID = [3.5, 1, 0.5]  # this must run softer
+PID = [4, 1.5, 1]  # this must run softer
 
 # state error
 STATE_OK = 0
