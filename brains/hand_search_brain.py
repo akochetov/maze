@@ -51,6 +51,14 @@ class ThinkThread(Thread):
     def left_hand_search(self, car):
         dirs = car.sensors[0].get_directions()
 
+        # log('Directions: {}'.format(dirs))
+
+        if Direction.BACK in dirs:
+            car.stop()
+            car.turn_around(stop_function=self.stop_function)
+            car.move(Direction.FORWARD)
+            return
+
         if Direction.LEFT in dirs:
             car.stop()
             car.rotate_ccw(stop_function=self.stop_function)
@@ -65,6 +73,14 @@ class ThinkThread(Thread):
 
     def right_hand_search(self, car):
         dirs = car.sensors[0].get_directions()
+
+        # log('Directions: {}'.format(dirs))
+
+        if Direction.BACK in dirs:
+            car.stop()
+            car.turn_around(stop_function=self.stop_function)
+            car.move(Direction.FORWARD)
+            return
 
         if Direction.RIGHT in dirs:
             car.stop()

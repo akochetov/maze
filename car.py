@@ -24,6 +24,24 @@ class Car(object):
 
         self.sensors = sensors
 
+    def turn_around(self, stop_function=None):
+        """
+        Car turning.
+        :param cw: ClockWise. True or False. In case of False rotates counter
+        clockwise
+        """
+
+        # rotate car
+        self.orientation = Orientation.flip(self.orientation)
+        self.world.set_orientation(self.orientation)
+
+        # "rotate" sensors too
+        for sensor in self.sensors:
+            sensor.source.orientation = Orientation.flip(
+                sensor.source.orientation
+                )
+        self.chassis.rotate(180, stop_function=stop_function)
+
     def rotate(self, cw, stop_function=None):
         """
         Car turning.

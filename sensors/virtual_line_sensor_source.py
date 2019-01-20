@@ -1,11 +1,34 @@
 from sensors.line_sensor_source_base import LineSensorSourceBase
 from misc.orientation import Orientation
+from misc.direction import Direction
 
 
 class VirtualLineSensorSource(LineSensorSourceBase):
     """
     Car sensor. Measures distance to a wall in front of sensor
     """
+    LEFT = [
+        "[1, 1, 0, 0, 0]",
+        "[1, 1, 1, 0, 0]",
+        "[1, 1, 0, 1, 1]",
+        "[1, 1, 1, 1, 1]"
+        ]
+
+    RIGHT = [
+        "[0, 0, 0, 1, 1]",
+        "[0, 0, 1, 1, 1]",
+        "[1, 1, 0, 1, 1]",
+        "[1, 1, 1, 1, 1]"
+        ]
+
+    FORWARD = [
+        "[1, 1, 1, 0, 0]",
+        "[0, 0, 1, 1, 1]",
+        "[0, 0, 1, 0, 0]",
+        "[1, 1, 1, 1, 1]"]
+
+    OFF = ["[0, 0, 0, 0, 0]"]
+
     def __init__(self, maze_world, orientation):
         """
         Constructor. Takes maze and initial sensor orientation
@@ -61,3 +84,28 @@ class VirtualLineSensorSource(LineSensorSourceBase):
         ret[4] = ret[3]
 
         return ret
+
+    def get_directions(self):
+        ret = []
+        state = str(self.get_state())
+
+        if self.__find_direction(state, self.LEFT):
+            ret.append(Direction.LEFT)
+
+        if self.__find_direction(state, self.RIGHT):
+            ret.append(Direction.RIGHT)
+
+        if self.__find_direction(state, self.FORWARD):
+            ret.append(Direction.FORWARD)
+
+        if self.__find_direction(state, self.OFF):
+            ret.append(Direction.BACK)
+
+        return ret
+
+    def __find_direction(self, state, direction):
+        for dir in direction:
+            if state == dir:
+                return True
+
+        return False
