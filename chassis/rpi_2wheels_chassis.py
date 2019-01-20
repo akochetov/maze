@@ -100,21 +100,22 @@ class RPi2WheelsChassis(ChassisBase):
 
         log('Stopped. Turning...')
 
+        if degrees == 180:
+            self.lmotor.rotate(False, self.left_motor_power)
+            self.rmotor.rotate(True, self.right_motor_power)
+        else:
+            self.lmotor.rotate(degrees == 90, self.left_motor_power)
+            self.rmotor.rotate(degrees == -90, self.right_motor_power)
+
         if stop_function is None:
-            if degrees == 180:
-                self.lmotor.rotate(False, self.left_motor_power)
-                self.rmotor.rotate(True, self.right_motor_power)
-                sleep(self.turn_time * 2)
-            else:
-                self.lmotor.rotate(degrees == 90, self.left_motor_power)
-                self.rmotor.rotate(degrees == -90, self.right_motor_power)
-                sleep(self.turn_time)
+            sleep(self.turn_time * float(abs(degrees)) / 90.0)
         else:
             start = time()
             # first have a sleep equal to half turn to get car started to turn
-            sleep(self.turn_time / 2)
+            sleep(self.turn_time * float(abs(degrees)) / 180.0)
 
-            while not stop_function() and time() - start < self.turn_time * 4:
+            enough_time = 4 * self.turn_time * float(abs(degrees)) / 90.0
+            while not stop_function() and time() - start < enough_time:
                 sleep(TURN_FREQ)
 
         log('Turning finished.')
