@@ -49,6 +49,7 @@ class RPiLineSensorSource(LineSensorSourceBase):
         self.trigger_repetitions = [0] * self.state_trigger_repetitions
 
         self.last_state = None
+        self.out_reps = 0
 
         self.__sensors = sensors
         self.__invert = invert
@@ -111,7 +112,11 @@ class RPiLineSensorSource(LineSensorSourceBase):
             self.__find_direction(state, [self.ALL]) and
             self.__if_same_reps()
         ):
-            ret = None
+            self.out_reps += 1
+            if self.out_reps > self.state_trigger_repetitions:
+                ret = None
+        else:
+            self.out_reps = 0
 
         self.__add_repetition(state)
 
