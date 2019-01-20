@@ -44,7 +44,7 @@ class ThinkThread(Thread):
         self.awake = False
 
     def stop_function(self):
-        dirs = car.sensors[0].get_directions()
+        dirs = self.car.sensors[0].get_directions()
 
         return len(dirs) == 1 and Direction.FORWARD in dirs
 
