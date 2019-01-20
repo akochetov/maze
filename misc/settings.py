@@ -27,7 +27,8 @@ POWER_SPEED = {
 TAPE_WIDTH = 0.03
 
 # PID coefficients, PK, IK and DK repsectively
-PID = [4, 1.5, 1]
+# PID = [4, 1.5, 1]  # this quite worked
+PID = [3.5, 1, 0.5]  # this must run softer
 
 # state error
 STATE_OK = 0
@@ -56,7 +57,7 @@ STATE_ACTION = {
     "[1, 1, 1, 1, 1]": 180}
 
 # how many times in a row action has to repeat to count
-STATE_ACTION_REPETITIONS = 2
+STATE_ACTION_REPETITIONS = 3
 
 # maze map settings
 TIME_ERROR = 0.5  # / 2
