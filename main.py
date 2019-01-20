@@ -94,9 +94,9 @@ while True:
 
         if settings.VIRTUAL:
             maze_world.save(sys.stdout)
+            print()
+            print()
 
-        print()
-        print()
     except KeyboardInterrupt:
         print('Interrupted. Exiting.')
         brain.stop()
