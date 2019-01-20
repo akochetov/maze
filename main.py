@@ -76,6 +76,7 @@ brain.think(car, maze_map)
 while True:
     try:
         if not brain.is_still_thinking():
+            car.stop()
             maze_map.on_crossing(car)
             shortest_path = maze_map.get_shortest_path(reverse=True)
             print('Shortest path:')
