@@ -40,6 +40,7 @@ class Car(object):
             sensor.source.orientation = Orientation.flip(
                 sensor.source.orientation
                 )
+            sensor.reset()
         self.chassis.rotate(180, stop_function=stop_function)
 
     def rotate(self, cw, stop_function=None):
@@ -58,6 +59,7 @@ class Car(object):
             sensor.source.orientation = Orientation.rotate(
                 sensor.source.orientation, cw
                 )
+            sensor.reset()
         self.chassis.rotate(90 if cw else -90, stop_function=stop_function)
 
     def rotate_cw(self, stop_function=None):

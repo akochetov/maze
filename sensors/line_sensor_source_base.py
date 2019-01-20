@@ -10,3 +10,6 @@ class LineSensorSourceBase(object):
 
     def get_directions(self):
         pass
+
+    def reset(self):
+        pass

@@ -15,6 +15,9 @@ class LineSensor(object):
         """
         self.source = source
 
+    def reset(self):
+        self.source.reset()
+
     def get_state(self):
         return self.source.get_state()
 
