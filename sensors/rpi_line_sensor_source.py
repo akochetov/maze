@@ -107,8 +107,8 @@ class RPiLineSensorSource(LineSensorSourceBase):
         # if all prev are ALL and we are still at ALL,
         # then maze way out found
         if (
-            self.__find_direction(self.last_state, self.ALL) and
-            self.__find_direction(state, self.ALL) and
+            self.__find_direction(self.last_state, [self.ALL]) and
+            self.__find_direction(state, [self.ALL]) and
             self.__if_same_reps()
         ):
             ret = None
