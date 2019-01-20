@@ -46,13 +46,13 @@ class Car(object):
         """
         Rotate car clock wise
         """
-        self.rotate(True)
+        self.rotate(True, stop_function=stop_function)
 
     def rotate_ccw(self, stop_function=None):
         """
         Rotate car counter clock wise
         """
-        self.rotate(False)
+        self.rotate(False, stop_function=stop_function)
 
     def stop(self):
         self.chassis.stop()

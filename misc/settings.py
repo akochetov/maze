@@ -2,7 +2,7 @@
 VIRTUAL = 1
 
 # Logging
-LOG = True
+LOG = 1
 
 # control time interval
 FREQ = 1 / 20
@@ -59,5 +59,5 @@ STATE_ACTION = {
 STATE_ACTION_REPETITIONS = 2
 
 # maze map settings
-TIME_ERROR = 0.25  # / 2
+TIME_ERROR = 0.5 / 2
 TIME_TO_TURN = 0.4

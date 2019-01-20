@@ -30,9 +30,9 @@ class ThinkThread(Thread):
                 break
 
             if self.maze_map is not None and self.car.sensors[0].is_crossing():
-                log('Crossing detected: {}'.format(
-                    self.car.sensors[0].get_state()
-                    ))
+                # log('Crossing detected: {}'.format(
+                #    self.car.sensors[0].get_state()
+                #    ))
                 self.maze_map.on_crossing(self.car)
 
             if self.lefthand:
@@ -53,14 +53,14 @@ class ThinkThread(Thread):
 
         if Direction.LEFT in dirs:
             car.stop()
-            car.rotate_ccw(self.stop_function)
+            car.rotate_ccw(stop_function=self.stop_function)
             car.move(Direction.FORWARD)
         else:
             if Direction.FORWARD in dirs:
                 car.move(Direction.FORWARD)
             else:
                 car.stop()
-                car.rotate_cw(self.stop_function)
+                car.rotate_cw(stop_function=self.stop_function)
                 car.move(Direction.FORWARD)
 
     def right_hand_search(self, car):
@@ -68,14 +68,14 @@ class ThinkThread(Thread):
 
         if Direction.RIGHT in dirs:
             car.stop()
-            car.rotate_cw(self.stop_function)
+            car.rotate_cw(stop_function=self.stop_function)
             car.move(Direction.FORWARD)
         else:
             if Direction.FORWARD in dirs:
                 car.move(Direction.FORWARD)
             else:
                 car.stop()
-                car.rotate_ccw(self.stop_function)
+                car.rotate_ccw(stop_function=self.stop_function)
                 car.move(Direction.FORWARD)
 
 
