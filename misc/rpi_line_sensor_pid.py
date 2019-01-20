@@ -12,19 +12,14 @@ class RPiLineSensorPID(object):
     def get_pid(self):
         sensors_data = self.sensor.get_state()
 
-        todo = self.state_action.get_action(sensors_data)
+        actual = self.state_action.get_state(sensors_data)
 
-        if todo is None:
-            actual = self.state_action.get_state(sensors_data)
+        ret = self.pid.get(self.ok_state_value, actual)
 
-            ret = self.pid.get(self.ok_state_value, actual)
+        log('Sensors: {}\tActual: {} Error: {} PID: {}'.format(
+            sensors_data,
+            actual,
+            self.ok_state_value - actual,
+            ret))
 
-            log('Sensors: {}\tActual: {} Error: {} PID: {}'.format(
-                sensors_data,
-                actual,
-                self.ok_state_value - actual,
-                ret))
-
-            return ret
-
-        return None
+        return ret
