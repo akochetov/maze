@@ -10,7 +10,7 @@ FREQ = 1 / 20
 # motors config
 RIGHT_MOTOR = {"EN": 13, "IN1": 5, "IN2": 6}
 LEFT_MOTOR = {"EN": 19, "IN1": 20, "IN2": 21}
-POWER = 40
+POWER = 30
 LEFT_MOTOR_POWER = POWER
 RIGHT_MOTOR_POWER = POWER+1
 PWM = 20
@@ -60,4 +60,4 @@ STATE_ACTION_REPETITIONS = 5
 
 # maze map settings
 TIME_ERROR = 0.5  # / 2
-TIME_TO_TURN = 0.4
+TIME_TO_TURN = 0.8
