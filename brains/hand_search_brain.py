@@ -84,6 +84,9 @@ class ThinkThread(Thread):
         if dirs is None:
             return
 
+        if len(dirs == 0):
+            log('Ooops: {}'.format(car.sensors[0].source.__dict__))
+
         if Direction.BACK in dirs:
             log('Brain says: turn around: {}'.format(dirs))
             car.stop()
