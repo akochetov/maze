@@ -51,24 +51,28 @@ class ThinkThread(Thread):
     def left_hand_search(self, car):
         dirs = car.sensors[0].get_directions()
 
-        # log('Directions: {}'.format(dirs))
-
         if Direction.BACK in dirs:
+            log('Brain says: turn around')
             car.stop()
             car.turn_around(stop_function=self.stop_function)
+            log('Brain says: forward')
             car.move(Direction.FORWARD)
             return
 
         if Direction.LEFT in dirs:
+            log('Brain says: left')
             car.stop()
             car.rotate_ccw(stop_function=self.stop_function)
+            log('Brain says: forward')
             car.move(Direction.FORWARD)
         else:
             if Direction.FORWARD in dirs:
                 car.move(Direction.FORWARD)
             else:
+                log('Brain says: right')
                 car.stop()
                 car.rotate_cw(stop_function=self.stop_function)
+                log('Brain says: forward')
                 car.move(Direction.FORWARD)
 
     def right_hand_search(self, car):
@@ -77,21 +81,27 @@ class ThinkThread(Thread):
         # log('Directions: {}'.format(dirs))
 
         if Direction.BACK in dirs:
+            log('Brain says: turn around')
             car.stop()
             car.turn_around(stop_function=self.stop_function)
+            log('Brain says: forward')
             car.move(Direction.FORWARD)
             return
 
         if Direction.RIGHT in dirs:
+            log('Brain says: right')
             car.stop()
             car.rotate_cw(stop_function=self.stop_function)
+            log('Brain says: forward')
             car.move(Direction.FORWARD)
         else:
             if Direction.FORWARD in dirs:
                 car.move(Direction.FORWARD)
             else:
+                log('Brain says: left')
                 car.stop()
                 car.rotate_ccw(stop_function=self.stop_function)
+                log('Brain says: forward')
                 car.move(Direction.FORWARD)
 
 
