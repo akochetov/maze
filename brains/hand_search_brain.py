@@ -46,7 +46,7 @@ class ThinkThread(Thread):
     def stop_function(self):
         dirs = self.car.sensors[0].get_directions()
 
-        return len(dirs) == 1 and Direction.FORWARD in dirs
+        return dirs is None or (len(dirs) == 1 and Direction.FORWARD in dirs)
 
     def left_hand_search(self, car):
         dirs = car.sensors[0].get_directions()
