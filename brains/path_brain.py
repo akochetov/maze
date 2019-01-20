@@ -19,7 +19,7 @@ class PathBrain(BrainBase):
             if direction is None:
                 break
 
-            car.move(direction)
+            # car.move(direction)
             # temporary implementation with printing moves out
             print('car.move({})'.format(direction))
 

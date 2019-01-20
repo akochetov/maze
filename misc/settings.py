@@ -1,5 +1,5 @@
 # Virtual or physical maze
-VIRTUAL = 1
+VIRTUAL = 0
 
 # Logging
 LOG = 1
