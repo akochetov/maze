@@ -30,9 +30,9 @@ class ThinkThread(Thread):
                 break
 
             if self.maze_map is not None and self.car.sensors[0].is_crossing():
-                # log('Crossing detected: {}'.format(
-                #    self.car.sensors[0].get_state()
-                #    ))
+                log('Crossing detected: {}'.format(
+                    self.car.sensors[0].get_state()
+                    ))
                 self.maze_map.on_crossing(self.car)
 
             if self.lefthand:
@@ -55,7 +55,7 @@ class ThinkThread(Thread):
             return
 
         if Direction.BACK in dirs:
-            log('Brain says: turn around')
+            log('Brain says: turn around: {}'.format(dirs))
             car.stop()
             car.turn_around(stop_function=self.stop_function)
             log('Brain says: forward')
@@ -63,7 +63,7 @@ class ThinkThread(Thread):
             return
 
         if Direction.LEFT in dirs:
-            log('Brain says: left')
+            log('Brain says: left: {}').format(dirs)
             car.stop()
             car.rotate_ccw(stop_function=self.stop_function)
             log('Brain says: forward')
@@ -72,7 +72,7 @@ class ThinkThread(Thread):
             if Direction.FORWARD in dirs:
                 car.move(Direction.FORWARD)
             else:
-                log('Brain says: right')
+                log('Brain says: right: {}'.format(dirs))
                 car.stop()
                 car.rotate_cw(stop_function=self.stop_function)
                 log('Brain says: forward')
@@ -85,7 +85,7 @@ class ThinkThread(Thread):
             return
 
         if Direction.BACK in dirs:
-            log('Brain says: turn around')
+            log('Brain says: turn around: {}'.format(dirs))
             car.stop()
             car.turn_around(stop_function=self.stop_function)
             log('Brain says: forward')
@@ -93,7 +93,7 @@ class ThinkThread(Thread):
             return
 
         if Direction.RIGHT in dirs:
-            log('Brain says: right')
+            log('Brain says: right: {}'.format(dirs))
             car.stop()
             car.rotate_cw(stop_function=self.stop_function)
             log('Brain says: forward')
@@ -102,7 +102,7 @@ class ThinkThread(Thread):
             if Direction.FORWARD in dirs:
                 car.move(Direction.FORWARD)
             else:
-                log('Brain says: left')
+                log('Brain says: left: {}'.format(dirs))
                 car.stop()
                 car.rotate_ccw(stop_function=self.stop_function)
                 log('Brain says: forward')
