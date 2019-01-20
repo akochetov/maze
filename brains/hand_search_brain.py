@@ -51,6 +51,9 @@ class ThinkThread(Thread):
     def left_hand_search(self, car):
         dirs = car.sensors[0].get_directions()
 
+        if dirs is None:
+            return
+
         if Direction.BACK in dirs:
             log('Brain says: turn around')
             car.stop()
@@ -78,7 +81,8 @@ class ThinkThread(Thread):
     def right_hand_search(self, car):
         dirs = car.sensors[0].get_directions()
 
-        # log('Directions: {}'.format(dirs))
+        if dirs is None:
+            return
 
         if Direction.BACK in dirs:
             log('Brain says: turn around')

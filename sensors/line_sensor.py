@@ -25,6 +25,7 @@ class LineSensor(object):
         dirs = self.get_directions()
 
         return\
+            dirs is None or\
             Direction.LEFT in dirs or\
             Direction.RIGHT in dirs or\
             Direction.BACK in dirs  # len(dirs) == 0
