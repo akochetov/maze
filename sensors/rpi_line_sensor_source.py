@@ -13,12 +13,14 @@ class RPiLineSensorSource(LineSensorSourceBase):
         "[1, 1, 0, 0, 0]",
         "[1, 1, 1, 0, 0]",
         "[1, 1, 0, 1, 1]",
+        "[1, 0, 1, 1, 0]",
         ALL]
 
     RIGHT = [
         "[0, 0, 0, 1, 1]",
         "[0, 0, 1, 1, 1]",
         "[1, 1, 0, 1, 1]",
+        "[0, 1, 1, 0, 1]",
         ALL]
 
     FORWARD = [
@@ -32,6 +34,8 @@ class RPiLineSensorSource(LineSensorSourceBase):
         "[0, 0, 1, 1, 0]",
         "[0, 1, 0, 0, 0]",
         "[0, 0, 0, 1, 0]",
+        "[1, 1, 0, 0, 0]",
+        "[0, 0, 0, 1, 1]",
         ALL]
 
     OFF = ["[0, 0, 0, 0, 0]"]
@@ -87,6 +91,7 @@ class RPiLineSensorSource(LineSensorSourceBase):
             self.__passed_crossing(state)
         ):
             ret.append(Direction.LEFT)
+            self.__clear_repetitions()
 
         # if all prev states were RIGHT and now we are OFF or forward,
         # then we just passed RIGHT turn
@@ -96,6 +101,7 @@ class RPiLineSensorSource(LineSensorSourceBase):
             self.__passed_crossing(state)
         ):
             ret.append(Direction.RIGHT)
+            self.__clear_repetitions()
 
         # if we are off the track, but prev step was FORWARD,
         # then we have to turn back
@@ -104,6 +110,7 @@ class RPiLineSensorSource(LineSensorSourceBase):
             self.__find_direction(state, self.OFF)
         ):
             ret.append(Direction.BACK)
+            self.__clear_repetitions()
 
         # if all prev are ALL and we are still at ALL,
         # then maze way out found
@@ -121,6 +128,10 @@ class RPiLineSensorSource(LineSensorSourceBase):
         self.__add_repetition(state)
 
         return ret
+
+    def __clear_repetitions(self):
+        for i in range(self.state_trigger_repetitions):
+            self.trigger_repetitions[i] = [""]
 
     def __add_repetition(self, last_rep):
         self.last_state = last_rep

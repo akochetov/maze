@@ -56,7 +56,7 @@ STATE_ACTION = {
     "[1, 1, 1, 1, 1]": 180}
 
 # how many times in a row action has to repeat to count
-STATE_ACTION_REPETITIONS = 5
+STATE_ACTION_REPETITIONS = 2
 
 # maze map settings
 TIME_ERROR = 0.5  # / 2
