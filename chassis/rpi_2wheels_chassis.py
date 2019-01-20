@@ -40,7 +40,7 @@ class RPi2WheelsMoveThread(Thread):
             l -= int(pow)
             r += int(pow)
 
-        log('Power {} {}'.format(l, r))
+        # log('Power {} {}'.format(l, r))
 
         chassis.lmotor.rotate(True, l)
         chassis.rmotor.rotate(True, r)

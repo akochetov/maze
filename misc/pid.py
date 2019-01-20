@@ -75,9 +75,9 @@ class PID:
             self.last_error = error
             self.reset_time()
 
-        log('p: {}\ti: {} d: {}'.format(
-            error,
-            self.integral,
-            derivative))
+        # log('p: {}\ti: {} d: {}'.format(
+        #    error,
+        #    self.integral,
+        #    derivative))
 
         return self.pk * error + self.ik * self.integral + self.dk * derivative
