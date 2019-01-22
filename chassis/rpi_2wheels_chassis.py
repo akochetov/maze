@@ -5,9 +5,6 @@ from time import sleep
 from time import time
 from threading import Thread
 
-# how frequently check sensors state when turning
-TURN_FREQ = 1 / 100
-
 
 class RPi2WheelsMoveThread(Thread):
     def __init__(self, chassis):
@@ -116,7 +113,7 @@ class RPi2WheelsChassis(ChassisBase):
 
             enough_time = 4 * self.turn_time * float(abs(degrees)) / 90.0
             while not stop_function() and time() - start < enough_time:
-                sleep(TURN_FREQ)
+                sleep(self.sleep_time)
 
         log('Turning finished.')
 

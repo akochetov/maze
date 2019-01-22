@@ -117,9 +117,7 @@ class RPiLineSensorSource(LineSensorSourceBase):
             if self.__find_recent_direction(self.FORWARD):
                 ret.append(Direction.BACK)
             else:
-                # TODO: not sure this is correct to return None
-                # None means 'don't know what to do' or 'end of maze'?
-                ret = None
+                ret = []
 
         if Direction.OFF in ret or Direction.FORWARD in ret:
             # we are OFF or FWD now, but we just had crossing with LEFT turn
@@ -135,8 +133,7 @@ class RPiLineSensorSource(LineSensorSourceBase):
             self.__get_recent_direction_count(self.ALL) >
             self.state_trigger_repetitions * 2
         ):
-            # TODO: not sure this is correct to return None
-            # None means 'don't know what to do' or 'end of maze'?
+            # Asumming that returning None means end of maze
             ret = None
 
         return ret
