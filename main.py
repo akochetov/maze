@@ -24,7 +24,9 @@ if settings.VIRTUAL:
     maze_file = 'maze10x10.txt'
     maze_world = VirtualWorld(maze_file)
     chassis = VirtualChassis(maze_world, settings.TIME_ERROR*1)
-    line_sensor = LineSensor(VirtualLineSensorSource(maze_world, ORIENTATION))
+    line_sensor = LineSensor(
+        VirtualLineSensorSource(maze_world, ORIENTATION),
+        settings.FREQ)
     car = Car(maze_world, chassis, [line_sensor], ORIENTATION)
     maze_map = MazeMap(car, settings.TIME_ERROR, settings.TIME_TO_TURN)
     brain = HandSearchBrain(lefthand=True)
@@ -45,8 +47,10 @@ else:
         settings.LINE_SENSORS,
         ORIENTATION,
         invert=True,
+        signals_window_size=settings.SIGNALS_WINDOWS_SIZE,
         state_trigger_repetitions=settings.STATE_ACTION_REPETITIONS
-        ))
+        ),
+        settings.FREQ)
 
     state_action = StateAction(settings.STATE_ERROR, settings.STATE_ACTION)
 
@@ -99,9 +103,11 @@ while True:
 
     except KeyboardInterrupt:
         print('Interrupted. Exiting.')
-        brain.stop()
-        car.stop()
         break
+
+brain.stop()
+car.stop()
+line_sensor.stop()
 
 if not settings.VIRTUAL:
     GPIO.cleanup()

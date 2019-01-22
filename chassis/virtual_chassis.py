@@ -84,9 +84,9 @@ class VirtualChassis(ChassisBase):
         return True
 
     def stop(self):
-        self.move_thread.exit()
-        self.move_thread.join()
-        pass
+        if self.move_thread.is_alive():
+            self.move_thread.exit()
+            self.move_thread.join()
 
     def is_moving(self):
         return self.move_thread.awake

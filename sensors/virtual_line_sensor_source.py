@@ -8,26 +8,26 @@ class VirtualLineSensorSource(LineSensorSourceBase):
     Car sensor. Measures distance to a wall in front of sensor
     """
     LEFT = [
-        "[1, 1, 0, 0, 0]",
-        "[1, 1, 1, 0, 0]",
-        "[1, 1, 0, 1, 1]",
-        "[1, 1, 1, 1, 1]"
+        "11000",
+        "11100",
+        "11011",
+        "11111"
         ]
 
     RIGHT = [
-        "[0, 0, 0, 1, 1]",
-        "[0, 0, 1, 1, 1]",
-        "[1, 1, 0, 1, 1]",
-        "[1, 1, 1, 1, 1]"
+        "00011",
+        "00111",
+        "11011",
+        "11111"
         ]
 
     FORWARD = [
-        "[1, 1, 1, 0, 0]",
-        "[0, 0, 1, 1, 1]",
-        "[0, 0, 1, 0, 0]",
-        "[1, 1, 1, 1, 1]"]
+        "11100",
+        "00111",
+        "00100",
+        "11111"]
 
-    OFF = ["[0, 0, 0, 0, 0]"]
+    OFF = ["00000"]
 
     def __init__(self, maze_world, orientation):
         """
@@ -83,11 +83,11 @@ class VirtualLineSensorSource(LineSensorSourceBase):
         ret[0] = ret[1]
         ret[4] = ret[3]
 
-        return ret
+        return super().bits_to_str(ret)
 
     def get_directions(self):
         ret = []
-        state = str(self.get_state())
+        state = self.get_state()
 
         if self.__find_direction(state, self.LEFT):
             ret.append(Direction.LEFT)

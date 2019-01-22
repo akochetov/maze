@@ -1,11 +1,11 @@
 # Virtual or physical maze
-VIRTUAL = 0
+VIRTUAL = 1
 
 # Logging
 LOG = 1
 
-# control time interval
-FREQ = 1 / 20
+# control iterations per second
+FREQ = 20
 
 # motors config
 RIGHT_MOTOR = {"EN": 13, "IN1": 5, "IN2": 6}
@@ -27,36 +27,32 @@ POWER_SPEED = {
 TAPE_WIDTH = 0.03
 
 # PID coefficients, PK, IK and DK repsectively
-# PID = [4, 1.5, 1]  # this quite worked
-PID = [4, 1.5, 1]  # this must run softer
+PID = [4, 1.5, 1]  # this quite worked
 
 # state error
 STATE_OK = 0
 
 STATE_ERROR = {
-    "[1, 0, 0, 0, 0]": -3,
+    "10000": -3,
     # "00011": -3,
-    "[1, 1, 0, 0, 0]": -2,
-    "[0, 1, 0, 0, 0]": -1.5,
-    "[0, 1, 1, 0, 0]": -1,
-    "[0, 0, 1, 0, 0]": STATE_OK,
-    "[0, 0, 1, 1, 0]": 1,
-    "[0, 0, 0, 1, 0]": 1.5,
-    "[0, 0, 0, 1, 1]": 2,
+    "11000": -2,
+    "01000": -1.5,
+    "01100": -1,
+    "00100": STATE_OK,
+    "00110": 1,
+    "00010": 1.5,
+    "00011": 2,
     # "11000": 3,
-    "[0, 0, 0, 0, 1]": 3}
-
-# state out
-STATE_OUT = "[0, 0, 0, 0, 0]"
+    "00001": 3}
 
 # state actions
 STATE_ACTION = {
-    STATE_OUT: 0,
-    "[1, 1, 1, 0, 0]": 90,
-    "[0, 0, 1, 1, 1]": -90,
-    "[1, 1, 1, 1, 1]": 180}
+    "11100": 90,
+    "00111": -90,
+    "11111": 180}
 
 # how many times in a row action has to repeat to count
+SIGNALS_WINDOWS_SIZE = 10
 STATE_ACTION_REPETITIONS = 3
 
 # maze map settings

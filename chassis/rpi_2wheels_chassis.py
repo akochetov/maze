@@ -49,7 +49,7 @@ class RPi2WheelsMoveThread(Thread):
 
     def run(self):
         while self.awake and self.do():
-            sleep(self.chassis.frequency)
+            sleep(self.chassis.sleep_time)
 
         self.awake = False
 
@@ -89,7 +89,7 @@ class RPi2WheelsChassis(ChassisBase):
         self.turn_time = turn_time
 
         self.sensor_pid = sensor_pid
-        self.frequency = frequency
+        self.sleep_time = 1.0 / frequency
 
         log('Initialized RPi chassis: {}'.format(self.__dict__))
 

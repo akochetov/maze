@@ -1,5 +1,6 @@
 from misc.orientation import Orientation
 
+
 class Sensor(object):
     """
     Car sensor. Measures distance to a wall in front of sensor
