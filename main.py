@@ -37,7 +37,6 @@ else:
     from chassis.rpi_2wheels_chassis import RPi2WheelsChassis
     from sensors.rpi_line_sensor_source import RPiLineSensorSource
     from misc.rpi_line_sensor_pid import RPiLineSensorPID
-    from misc.state_action import StateAction
 
     GPIO.setmode(GPIO.BCM)
 
@@ -52,12 +51,10 @@ else:
         ),
         settings.FREQ)
 
-    state_action = StateAction(settings.STATE_ERROR, settings.STATE_ACTION)
-
     sensor_pid = RPiLineSensorPID(
         settings.PID,
         line_sensor,
-        state_action,
+        settings.STATE_ERRORS,
         settings.STATE_OK
     )
 

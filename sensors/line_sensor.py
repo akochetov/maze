@@ -89,15 +89,6 @@ class LineSensor(object):
     def get_directions(self):
         return self.thread.get_directions()
 
-    def is_crossing(self):
-        dirs = self.get_directions()
-
-        return\
-            dirs is None or\
-            Direction.LEFT in dirs or\
-            Direction.RIGHT in dirs or\
-            Direction.BACK in dirs  # len(dirs) == 0
-
     def stop(self):
         if self.thread.is_alive():
             self.thread.exit()

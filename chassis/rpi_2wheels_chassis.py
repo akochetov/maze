@@ -17,35 +17,9 @@ class RPi2WheelsMoveThread(Thread):
         self.awake = True
         return super().start()
 
-    def do(self):
-        chassis = self.chassis
-        power = (chassis.left_motor_power + chassis.right_motor_power) / 2
-
-        pow = chassis.sensor_pid.get_pid()
-
-        if pow is None:
-            return False
-
-        pow = pow if (abs(pow) <= power) else power * pow / abs(pow)
-
-        [l, r] = [chassis.left_motor_power, chassis.right_motor_power]
-
-        if pow > 0:
-            l -= int(pow)
-            r += int(pow)
-        if pow < 0:
-            l -= int(pow)
-            r += int(pow)
-
-        # log('Power {} {}'.format(l, r))
-
-        chassis.lmotor.rotate(True, l)
-        chassis.rmotor.rotate(True, r)
-
-        return True
-
     def run(self):
-        while self.awake and self.do():
+        while self.awake:
+            self.chassis._move()
             sleep(self.chassis.sleep_time)
 
         self.awake = False
@@ -55,12 +29,16 @@ class RPi2WheelsMoveThread(Thread):
 
 
 class RPi2WheelsChassis(ChassisBase):
+    SLOW = "SLOW"
+    FAST = "FAST"
+    TURN = "TURN"
+
     def __init__(
             self,
             lmotor_settings,
             rmotor_settings,
-            left_motor_power,
-            right_motor_power,
+            left_motor_pow,
+            right_motor_pow,
             turn_time,
             pwm,
             sensor_pid,
@@ -81,8 +59,8 @@ class RPi2WheelsChassis(ChassisBase):
         self.lmotor.setup()
         self.rmotor.setup()
 
-        self.left_motor_power = left_motor_power
-        self.right_motor_power = right_motor_power
+        self.left_motor_pow = left_motor_pow
+        self.right_motor_pow = right_motor_pow
         self.turn_time = turn_time
 
         self.sensor_pid = sensor_pid
@@ -92,17 +70,48 @@ class RPi2WheelsChassis(ChassisBase):
 
         self.move_thread = RPi2WheelsMoveThread(self)
 
+    def _move(self):
+        # get PID value based on sensor values
+        # this is to get robot rolling straight
+        pow = self.sensor_pid.get_pid()
+
+        # go fast by default
+        # if there is no PID detected (meaning that we are at crossing)
+        # then slow down
+        speed = self.SLOW if pow is None else self.FAST
+
+        [l, r] = [
+            self.left_motor_pow[speed],
+            self.right_motor_pow[speed]
+            ]
+
+        power = (l + r) / 2
+
+        pow = pow if (abs(pow) <= power) else power * pow / abs(pow)
+
+        if pow > 0:
+            l -= int(pow)
+            r += int(pow)
+        if pow < 0:
+            l -= int(pow)
+            r += int(pow)
+
+        # log('Power {} {}'.format(l, r))
+
+        self.lmotor.rotate(True, l)
+        self.rmotor.rotate(True, r)
+
     def rotate(self, degrees, stop_function=None):
         self.stop()
 
         log('Stopped. Turning...')
 
         if degrees == 180:
-            self.lmotor.rotate(False, self.left_motor_power)
-            self.rmotor.rotate(True, self.right_motor_power)
+            self.lmotor.rotate(False, self.left_motor_pow[self.TURN])
+            self.rmotor.rotate(True, self.right_motor_pow[self.TURN])
         else:
-            self.lmotor.rotate(degrees == 90, self.left_motor_power)
-            self.rmotor.rotate(degrees == -90, self.right_motor_power)
+            self.lmotor.rotate(degrees == 90, self.left_motor_pow[self.TURN])
+            self.rmotor.rotate(degrees == -90, self.right_motor_pow[self.TURN])
 
         if stop_function is None:
             sleep(self.turn_time * float(abs(degrees)) / 90.0)
