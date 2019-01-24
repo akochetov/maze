@@ -80,6 +80,9 @@ class RPi2WheelsChassis(ChassisBase):
         # then slow down
         speed = self.SLOW if pow is None else self.FAST
 
+        if pow is None:
+            pow = 0  # (self.left_motor_pow[self.SLOW] + self.right_motor_pow[self.SLOW]) / 2
+
         [l, r] = [
             self.left_motor_pow[speed],
             self.right_motor_pow[speed]
@@ -87,7 +90,8 @@ class RPi2WheelsChassis(ChassisBase):
 
         power = (l + r) / 2
 
-        pow = pow if (abs(pow) <= power) else power * pow / abs(pow)
+        # pow = pow if (abs(pow) <= power) else power * pow / abs(pow)
+        pow = power * pow / 100
 
         if pow > 0:
             l -= int(pow)
@@ -96,7 +100,7 @@ class RPi2WheelsChassis(ChassisBase):
             l -= int(pow)
             r += int(pow)
 
-        # log('Power {} {}'.format(l, r))
+        log('Power {} {}'.format(l, r))
 
         self.lmotor.rotate(True, l)
         self.rmotor.rotate(True, r)

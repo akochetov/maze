@@ -6,7 +6,6 @@ class RPiLineSensorPID(object):
     def __init__(self, pid_settings, sensor, states, ok_state_value):
         self.pid = PID(*pid_settings)
         self.sensor = sensor
-        self.state_action = state_action
         self.ok_state_value = ok_state_value
         self.states = states
 

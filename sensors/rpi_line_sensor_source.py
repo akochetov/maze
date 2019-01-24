@@ -8,16 +8,17 @@ class SignalStack(object):
     def __init__(self, max_size):
         self.max_size = max_size
         self.__current_size = 0
-        self.__queue = [] * self.max_size
+        self.__queue = [0] * self.max_size
 
     def put(self, item):
         if self.__current_size >= self.max_size:
-            for i in range(0, self.__current_size - 1):
+            for i in range(0, self.max_size - 1):
                 self.__queue[i] = self.__queue[i + 1]
             self.__current_size = self.max_size - 1
 
         self.__queue[self.__current_size] = item
         self.__current_size += 1
+        log('{}'.format(self.__queue))
 
     def get_items(self):
         return self.__queue[0:self.__current_size]
@@ -119,7 +120,7 @@ class RPiLineSensorSource(LineSensorSourceBase):
             else:
                 ret = []
 
-        if Direction.OFF in ret or Direction.FORWARD in ret:
+        if len(ret) == 0:  # Direction.OFF in ret or Direction.FORWARD in ret:
             # we are OFF or FWD now, but we just had crossing with LEFT turn
             if self.__find_recent_direction(self.LEFT):
                 ret.append(Direction.LEFT)

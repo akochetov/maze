@@ -103,8 +103,8 @@ while True:
         break
 
 brain.stop()
-car.stop()
 line_sensor.stop()
+car.stop()
 
 if not settings.VIRTUAL:
     GPIO.cleanup()
