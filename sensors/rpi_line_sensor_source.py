@@ -100,9 +100,9 @@ class RPiLineSensorSource(LineSensorSourceBase):
             else:
                 ret[i] = GPIO.input(self.__sensors[i])
 
+        ret = super().bits_to_str(ret)
         self.__stack.put(ret)
-
-        return super().bits_to_str(ret)
+        return ret
 
     def get_directions(self):
         ret = []

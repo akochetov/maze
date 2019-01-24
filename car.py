@@ -84,10 +84,7 @@ class Car(object):
         If LEFT or RIGHT, turns first (changes Orientation) and quits.
         :param direction: Direction where to move
         """
-
-        if direction == Direction.BACK:
-            self.rotate_cw()
-            self.rotate_cw()
+        if self.is_moving():
             return
 
         self.chassis.move()
