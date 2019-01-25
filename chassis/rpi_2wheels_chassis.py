@@ -145,8 +145,19 @@ class RPi2WheelsChassis(ChassisBase):
         return True
 
     def stop(self):
-        if self.is_moving():
+        moving = self.is_moving()
+
+        if moving:
             self.move_thread.exit()
+
+            # active break
+            self.lmotor.rotate(False)
+            self.rmotor.rotate(False)
+            sleep(1 / 10)
+            self.lmotor.stop()
+            self.lmotor.stop()
+
+        if moving:
             self.move_thread.join()
 
         if self.lmotor is not None:
