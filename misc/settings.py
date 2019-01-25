@@ -18,19 +18,19 @@ LEFT_MOTOR = {"EN": 19, "IN1": 20, "IN2": 21}
 LEFT_MOTOR_POWER = {"FAST": 80, "SLOW": 40, "TURN": 80}
 RIGHT_MOTOR_POWER = {"FAST": 81, "SLOW": 41, "TURN": 81}
 
-PWM = 25
+PWM = 40
 
 # line sensors
 LINE_SENSORS = [8, 25, 24, 23, 18]
 
 # PID coefficients, PK, IK and DK repsectively
-PID = [4, 1.5, 1]
+PID = [1 / 30, 0, 0]
 
 # state error
-STATE_OK = 0
+STATE_OK = 2000
 
 # how many times in a row action has to repeat to count
-SIGNALS_WINDOWS_SIZE = 10
+SIGNALS_WINDOWS_SIZE = 9
 STATE_ACTION_REPETITIONS = 3
 
 # maze map settings

@@ -2,7 +2,7 @@ from sensors.distance_sensor import Sensor
 from misc.orientation import Orientation
 from misc.direction import Direction
 from chassis.chassis_base import ChassisBase
-
+from misc.log import log
 
 class Car(object):
     """
@@ -102,11 +102,12 @@ class Car(object):
         # this is required for virtual moves mainly
         # when car made first move, sensors have to be updated
         # to catch new data
+        log('Reseting sensors---------')
         for sensor in self.sensors:
             sensor.reset()
 
     def is_moving(self):
-        self.chassis.is_moving()
+        return self.chassis.is_moving()
 
     def is_out(self):
         """

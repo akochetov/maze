@@ -33,9 +33,9 @@ class RPiLineSensorSource(LineSensorSourceBase):
     '''
     ALL = 0b11111
 
-    LEFT = 0b00001
+    LEFT = 0b10000
 
-    RIGHT = 0b10000
+    RIGHT = 0b00001
 
     FORWARD = 0b01110
 
@@ -52,6 +52,7 @@ class RPiLineSensorSource(LineSensorSourceBase):
         super().__init__(orientation)
 
         self.state_trigger_repetitions = state_trigger_repetitions
+        self.signals_window_size = signals_window_size
 
         self.last_state = None
         self.out_reps = 0
@@ -73,9 +74,9 @@ class RPiLineSensorSource(LineSensorSourceBase):
         ret = 0
         for i in range(0, self.__pins_number):
             if self.__invert:
-                ret += abs(GPIO.input(self.__sensors[i]) - 1) << i
+                ret += abs(GPIO.input(self.__sensors[i]) - 1) << (self.__pins_number - i - 1)
             else:
-                ret += GPIO.input(self.__sensors[i]) << i
+                ret += GPIO.input(self.__sensors[i]) << (self.__pins_number - i - 1)
 
         self.__stack.put(ret)
         return ret
@@ -89,7 +90,7 @@ class RPiLineSensorSource(LineSensorSourceBase):
             ret.append(Direction.FORWARD)
 
         # are we OFF road?
-        if self.__find_direction(state, self.OFF):
+        if self.__find_direction(state, self.OFF, True):
             # we are OFF now, but we were just FWD (meaning we are to go BACK)
             if self.__find_recent_direction(self.FORWARD):
                 ret.append(Direction.BACK)
@@ -98,6 +99,7 @@ class RPiLineSensorSource(LineSensorSourceBase):
 
         if len(ret) == 0:  # Direction.OFF in ret or Direction.FORWARD in ret:
             # we are OFF or FWD now, but we just had crossing with LEFT turn
+            log('{}'.format(self.__stack.get_items()))
             if self.__find_recent_direction(self.LEFT):
                 ret.append(Direction.LEFT)
             # we are OFF or FWD now, but we just had crossing with RIGHT turn
@@ -107,26 +109,31 @@ class RPiLineSensorSource(LineSensorSourceBase):
         # if all prev are mainly ALL and we are still at ALL,
         # then maze way out found
         if (
-            self.__get_recent_direction_count(self.ALL) >
-            self.state_trigger_repetitions * 2
+            self.__get_recent_direction_count(self.ALL, True) >=
+            self.signals_window_size
         ):
+            log('End of maze!!!---------')
+            log('{}'.format(self.__stack.get_items()))
             # Asumming that returning None means end of maze
             ret = None
 
         return ret
 
-    def __find_recent_direction(self, direction):
+    def __find_recent_direction(self, direction, exact_check=False):
         return (
-            self.__get_recent_direction_count(direction) >=
+            self.__get_recent_direction_count(direction, exact_check) >=
             self.state_trigger_repetitions
             )
 
-    def __get_recent_direction_count(self, direction):
+    def __get_recent_direction_count(self, direction, exact_check=False):
         counter = 0
         for dir in self.__stack.get_items():
-            if self.__find_direction(dir, direction):
+            if self.__find_direction(dir, direction, exact_check):
                 counter += 1
         return counter
 
-    def __find_direction(self, state, direction):
-        return state & direction > 0 or state == direction
+    def __find_direction(self, state, direction, exact_check=False):
+        if exact_check:
+            return state == direction
+        else:
+            return state & direction > 0 or state == direction

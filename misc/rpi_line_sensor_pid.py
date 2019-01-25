@@ -15,17 +15,17 @@ class RPiLineSensorPID(object):
             return None
 
         actual = (
-            sensors_data & 0b00001 * 0 +
-            sensors_data & 0b00010 * 1000 +
-            sensors_data & 0b00100 * 2000 +
-            sensors_data & 0b01000 * 3000 +
-            sensors_data & 0b10000 * 4000
+            (sensors_data & 0b00001) * 0 +
+            (sensors_data & 0b00010) * 1000 +
+            (sensors_data & 0b00100) * 2000 +
+            (sensors_data & 0b01000) * 3000 +
+            (sensors_data & 0b10000) * 4000
             ) / (
-            sensors_data & 0b00001 +
-            sensors_data & 0b00010 +
-            sensors_data & 0b00100 +
-            sensors_data & 0b01000 +
-            sensors_data & 0b10000
+            (sensors_data & 0b00001) +
+            (sensors_data & 0b00010) +
+            (sensors_data & 0b00100) +
+            (sensors_data & 0b01000) +
+            (sensors_data & 0b10000)
             )
 
         ret = self.pid.get_simple(self.ok_state_value, actual)

@@ -82,8 +82,8 @@ class RPi2WheelsChassis(ChassisBase):
         )
 
         if pid is not None:
-            l = l - 2 * abs(pid) + pid
-            r = r - 2 * abs(pid) - pid
+            l = l - int(2 * abs(pid) - pid)
+            r = r - int(2 * abs(pid) + pid)
 
             if l < 0:
                 l = 0
