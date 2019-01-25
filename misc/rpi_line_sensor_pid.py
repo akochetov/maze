@@ -31,7 +31,7 @@ class RPiLineSensorPID(object):
         ret = self.pid.get_simple(self.ok_state_value, actual)
 
         log('Sensors: {}\tActual: {} Error: {} PID: {}'.format(
-            sensors_data,
+            bin(sensors_data),
             actual,
             self.ok_state_value - actual,
             ret))

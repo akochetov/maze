@@ -66,7 +66,6 @@ else:
     sensor_pid = RPiLineSensorPID(
         settings.PID,
         line_sensor,
-        settings.STATE_ERRORS,
         settings.STATE_OK
     )
 
@@ -112,6 +111,7 @@ while not exit_loop:
 
     except KeyboardInterrupt:
         print('Interrupted. Exiting.')
+        exit_loop = True
         break
 
 brain.stop()

@@ -18,7 +18,7 @@ class SignalStack(object):
 
         self.__queue[self.__current_size] = item
         self.__current_size += 1
-        log('{}'.format(self.__queue))
+        # log('{}'.format(self.__queue))
 
     def get_items(self):
         return self.__queue[0:self.__current_size]
@@ -70,12 +70,12 @@ class RPiLineSensorSource(LineSensorSourceBase):
         self.__stack.erase()
 
     def get_state(self):
-        ret = [0] * self.__pins_number
+        ret = 0
         for i in range(0, self.__pins_number):
             if self.__invert:
-                ret[i] = abs(GPIO.input(self.__sensors[i]) - 1) << i
+                ret += abs(GPIO.input(self.__sensors[i]) - 1) << i
             else:
-                ret[i] = GPIO.input(self.__sensors[i]) << i
+                ret += GPIO.input(self.__sensors[i]) << i
 
         self.__stack.put(ret)
         return ret

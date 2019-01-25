@@ -39,7 +39,7 @@ def when_dbl():
         p.terminate()
         p.wait()
         p = None
-        print "Process terminated"
+        print ('Process terminated')
 
 
 def when_released():
