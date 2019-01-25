@@ -64,7 +64,7 @@ class ThinkThread(Thread):
             car.turn_around(stop_function=self.stop_function)
             log('Brain says: forward')
             car.move()
-            return
+            return True
 
         if Direction.LEFT in dirs:
             log('Brain says: left: {}'.format(dirs))
@@ -100,7 +100,7 @@ class ThinkThread(Thread):
             car.turn_around(stop_function=self.stop_function)
             log('Brain says: forward')
             car.move()
-            return
+            return True
 
         if Direction.RIGHT in dirs:
             log('Brain says: right: {}'.format(dirs))
@@ -118,6 +118,7 @@ class ThinkThread(Thread):
                 log('Brain says: forward')
                 car.move()
         return True
+
 
 class HandSearchBrain(BrainBase):
     def __init__(self, frequency, lefthand=True):
