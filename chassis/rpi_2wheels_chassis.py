@@ -33,6 +33,8 @@ class RPi2WheelsChassis(ChassisBase):
     FAST = "FAST"
     TURN = "TURN"
 
+    BREAK_TIME = 1.0 / 15.0
+
     def __init__(
             self,
             lmotor_settings,
@@ -125,11 +127,21 @@ class RPi2WheelsChassis(ChassisBase):
         else:
             start = time()
             # first have a sleep equal to half turn to get car started to turn
-            sleep(self.turn_time * float(abs(degrees)) / 180.0)
+            # sleep(self.turn_time * float(abs(degrees)) / 180.0)
 
             enough_time = 4 * self.turn_time * float(abs(degrees)) / 90.0
             while not stop_function() and time() - start < enough_time:
                 sleep(self.sleep_time)
+
+        if degrees == 180:
+            self.lmotor.rotate(True)
+            self.rmotor.rotate(False)
+        else:
+            self.lmotor.rotate(degrees == -90)
+            self.rmotor.rotate(degrees == 90)
+        sleep(self.BREAK_TIME)
+
+        self.stop()
 
         log('Turning finished.')
 
@@ -149,16 +161,19 @@ class RPi2WheelsChassis(ChassisBase):
 
         if moving:
             self.move_thread.exit()
+            self.move_thread.join()
 
+            log('Breaking...')
             # active break
             self.lmotor.rotate(False)
             self.rmotor.rotate(False)
-            sleep(1 / 10)
+            sleep(self.BREAK_TIME)
             self.lmotor.stop()
             self.lmotor.stop()
+            log('Breakin done.')
 
-        if moving:
-            self.move_thread.join()
+        # if moving:
+        #    self.move_thread.join()
 
         if self.lmotor is not None:
             self.lmotor.stop()

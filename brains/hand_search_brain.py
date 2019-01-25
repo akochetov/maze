@@ -28,9 +28,9 @@ class ThinkThread(Thread):
                 break
 
             if self.lefthand:
-                self.left_hand_search(self.car)
+                self.awake = self.left_hand_search(self.car)
             else:
-                self.right_hand_search(self.car)
+                self.awake = self.right_hand_search(self.car)
 
     def exit(self):
         self.awake = False
@@ -52,10 +52,9 @@ class ThinkThread(Thread):
         self._check_crossing(dirs)
 
         if dirs is None:
-            return
+            return False
 
         if len(dirs) == 0:
-            return
             log('Ooops: {}'.format(car.sensors[0].source.__dict__))
             dirs = [Direction.FORWARD]
 
@@ -79,17 +78,17 @@ class ThinkThread(Thread):
             else:
                 log('Brain says: right: {}'.format(dirs))
                 car.stop()
-                return
                 car.rotate_cw(stop_function=self.stop_function)
                 log('Brain says: forward')
                 car.move()
+        return True
 
     def right_hand_search(self, car):
         dirs = car.sensors[0].get_directions()
         self._check_crossing(dirs)
 
         if dirs is None:
-            return
+            return False
 
         if len(dirs) == 0:
             log('Ooops: {}'.format(car.sensors[0].source.__dict__))
@@ -118,7 +117,7 @@ class ThinkThread(Thread):
                 car.rotate_ccw(stop_function=self.stop_function)
                 log('Brain says: forward')
                 car.move()
-
+        return True
 
 class HandSearchBrain(BrainBase):
     def __init__(self, frequency, lefthand=True):

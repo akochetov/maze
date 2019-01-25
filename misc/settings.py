@@ -5,7 +5,7 @@ VIRTUAL = 0
 LOG = 1
 
 # control iterations per second
-FREQ = 20
+FREQ = 30
 
 # button and LED pins to control robot
 CTRL_BTN = 14
@@ -16,7 +16,7 @@ RIGHT_MOTOR = {"EN": 13, "IN1": 5, "IN2": 6}
 LEFT_MOTOR = {"EN": 19, "IN1": 20, "IN2": 21}
 
 LEFT_MOTOR_POWER = {"FAST": 80, "SLOW": 40, "TURN": 80}
-RIGHT_MOTOR_POWER = {"FAST": 81, "SLOW": 41, "TURN": 81}
+RIGHT_MOTOR_POWER = {"FAST": 80, "SLOW": 40, "TURN": 80}
 
 PWM = 40
 

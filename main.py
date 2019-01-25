@@ -98,8 +98,8 @@ while not exit_loop:
             maze_map.save_full_path(sys.stdout)
             print()
             print('Going back. Current orient.: {}'.format(car.orientation))
-            path_brain = PathBrain(shortest_path)
-            path_brain.think(car, maze_map=maze_map)
+            # path_brain = PathBrain(shortest_path)
+            # path_brain.think(car, maze_map=maze_map)
             break
 
         time.sleep(settings.TIME_ERROR*1)
