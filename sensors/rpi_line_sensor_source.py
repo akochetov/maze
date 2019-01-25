@@ -31,38 +31,15 @@ class RPiLineSensorSource(LineSensorSourceBase):
     '''
     RPi implementation of digital line sensor with 5 IRs in line
     '''
-    ALL = ["11111"]
+    ALL = 0b11111
 
-    LEFT = [
-        "11000",
-        "11100",
-        "11011",
-        "10110",
-        ALL]
+    LEFT = 0b00001
 
-    RIGHT = [
-        "00011",
-        "00111",
-        "11011",
-        "01101",
-        ALL]
+    RIGHT = 0b10000
 
-    FORWARD = [
-        "11100",
-        "11110",
-        "00111",
-        "01111",
-        "00100",
-        "01110",
-        "01100",
-        "00110",
-        "01000",
-        "00010",
-        "11000",
-        "00011",
-        ALL]
+    FORWARD = 0b00100
 
-    OFF = ["00000"]
+    OFF = 0b00000
 
     def __init__(
             self,
@@ -96,11 +73,10 @@ class RPiLineSensorSource(LineSensorSourceBase):
         ret = [0] * self.__pins_number
         for i in range(0, self.__pins_number):
             if self.__invert:
-                ret[i] = abs(GPIO.input(self.__sensors[i]) - 1)
+                ret[i] = abs(GPIO.input(self.__sensors[i]) - 1) << i
             else:
-                ret[i] = GPIO.input(self.__sensors[i])
+                ret[i] = GPIO.input(self.__sensors[i]) << i
 
-        ret = super().bits_to_str(ret)
         self.__stack.put(ret)
         return ret
 
@@ -148,16 +124,9 @@ class RPiLineSensorSource(LineSensorSourceBase):
     def __get_recent_direction_count(self, direction):
         counter = 0
         for dir in self.__stack.get_items():
-            if dir in direction:
+            if self.__find_direction(dir, direction):
                 counter += 1
         return counter
 
     def __find_direction(self, state, direction):
-        if state is None:
-            return False
-
-        for dir in direction:
-            if state == dir:
-                return True
-
-        return False
+        return state & direction > 0 or state == direction

@@ -7,27 +7,13 @@ class VirtualLineSensorSource(LineSensorSourceBase):
     """
     Car sensor. Measures distance to a wall in front of sensor
     """
-    LEFT = [
-        "11000",
-        "11100",
-        "11011",
-        "11111"
-        ]
+    LEFT = 0b00011
 
-    RIGHT = [
-        "00011",
-        "00111",
-        "11011",
-        "11111"
-        ]
+    RIGHT = 0b11000
 
-    FORWARD = [
-        "11100",
-        "00111",
-        "00100",
-        "11111"]
+    FORWARD = 0b00100
 
-    OFF = ["00000"]
+    OFF = 0b00000
 
     def __init__(self, maze_world, orientation):
         """
@@ -45,7 +31,7 @@ class VirtualLineSensorSource(LineSensorSourceBase):
         :return: 0 if wall is close and no step can be made, or number of
         steps to the wall
         """
-        ret = [0]*5
+        ret = 0
         pos = [
             self.maze.get_position(),
             self.maze.get_position(),
@@ -73,17 +59,17 @@ class VirtualLineSensorSource(LineSensorSourceBase):
         # right sensors from center
         for i in range(1, 4):
             try:
-                ret[i] = int(not self.maze.test_if_wall(
+                ret += int(not self.maze.test_if_wall(
                     pos[i-1][0],
                     pos[i-1][1]
-                    ))
+                    )) << i
             except:
                 pass
 
-        ret[0] = ret[1]
-        ret[4] = ret[3]
+        ret += (ret & 2) >> 1
+        ret += (ret & 8) << 1
 
-        return super().bits_to_str(ret)
+        return ret
 
     def get_directions(self):
         ret = []
@@ -104,8 +90,4 @@ class VirtualLineSensorSource(LineSensorSourceBase):
         return ret
 
     def __find_direction(self, state, direction):
-        for dir in direction:
-            if state == dir:
-                return True
-
-        return False
+        return state & direction > 0 or state == direction

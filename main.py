@@ -1,3 +1,4 @@
+from signal import signal, SIGINT, SIGTERM
 import sys
 import os
 import time
@@ -18,6 +19,16 @@ from chassis.virtual_chassis import VirtualChassis
 from sensors.virtual_line_sensor_source import VirtualLineSensorSource
 
 ORIENTATION = Orientation.SOUTH
+
+exit_loop = False
+
+
+def exitLoop(arg1, arg2):
+    global exit_loop
+    exit_loop = True
+
+signal(SIGINT, exitLoop)
+signal(SIGTERM, exitLoop)
 
 if settings.VIRTUAL:
     # maze_file = 'maze20x20 - linefollow - large loop.txt'
@@ -74,7 +85,7 @@ else:
 
 brain.think(car, maze_map)
 
-while True:
+while not exit_loop:
     try:
         if not brain.is_still_thinking():
             car.stop()
