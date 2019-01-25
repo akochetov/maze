@@ -129,4 +129,4 @@ class RPiLineSensorSource(LineSensorSourceBase):
         return counter
 
     def __find_direction(self, state, direction):
-        return state & direction > 0 or state == direction:
+        return state & direction > 0 or state == direction
