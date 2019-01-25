@@ -12,7 +12,7 @@
 
 case "$1" in
 	start)
-		nohup stdbuf -oL python3 /opt/maze/launcher.py &
+		nohup stdbuf -oL python3 /opt/maze/launcher.py >/opt/maze/robot_btn.log 2>&1 &
 		;;
 	stop)
 		sudo killall python3
