@@ -30,6 +30,10 @@ def exitLoop(arg1, arg2):
 signal(SIGINT, exitLoop)
 signal(SIGTERM, exitLoop)
 
+maze_world = None
+chassis = None
+line_sensor = None
+
 if settings.VIRTUAL:
     # maze_file = 'maze20x20 - linefollow - large loop.txt'
     maze_file = 'maze10x10.txt'
@@ -38,9 +42,6 @@ if settings.VIRTUAL:
     line_sensor = LineSensor(
         VirtualLineSensorSource(maze_world, ORIENTATION),
         settings.FREQ)
-    car = Car(maze_world, chassis, [line_sensor], ORIENTATION)
-    maze_map = MazeMap(car, settings.TIME_ERROR, settings.TIME_TO_TURN)
-    brain = HandSearchBrain(lefthand=True)
 else:
     # physical RPi imports
     import RPi.GPIO as GPIO
@@ -79,9 +80,9 @@ else:
         sensor_pid,
         settings.FREQ)
 
-    car = Car(maze_world, chassis, [line_sensor], ORIENTATION)
-    maze_map = MazeMap(car, settings.TIME_ERROR, settings.TIME_TO_TURN)
-    brain = HandSearchBrain(lefthand=False)
+car = Car(maze_world, chassis, [line_sensor], ORIENTATION)
+maze_map = MazeMap(car, settings.TIME_ERROR, settings.TIME_TO_TURN)
+brain = HandSearchBrain(settings.FREQ, lefthand=True)
 
 brain.think(car, maze_map)
 

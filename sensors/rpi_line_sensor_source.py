@@ -37,7 +37,7 @@ class RPiLineSensorSource(LineSensorSourceBase):
 
     RIGHT = 0b10000
 
-    FORWARD = 0b00100
+    FORWARD = 0b01110
 
     OFF = 0b00000
 
@@ -129,4 +129,4 @@ class RPiLineSensorSource(LineSensorSourceBase):
         return counter
 
     def __find_direction(self, state, direction):
-        return state & direction > 0 or state == direction
+        return state & direction > 0 or state == direction:

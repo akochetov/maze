@@ -77,7 +77,17 @@ class Car(object):
     def stop(self):
         self.chassis.stop()
 
-    def move(self, direction):
+    def move_to(self, direction):
+        if direction == Direction.LEFT:
+            self.rotate_ccw()
+        if direction == Direction.RIGHT:
+            self.rotate_cw()
+        if direction == Direction.BACK:
+            self.turn_around()
+
+        self.move()
+
+    def move(self):
         """
         Move car one step in Direction.
         In case it is FORWARD, moves where current Orientation is heading.

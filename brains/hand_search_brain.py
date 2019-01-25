@@ -7,12 +7,13 @@ from time import sleep
 
 class ThinkThread(Thread):
 
-    def __init__(self, car, maze_map, lefthand=True):
+    def __init__(self, car, maze_map, frequency, lefthand=True):
         super().__init__()
 
         self.car = car
         self.maze_map = maze_map
         self.lefthand = lefthand
+        self.sleep_time = 1.0 / frequency
 
     def start(self):
         self.awake = True
@@ -20,7 +21,7 @@ class ThinkThread(Thread):
 
     def run(self):
         while self.awake:
-            sleep(0.01/3)
+            sleep(self.sleep_time)
 
             if self.car.is_out():
                 self.awake = False
@@ -62,7 +63,7 @@ class ThinkThread(Thread):
             car.stop()
             car.turn_around(stop_function=self.stop_function)
             log('Brain says: forward')
-            car.move(Direction.FORWARD)
+            car.move()
             return
 
         if Direction.LEFT in dirs:
@@ -70,16 +71,16 @@ class ThinkThread(Thread):
             car.stop()
             car.rotate_ccw(stop_function=self.stop_function)
             log('Brain says: forward')
-            car.move(Direction.FORWARD)
+            car.move()
         else:
             if Direction.FORWARD in dirs:
-                car.move(Direction.FORWARD)
+                car.move()
             else:
                 log('Brain says: right: {}'.format(dirs))
                 car.stop()
                 car.rotate_cw(stop_function=self.stop_function)
                 log('Brain says: forward')
-                car.move(Direction.FORWARD)
+                car.move()
 
     def right_hand_search(self, car):
         dirs = car.sensors[0].get_directions()
@@ -97,7 +98,7 @@ class ThinkThread(Thread):
             car.stop()
             car.turn_around(stop_function=self.stop_function)
             log('Brain says: forward')
-            car.move(Direction.FORWARD)
+            car.move()
             return
 
         if Direction.RIGHT in dirs:
@@ -105,20 +106,20 @@ class ThinkThread(Thread):
             car.stop()
             car.rotate_cw(stop_function=self.stop_function)
             log('Brain says: forward')
-            car.move(Direction.FORWARD)
+            car.move()
         else:
             if Direction.FORWARD in dirs:
-                car.move(Direction.FORWARD)
+                car.move()
             else:
                 log('Brain says: left: {}'.format(dirs))
                 car.stop()
                 car.rotate_ccw(stop_function=self.stop_function)
                 log('Brain says: forward')
-                car.move(Direction.FORWARD)
+                car.move()
 
 
 class HandSearchBrain(BrainBase):
-    def __init__(self, lefthand=True):
+    def __init__(self, frequency, lefthand=True):
         """Initiates a left-or-right hand search algorythm
 
         Keyword Arguments:
@@ -126,6 +127,7 @@ class HandSearchBrain(BrainBase):
             right hand search (default: {True})
         """
         self.lefthand = lefthand
+        self.frequency = frequency
 
     def think(self, car, maze_map=None):
         """Finds the way out using left or right hand searches
@@ -135,7 +137,7 @@ class HandSearchBrain(BrainBase):
             maze_map {MazeMap} -- MazeMap to navigate and make shortest path
         """
 
-        self.thread = ThinkThread(car, maze_map, self.lefthand)
+        self.thread = ThinkThread(car, maze_map, self.frequency, self.lefthand)
         self.thread.start()
 
     def is_still_thinking(self):
