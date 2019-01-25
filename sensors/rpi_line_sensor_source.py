@@ -93,13 +93,16 @@ class RPiLineSensorSource(LineSensorSourceBase):
         if self.__find_direction(state, self.OFF, True):
             # we are OFF now, but we were just FWD (meaning we are to go BACK)
             if self.__find_recent_direction(self.FORWARD):
+                log('BACK: {}'.format(self.__stack.get_items()))
                 ret.append(Direction.BACK)
             else:
                 ret = []
 
-        if len(ret) == 0:  # Direction.OFF in ret or Direction.FORWARD in ret:
+        if len(ret) == 0 or ret[0] == Direction.BACK:  # Direction.OFF in ret or Direction.FORWARD in ret:
             # we are OFF or FWD now, but we just had crossing with LEFT turn
-            log('{}'.format(self.__stack.get_items()))
+            log('LEFT or RIGHT: {}'.format(self.__stack.get_items()))
+            if len(ret) > 0:
+                ret.remove(Direction.BACK)
             if self.__find_recent_direction(self.LEFT):
                 ret.append(Direction.LEFT)
             # we are OFF or FWD now, but we just had crossing with RIGHT turn
@@ -112,8 +115,7 @@ class RPiLineSensorSource(LineSensorSourceBase):
             self.__get_recent_direction_count(self.ALL, True) >=
             self.signals_window_size
         ):
-            log('End of maze!!!---------')
-            log('{}'.format(self.__stack.get_items()))
+            log('END: {}'.format(self.__stack.get_items()))
             # Asumming that returning None means end of maze
             ret = None
 

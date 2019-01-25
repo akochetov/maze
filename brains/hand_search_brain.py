@@ -55,6 +55,7 @@ class ThinkThread(Thread):
             return
 
         if len(dirs) == 0:
+            return
             log('Ooops: {}'.format(car.sensors[0].source.__dict__))
             dirs = [Direction.FORWARD]
 
@@ -78,6 +79,7 @@ class ThinkThread(Thread):
             else:
                 log('Brain says: right: {}'.format(dirs))
                 car.stop()
+                return
                 car.rotate_cw(stop_function=self.stop_function)
                 log('Brain says: forward')
                 car.move()
