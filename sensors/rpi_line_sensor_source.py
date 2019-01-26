@@ -18,7 +18,6 @@ class SignalStack(object):
 
         self.__queue[self.__current_size] = item
         self.__current_size += 1
-        # log('{}'.format(self.__queue))
 
     def get_items(self):
         return self.__queue[0:self.__current_size]
@@ -93,18 +92,14 @@ class RPiLineSensorSource(LineSensorSourceBase):
         if self.__find_direction(state, self.OFF, True):
             # we are OFF now, but we were just FWD (meaning we are to go BACK)
             if self.__find_recent_direction(self.FORWARD):
-                # log('BACK: {}'.format(self.__stack.get_items()))
+                log('BACK: {}'.format(self.__stack.get_items()))
                 ret.append(Direction.BACK)
-            else:
-                ret = []
 
-        if len(ret) == 0 or ret[0] == Direction.BACK:  # Direction.OFF in ret or Direction.FORWARD in ret:
             # we are OFF or FWD now, but we just had crossing with LEFT turn
             # log('LEFT or RIGHT: {}'.format(self.__stack.get_items()))
-            if len(ret) > 0:
-                ret.remove(Direction.BACK)
             if self.__find_recent_direction(self.LEFT):
                 ret.append(Direction.LEFT)
+
             # we are OFF or FWD now, but we just had crossing with RIGHT turn
             if self.__find_recent_direction(self.RIGHT):
                 ret.append(Direction.RIGHT)

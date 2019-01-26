@@ -27,18 +27,20 @@ class ThinkThread(Thread):
                 self.awake = False
                 break
 
-            if self.lefthand:
-                self.awake = self.left_hand_search(self.car)
-            else:
-                self.awake = self.right_hand_search(self.car)
+            if self.awake:
+                if not (self.left_hand_search(self.car) if self.lefthand else self.right_hand_search(self.car)):
+                    self.awake = False
+                    break
 
     def exit(self):
         self.awake = False
 
     def stop_function(self):
-        dirs = self.car.sensors[0].get_directions()
+        # dirs = self.car.sensors[0].get_directions()
         # log('Stop function: {}'.format(dirs))
-        return dirs is None or (len(dirs) == 1 and Direction.FORWARD in dirs)
+        # return dirs is None or (len(dirs) == 1 and Direction.FORWARD in dirs)
+        state = self.car.sensors[0].get_state()
+        return state == 0b00100
 
     def _check_crossing(self, dirs):
         if (dirs is None or
@@ -58,7 +60,7 @@ class ThinkThread(Thread):
             log('Ooops: {}'.format(car.sensors[0].source.__dict__))
             dirs = [Direction.FORWARD]
 
-        if Direction.BACK in dirs:
+        if len(dirs) == 1 and Direction.BACK in dirs:
             log('Brain says: turn around: {}'.format(dirs))
             car.stop()
             car.turn_around(stop_function=self.stop_function)
@@ -94,7 +96,7 @@ class ThinkThread(Thread):
             log('Ooops: {}'.format(car.sensors[0].source.__dict__))
             dirs = [Direction.FORWARD]
 
-        if Direction.BACK in dirs:
+        if len(dirs) == 1 and Direction.BACK in dirs:
             log('Brain says: turn around: {}'.format(dirs))
             car.stop()
             car.turn_around(stop_function=self.stop_function)

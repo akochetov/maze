@@ -81,42 +81,39 @@ else:
 
 car = Car(maze_world, chassis, [line_sensor], ORIENTATION)
 maze_map = MazeMap(car, settings.TIME_ERROR, settings.TIME_TO_TURN)
-brain = HandSearchBrain(settings.FREQ, lefthand=True)
+brain = HandSearchBrain(settings.FREQ, lefthand=False)
 
 brain.think(car, maze_map)
-
 while not exit_loop:
-    try:
-        if not brain.is_still_thinking():
-            car.stop()
-            maze_map.on_crossing(car)
-            shortest_path = maze_map.get_shortest_path(reverse=True)
-            print('Shortest path:')
-            print(shortest_path)
-            print()
-            print('Full travelled map:')
-            maze_map.save_full_path(sys.stdout)
-            print()
-            print('Going back. Current orient.: {}'.format(car.orientation))
-            # path_brain = PathBrain(shortest_path)
-            # path_brain.think(car, maze_map=maze_map)
-            break
-
-        time.sleep(settings.TIME_ERROR*1)
-
-        if settings.VIRTUAL:
-            maze_world.save(sys.stdout)
-            print()
-            print()
-
-    except KeyboardInterrupt:
-        print('Interrupted. Exiting.')
-        exit_loop = True
+    if not brain.is_still_thinking():
+        car.stop()
+        maze_map.on_crossing(car)
+        shortest_path = maze_map.get_shortest_path(reverse=True)
+        print('Shortest path:')
+        print(shortest_path)
+        print()
+        print('Full travelled map:')
+        maze_map.save_full_path(sys.stdout)
+        print()
+        print('Going back. Current orient.: {}'.format(car.orientation))
+        # path_brain = PathBrain(shortest_path)
+        # path_brain.think(car, maze_map=maze_map)
         break
+
+    time.sleep(settings.TIME_ERROR*1)
+
+    if settings.VIRTUAL:
+        maze_world.save(sys.stdout)
+        print()
+        print()
+
+print('Stopping brain, sensors and car.')
 
 brain.stop()
 line_sensor.stop()
 car.stop()
+
+print('All stopped.')
 
 if not settings.VIRTUAL:
     GPIO.cleanup()

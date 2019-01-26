@@ -18,7 +18,7 @@ LEFT_MOTOR = {"EN": 19, "IN1": 20, "IN2": 21}
 LEFT_MOTOR_POWER = {"FAST": 80, "SLOW": 40, "TURN": 80}
 RIGHT_MOTOR_POWER = {"FAST": 80, "SLOW": 40, "TURN": 80}
 
-PWM = 40
+PWM = 30
 
 # line sensors
 LINE_SENSORS = [8, 25, 24, 23, 18]
@@ -35,4 +35,4 @@ STATE_ACTION_REPETITIONS = 3
 
 # maze map settings
 TIME_ERROR = 0.5  # / 2
-TIME_TO_TURN = 0.8
+TIME_TO_TURN = 0.5
