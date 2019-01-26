@@ -24,7 +24,7 @@ PWM = 30
 LINE_SENSORS = [8, 25, 24, 23, 18]
 
 # PID coefficients, PK, IK and DK repsectively
-PID = [1 / 30, 0, 0]
+PID = [1 / 40, 1 / 2000, 1 / 5]
 
 # state error
 STATE_OK = 2000

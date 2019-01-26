@@ -57,9 +57,9 @@ class PID:
         self.last_error = error
 
         log('p: {}\ti: {} d: {}'.format(
-            error,
-            self.integral,
-            derivative))
+            error * self.pk,
+            self.integral * self.ik,
+            derivative * self.dk))
 
         return self.pk * error + self.ik * self.integral + self.dk * derivative
 

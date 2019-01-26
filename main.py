@@ -99,7 +99,7 @@ while not exit_loop:
         path_brain = PathBrain(shortest_path)
 
         # wait 5 seconds before returning back
-        sleep(5)
+        time.sleep(5)
         path_brain.think(car, maze_map=maze_map)
         break
 
