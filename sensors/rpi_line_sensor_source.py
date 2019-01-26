@@ -30,15 +30,12 @@ class RPiLineSensorSource(LineSensorSourceBase):
     '''
     RPi implementation of digital line sensor with 5 IRs in line
     '''
-    ALL = 0b11111
-
+    ALL = -1
     LEFT = 0b10000
-
-    RIGHT = 0b00001
-
+    RIGHT = 1
     FORWARD = 0b01110
-
-    OFF = 0b00000
+    STRAIGHT = 0b00100
+    OFF = 0
 
     def __init__(
             self,
@@ -66,8 +63,15 @@ class RPiLineSensorSource(LineSensorSourceBase):
         for sensor in self.__sensors:
             GPIO.setup(sensor, GPIO.IN)
 
+        self.LEFT = 1 << (self.__pins_number - 1)
+        self.STRAIGHT = 1 << (self.__pins_number // 2)
+        self.FORWARD = 0b111 << (self.__pins_number // 2 - 1)
+
     def reset(self):
         self.__stack.erase()
+
+    def is_straight(self):
+        return self.get_state() == self.STRAIGHT
 
     def get_state(self):
         ret = 0
@@ -80,6 +84,22 @@ class RPiLineSensorSource(LineSensorSourceBase):
 
         self.__stack.put(ret)
         return ret
+
+    def get_value(self, data=None):
+        sensors_data = self.get_state() if data is None else data
+
+        if (
+            sensors_data == 0 or
+            sensors_data == (1 << (self.__pins_number - 1))
+        ):
+            return None
+
+        a, b = 0, 0
+        for i in range(0, self.__pins_number):
+            c = (sensors_data & (1 << i)) / (2 ** i)
+            a += 1000 * c * i
+            b += c
+        return a / b
 
     def get_directions(self):
         ret = []

@@ -36,11 +36,7 @@ class ThinkThread(Thread):
         self.awake = False
 
     def stop_function(self):
-        # dirs = self.car.sensors[0].get_directions()
-        # log('Stop function: {}'.format(dirs))
-        # return dirs is None or (len(dirs) == 1 and Direction.FORWARD in dirs)
-        state = self.car.sensors[0].get_state()
-        return state == 0b00100
+        return self.car.sensors[0].is_straight()
 
     def _check_crossing(self, dirs):
         if (dirs is None or

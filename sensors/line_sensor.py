@@ -83,6 +83,9 @@ class LineSensor(object):
     def reset(self):
         self.thread.reset()
 
+    def is_straight(self):
+        return self.source.is_straight()
+
     def get_state(self):
         return self.thread.get_state()
 

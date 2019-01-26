@@ -8,11 +8,9 @@ class VirtualLineSensorSource(LineSensorSourceBase):
     Car sensor. Measures distance to a wall in front of sensor
     """
     LEFT = 0b00011
-
     RIGHT = 0b11000
-
     FORWARD = 0b00100
-
+    STRAIGHT = 0b00100
     OFF = 0b00000
 
     def __init__(self, maze_world, orientation):
@@ -24,6 +22,9 @@ class VirtualLineSensorSource(LineSensorSourceBase):
         """
         super().__init__(orientation)
         self.maze = maze_world
+
+    def is_straight(self):
+        return self.get_state() == self.STRAIGHT
 
     def get_state(self):
         """

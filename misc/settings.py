@@ -21,13 +21,14 @@ RIGHT_MOTOR_POWER = {"FAST": 80, "SLOW": 40, "TURN": 80}
 PWM = 30
 
 # line sensors
-LINE_SENSORS = [8, 25, 24, 23, 18]
+LINE_SENSORS = [12, 7, 8, 25, 24, 23, 18]
+# LINE_SENSORS = [8, 25, 24, 23, 18]
 
 # PID coefficients, PK, IK and DK repsectively
 PID = [1 / 40, 1 / 2000, 1 / 5]
 
 # state error
-STATE_OK = 2000
+STATE_OK = 3000
 
 # how many times in a row action has to repeat to count
 SIGNALS_WINDOWS_SIZE = 9

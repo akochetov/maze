@@ -8,6 +8,9 @@ class LineSensorSourceBase(object):
     def get_state(self):
         pass
 
+    def is_straight(self):
+        pass
+
     def get_directions(self):
         pass
 
