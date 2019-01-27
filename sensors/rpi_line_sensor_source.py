@@ -74,7 +74,8 @@ class RPiLineSensorSource(LineSensorSourceBase):
         self.__stack.erase()
 
     def is_straight(self):
-        return self.get_state() & self.STRAIGHT > 0
+        state = self.get_state()
+        return state & self.STRAIGHT > 0# and state & self.LEFT == 0 and state & self.RIGHT == 0
 
     def get_state(self):
         ret = 0
@@ -113,9 +114,10 @@ class RPiLineSensorSource(LineSensorSourceBase):
             ret.append(Direction.FORWARD)
 
         # are we OFF road?
-        if self.__find_direction(state, self.OFF, True):
+        if self.__find_direction(state, self.OFF, True): #  or self.is_straight():
             # we are OFF now, but we were just FWD (meaning we are to go BACK)
             if self.__find_recent_direction(self.FORWARD):
+                # log('{}'.format(self.__stack.get_items()))
                 ret.append(Direction.BACK)
 
             # we are OFF or FWD now, but we just had crossing with LEFT turn
@@ -131,7 +133,7 @@ class RPiLineSensorSource(LineSensorSourceBase):
         # then maze way out found
         if (
             self.__get_recent_direction_count(self.ALL, True) >=
-            self.signals_window_size // 2
+            self.signals_window_size // 1.5
         ):
             # log('END: {}'.format(self.__stack.get_items()))
             # Asumming that returning None means end of maze
