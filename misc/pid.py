@@ -43,26 +43,6 @@ class PID:
 
         return time()
 
-    def get_simple(self, desired_value, actual_value):
-        error = desired_value - actual_value
-        derivative = error - self.last_error
-
-        if desired_value == actual_value:
-            # to avoid overshoot - drop integral every time error = 0
-            self.integral = self.integral / 5
-        else:
-            # if there is an error - change integral
-            self.integral += error
-
-        self.last_error = error
-
-        log('p: {}\ti: {} d: {}'.format(
-            error * self.pk,
-            self.integral * self.ik,
-            derivative * self.dk))
-
-        return self.pk * error + self.ik * self.integral + self.dk * derivative
-
     def get(self, desired_value, actual_value):
         """Calculates output signal with PID
 

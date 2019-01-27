@@ -33,7 +33,7 @@ class RPi2WheelsChassis(ChassisBase):
     FAST = "FAST"
     TURN = "TURN"
 
-    BREAK_TIME = 1.0 / 15.0
+    BREAK_TIME = 1.0 / 10.0
 
     def __init__(
             self,
@@ -105,7 +105,7 @@ class RPi2WheelsChassis(ChassisBase):
 
         l, r = self._pid_to_power(pid)
 
-        log('Power {} {}'.format(l, r))
+        # log('Power {} {}'.format(l, r))
 
         self.lmotor.rotate(True, l)
         self.rmotor.rotate(True, r)
@@ -139,7 +139,7 @@ class RPi2WheelsChassis(ChassisBase):
         else:
             self.lmotor.rotate(degrees == -90)
             self.rmotor.rotate(degrees == 90)
-        sleep(self.BREAK_TIME)
+        sleep(self.BREAK_TIME / 2)
 
         self.stop()
 

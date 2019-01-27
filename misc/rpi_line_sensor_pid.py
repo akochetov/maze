@@ -14,12 +14,12 @@ class RPiLineSensorPID(object):
         if actual is None:
             return None
 
-        ret = self.pid.get_simple(self.ok_state_value, actual)
+        ret = self.pid.get(self.ok_state_value, actual)
 
-        log('Sensors: {}\tActual: {} Error: {} PID: {}'.format(
-            bin(self.sensor.get_state()),
-            actual,
-            self.ok_state_value - actual,
-            ret))
+        # log('Sensors: {}\tActual: {} Error: {} PID: {}'.format(
+        #    bin(self.sensor.get_state()),
+        #    actual,
+        #    self.ok_state_value - actual,
+        #    ret))
 
         return ret

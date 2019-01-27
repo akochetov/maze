@@ -53,7 +53,7 @@ class ThinkThread(Thread):
             return False
 
         if len(dirs) == 0:
-            log('Ooops: {}'.format(car.sensors[0].source.__dict__))
+            #log('Ooops: {}'.format(car.sensors[0].source.__dict__))
             dirs = [Direction.FORWARD]
 
         if len(dirs) == 1 and Direction.BACK in dirs:
@@ -89,7 +89,7 @@ class ThinkThread(Thread):
             return False
 
         if len(dirs) == 0:
-            log('Ooops: {}'.format(car.sensors[0].source.__dict__))
+            #log('Ooops: {}'.format(car.sensors[0].source.__dict__))
             dirs = [Direction.FORWARD]
 
         if len(dirs) == 1 and Direction.BACK in dirs:
