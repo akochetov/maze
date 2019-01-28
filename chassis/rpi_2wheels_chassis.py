@@ -33,8 +33,6 @@ class RPi2WheelsChassis(ChassisBase):
     FAST = "FAST"
     TURN = "TURN"
 
-    BREAK_TIME = 1.0 / 8.0
-
     def __init__(
             self,
             lmotor_settings,
@@ -42,6 +40,7 @@ class RPi2WheelsChassis(ChassisBase):
             left_motor_pow,
             right_motor_pow,
             turn_time,
+            brake_time,
             pwm,
             sensor_pid,
             frequency
@@ -64,6 +63,7 @@ class RPi2WheelsChassis(ChassisBase):
         self.left_motor_pow = left_motor_pow
         self.right_motor_pow = right_motor_pow
         self.turn_time = turn_time
+        self.brake_time = brake_time
 
         self.sensor_pid = sensor_pid
         self.sleep_time = 1.0 / frequency
@@ -83,20 +83,21 @@ class RPi2WheelsChassis(ChassisBase):
             self.right_motor_pow[speed]
         )
 
+        lp, rp = 0, 0
         if pid is not None:
-            l = l - int(abs(pid) - pid / 2)
-            r = r - int(abs(pid) + pid / 2)
+            lp = 100 - abs(pid) + pid / 2
+            rp = 100 - abs(pid) - pid / 2
 
-            if l < 0:
-                l = 0
-            if l > 100:
-                l = 100
-            if r < 0:
-                r = 0
-            if r > 100:
-                r = 100
+            if lp < 0:
+                lp = 0
+            if lp > 100:
+                lp = 100
+            if rp < 0:
+                rp = 0
+            if rp > 100:
+                rp = 100
 
-        return l, r
+        return int(l * lp / 100), int(r * rp / 100)
 
     def _move(self):
         # get PID value based on sensor values
@@ -105,7 +106,7 @@ class RPi2WheelsChassis(ChassisBase):
 
         l, r = self._pid_to_power(pid)
 
-        # log('Power {} {}'.format(l, r))
+        log('Power {} {}'.format(l, r))
 
         self.lmotor.rotate(True, l)
         self.rmotor.rotate(True, r)
@@ -140,7 +141,7 @@ class RPi2WheelsChassis(ChassisBase):
         else:
             self.lmotor.rotate(degrees == -90)
             self.rmotor.rotate(degrees == 90)
-            sleep(self.BREAK_TIME / 2)
+            sleep(self.brake_time / 2)
 
         self.stop()
 
@@ -168,7 +169,7 @@ class RPi2WheelsChassis(ChassisBase):
             # active break
             self.lmotor.rotate(False)
             self.rmotor.rotate(False)
-            sleep(self.BREAK_TIME)
+            sleep(self.brake_time)
             self.lmotor.stop()
             self.lmotor.stop()
             log('Breakin done.')

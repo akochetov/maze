@@ -75,6 +75,7 @@ else:
         settings.LEFT_MOTOR_POWER,
         settings.RIGHT_MOTOR_POWER,
         settings.TIME_TO_TURN,
+        settings.BRAKE_TIME,
         settings.PWM,
         sensor_pid,
         settings.FREQ)
