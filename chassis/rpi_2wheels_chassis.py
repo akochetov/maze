@@ -33,7 +33,7 @@ class RPi2WheelsChassis(ChassisBase):
     FAST = "FAST"
     TURN = "TURN"
 
-    BREAK_TIME = 1.0 / 10.0
+    BREAK_TIME = 1.0 / 8.0
 
     def __init__(
             self,
@@ -131,15 +131,16 @@ class RPi2WheelsChassis(ChassisBase):
 
             enough_time = 4 * self.turn_time * float(abs(degrees)) / 90.0
             while not stop_function() and time() - start < enough_time:
-                sleep(self.sleep_time)
+                sleep(self.sleep_time / 2)
 
         if degrees == 180:
             self.lmotor.rotate(True)
             self.rmotor.rotate(False)
+            sleep(self.BREAK_TIME)
         else:
             self.lmotor.rotate(degrees == -90)
             self.rmotor.rotate(degrees == 90)
-        sleep(self.BREAK_TIME / 2)
+            sleep(self.BREAK_TIME / 2)
 
         self.stop()
 

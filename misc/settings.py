@@ -18,7 +18,7 @@ LEFT_MOTOR = {"EN": 19, "IN1": 20, "IN2": 21}
 LEFT_MOTOR_POWER = {"FAST": 80, "SLOW": 40, "TURN": 80}
 RIGHT_MOTOR_POWER = {"FAST": 80, "SLOW": 40, "TURN": 80}
 
-PWM = 30
+PWM = 40
 
 # line sensors
 LINE_SENSORS = [12, 7, 8, 25, 24, 23, 18]
