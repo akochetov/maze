@@ -28,9 +28,14 @@ class ThinkThread(Thread):
                 break
 
             if self.awake:
-                if not (self.left_hand_search(self.car) if self.lefthand else self.right_hand_search(self.car)):
-                    self.awake = False
-                    break
+                if self.lefthand:
+                    if not self.left_hand_search(self.car):
+                        self.awake = False
+                        break
+                else:
+                    if not self.right_hand_search(self.car):
+                        self.awake = False
+                        break
 
     def exit(self):
         self.awake = False
@@ -53,7 +58,7 @@ class ThinkThread(Thread):
             return False
 
         if len(dirs) == 0:
-            #log('Ooops: {}'.format(car.sensors[0].source.__dict__))
+            # log('Ooops: {}'.format(car.sensors[0].source.__dict__))
             dirs = [Direction.FORWARD]
 
         if len(dirs) == 1 and Direction.BACK in dirs:
@@ -89,7 +94,7 @@ class ThinkThread(Thread):
             return False
 
         if len(dirs) == 0:
-            #log('Ooops: {}'.format(car.sensors[0].source.__dict__))
+            # log('Ooops: {}'.format(car.sensors[0].source.__dict__))
             dirs = [Direction.FORWARD]
 
         if len(dirs) == 1 and Direction.BACK in dirs:

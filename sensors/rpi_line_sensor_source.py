@@ -113,7 +113,14 @@ class RPiLineSensorSource(LineSensorSourceBase):
             ret.append(Direction.FORWARD)
 
         # are we OFF road?
-        if self.__find_direction(state, self.OFF, True):
+        if (
+            self.__find_direction(state, self.OFF, True) or
+            (
+                self.__find_direction(state, self.FORWARD) and
+                not self.__find_direction(state, self.LEFT) and
+                not self.__find_direction(state, self.RIGHT)
+            )
+        ):
             # we are OFF now, but we were just FWD (meaning we are to go BACK)
             if self.__find_recent_direction(self.FORWARD):
                 ret.append(Direction.BACK)
