@@ -18,4 +18,8 @@ echo "Installing gpioero..."
 sudo apt install python-gpiozero
 sudo apt install python3-gpiozero
 
+echo "Installing RPI.GPIO 0.6.3..."
+sudo apt-get remove RPi.GPIO
+sudo pip3 install RPi.GPIO==0.6.3
+
 echo "Done."
