@@ -44,6 +44,30 @@ class PID:
         return time()
 
     def get(self, desired_value, actual_value):
+        return self.__get_simple(desired_value, actual_value)
+
+    def __get_simple(self, desired_value, actual_value):
+        """Calculates output signal with PID
+
+        Arguments:
+            desired_value {float} -- Desired value of system state
+            actual_value {float} -- Actual current value of system state
+        """
+        error = desired_value - actual_value
+
+        self.integral = self.integral + error
+
+        derivative = error - self.last_error
+        self.last_error = error
+
+        log('p: {}\ti: {} d: {}'.format(
+            error * self.pk,
+            self.integral * self.ik,
+            derivative * self.dk))
+
+        return self.pk * error + self.ik * self.integral + self.dk * derivative
+
+    def __get_advanced(self, desired_value, actual_value):
         """Calculates output signal with PID
 
         Arguments:

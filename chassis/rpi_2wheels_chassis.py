@@ -137,7 +137,7 @@ class RPi2WheelsChassis(ChassisBase):
         if degrees == 180:
             self.lmotor.rotate(True)
             self.rmotor.rotate(False)
-            sleep(self.BREAK_TIME)
+            sleep(self.brake_time)
         else:
             self.lmotor.rotate(degrees == -90)
             self.rmotor.rotate(degrees == 90)
