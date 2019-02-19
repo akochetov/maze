@@ -50,7 +50,7 @@ class ThinkThread(Thread):
                 Direction.BACK in dirs):
             self.maze_map.on_crossing(self.car)
 
-    def left_hand_search(self, car):
+    def hand_search(self, car, hand_direction):
         dirs = car.sensors[0].get_directions()
         self._check_crossing(dirs)
 
@@ -69,46 +69,13 @@ class ThinkThread(Thread):
             car.move()
             return True
 
-        if Direction.LEFT in dirs:
-            log('Brain says: left: {}'.format(dirs))
-            car.stop()
-            car.rotate_ccw(stop_function=self.stop_function)
-            log('Brain says: forward')
-            car.move()
-        else:
-            if Direction.FORWARD in dirs:
-                car.move()
-            else:
-                log('Brain says: right: {}'.format(dirs))
-                car.stop()
-                car.rotate_cw(stop_function=self.stop_function)
-                log('Brain says: forward')
-                car.move()
-        return True
-
-    def right_hand_search(self, car):
-        dirs = car.sensors[0].get_directions()
-        self._check_crossing(dirs)
-
-        if dirs is None:
-            return False
-
-        if len(dirs) == 0:
-            # log('Ooops: {}'.format(car.sensors[0].source.__dict__))
-            dirs = [Direction.FORWARD]
-
-        if len(dirs) == 1 and Direction.BACK in dirs:
-            log('Brain says: turn around: {}'.format(dirs))
-            car.stop()
-            car.turn_around(stop_function=self.stop_function)
-            log('Brain says: forward')
-            car.move()
-            return True
-
-        if Direction.RIGHT in dirs:
+        if hand_direction in dirs:
             log('Brain says: right: {}'.format(dirs))
             car.stop()
-            car.rotate_cw(stop_function=self.stop_function)
+            if hand_direction == Direction.RIGHT:
+                car.rotate_cw(stop_function=self.stop_function)
+            else:
+                car.rotate_ccw(stop_function=self.stop_function)
             log('Brain says: forward')
             car.move()
         else:
@@ -117,10 +84,19 @@ class ThinkThread(Thread):
             else:
                 log('Brain says: left: {}'.format(dirs))
                 car.stop()
-                car.rotate_ccw(stop_function=self.stop_function)
+                if hand_direction == Direction.RIGHT:
+                    car.rotate_ccw(stop_function=self.stop_function)
+                else:
+                    car.rotate_cw(stop_function=self.stop_function)
                 log('Brain says: forward')
                 car.move()
         return True
+
+    def left_hand_search(self, car):
+        return self.hand_search(car, Direction.LEFT)
+
+    def right_hand_search(self, car):
+        return self.hand_search(car, Direction.RIGHT)
 
 
 class HandSearchBrain(BrainBase):
