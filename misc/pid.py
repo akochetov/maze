@@ -57,8 +57,15 @@ class PID:
 
         self.integral = self.integral + error
 
+        if error == 0:
+            self.integral = 0
+
         derivative = error - self.last_error
         self.last_error = error
+
+        if self.first_call:
+            self.first_call = False
+            derivative = 0
 
         log('p: {}\ti: {} d: {}'.format(
             error * self.pk,

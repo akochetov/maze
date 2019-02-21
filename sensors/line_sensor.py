@@ -78,10 +78,10 @@ class LineSensor(object):
 
         self.source = source
         self.thread = LineSensorThread(self.source, frequency)
-        self.thread.start()
+        # self.thread.start()
 
     def reset(self):
-        self.thread.reset()
+        self.source.reset()
 
     def is_straight(self):
         return self.source.is_straight()
@@ -90,10 +90,10 @@ class LineSensor(object):
         return self.source.get_value()
 
     def get_state(self):
-        return self.thread.get_state()
+        return self.source.get_state()
 
     def get_directions(self):
-        return self.thread.get_directions()
+        return self.source.get_directions()
 
     def stop(self):
         if self.thread.is_alive():

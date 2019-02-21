@@ -1,14 +1,15 @@
 import RPi.GPIO as GPIO
 from sensors.line_sensor import LineSensor
 from sensors.rpi_line_sensor_source import RPiLineSensorSource
+from misc.orientation import Orientation
 import misc.settings as settings
-import time
+from time import sleep
 
 GPIO.setmode(GPIO.BCM)
 
 line_sensor = LineSensor(RPiLineSensorSource(
         settings.LINE_SENSORS,
-        ORIENTATION,
+        Orientation.SOUTH,
         invert=True,
         signals_window_size=settings.SIGNALS_WINDOWS_SIZE,
         state_trigger_repetitions=settings.STATE_ACTION_REPETITIONS

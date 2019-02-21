@@ -41,6 +41,7 @@ class ThinkThread(Thread):
         self.awake = False
 
     def stop_function(self):
+        # print('stop_function: {}'.format(bin(self.car.sensors[0].get_state())))
         return self.car.sensors[0].is_straight()
 
     def _check_crossing(self, dirs):

@@ -41,7 +41,7 @@ if settings.VIRTUAL:
     chassis = VirtualChassis(maze_world, settings.TIME_ERROR*1)
     line_sensor = LineSensor(
         VirtualLineSensorSource(maze_world, ORIENTATION),
-        settings.FREQ)
+        settings.CTRL_FREQ)
 else:
     # physical RPi imports
     import RPi.GPIO as GPIO
@@ -61,7 +61,7 @@ else:
         signals_window_size=settings.SIGNALS_WINDOWS_SIZE,
         state_trigger_repetitions=settings.STATE_ACTION_REPETITIONS
         ),
-        settings.FREQ)
+        settings.CTRL_FREQ)
 
     sensor_pid = RPiLineSensorPID(
         settings.PID,
@@ -78,11 +78,11 @@ else:
         settings.BRAKE_TIME,
         settings.PWM,
         sensor_pid,
-        settings.FREQ)
+        settings.PID_FREQ)
 
 car = Car(maze_world, chassis, [line_sensor], ORIENTATION)
 maze_map = MazeMap(car, settings.TIME_ERROR, settings.TIME_TO_TURN)
-brain = HandSearchBrain(settings.FREQ, lefthand=False)
+brain = HandSearchBrain(settings.CTRL_FREQ, lefthand=False)
 
 brain.think(car, maze_map)
 while not exit_loop:

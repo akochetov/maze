@@ -15,9 +15,11 @@ class SignalStack(object):
             for i in range(0, self.max_size - 1):
                 self.__queue[i] = self.__queue[i + 1]
             self.__current_size = self.max_size - 1
-
-        self.__queue[self.__current_size] = item
-        self.__current_size += 1
+        try:
+            self.__queue[self.__current_size] = item
+            self.__current_size += 1
+        except:
+            log('current_size: {}'.format(self.__current_size))
 
     def get_items(self):
         return self.__queue[0:self.__current_size]
@@ -64,7 +66,8 @@ class RPiLineSensorSource(LineSensorSourceBase):
             GPIO.setup(sensor, GPIO.IN)
 
         self.LEFT = 1 << (self.__pins_number - 1)
-        self.STRAIGHT = 1 << (self.__pins_number // 2)
+        self.STRAIGHT = 0b1 << (self.__pins_number // 2)
+        print(bin(self.STRAIGHT))
         self.FORWARD = 0b111 << (self.__pins_number // 2 - 1)
         self.ALL = 0
         for i in range(0, self.__pins_number):
@@ -123,6 +126,7 @@ class RPiLineSensorSource(LineSensorSourceBase):
                 not self.__find_direction(state, self.RIGHT)
             )
         ):
+            # log('{}'.format(self.__stack.get_items()))
             # we are OFF now, but we were just FWD (meaning we are to go BACK)
             if self.__find_recent_direction(self.FORWARD):
                 # log('{}'.format(self.__stack.get_items()))
@@ -141,9 +145,9 @@ class RPiLineSensorSource(LineSensorSourceBase):
         # then maze way out found
         if (
             self.__get_recent_direction_count(self.ALL, True) >=
-            self.signals_window_size // 1.5
+            self.signals_window_size # // 1.5
         ):
-            # log('END: {}'.format(self.__stack.get_items()))
+            log('END: {}'.format(self.__stack.get_items()))
             # Asumming that returning None means end of maze
             ret = None
 
