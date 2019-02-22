@@ -67,7 +67,6 @@ class RPiLineSensorSource(LineSensorSourceBase):
 
         self.LEFT = 1 << (self.__pins_number - 1)
         self.STRAIGHT = 0b1 << (self.__pins_number // 2)
-        print(bin(self.STRAIGHT))
         self.FORWARD = 0b111 << (self.__pins_number // 2 - 1)
         self.ALL = 0
         for i in range(0, self.__pins_number):
@@ -145,7 +144,7 @@ class RPiLineSensorSource(LineSensorSourceBase):
         # then maze way out found
         if (
             self.__get_recent_direction_count(self.ALL, True) >=
-            self.signals_window_size # // 1.5
+            self.signals_window_size  # // 1.5
         ):
             log('END: {}'.format(self.__stack.get_items()))
             # Asumming that returning None means end of maze

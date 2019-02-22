@@ -81,27 +81,33 @@ else:
         settings.PID_FREQ)
 
 car = Car(maze_world, chassis, [line_sensor], ORIENTATION)
-maze_map = MazeMap(car, settings.TIME_ERROR, settings.TIME_TO_TURN)
 brain = HandSearchBrain(settings.CTRL_FREQ, lefthand=False)
 
+maze_map = None
+if settings.NAVIGATE_BACK:
+    maze_map = MazeMap(car, settings.TIME_ERROR, settings.TIME_TO_TURN)
+
 brain.think(car, maze_map)
+
 while not exit_loop:
     if not brain.is_still_thinking():
         car.stop()
-        maze_map.on_crossing(car)
-        shortest_path = maze_map.get_shortest_path(reverse=True)
-        print('Shortest path:')
-        print(shortest_path)
-        print()
-        print('Full travelled map:')
-        maze_map.save_full_path(sys.stdout)
-        print()
-        print('Going back. Current orient.: {}'.format(car.orientation))
-        path_brain = PathBrain(shortest_path)
 
-        # wait 5 seconds before returning back
-        # time.sleep(5)
-        # path_brain.think(car, maze_map=maze_map)
+        if settings.NAVIGATE_BACK:
+            maze_map.on_crossing(car)
+            shortest_path = maze_map.get_shortest_path(reverse=True)
+            print('Shortest path:')
+            print(shortest_path)
+            print()
+            print('Full travelled map:')
+            maze_map.save_full_path(sys.stdout)
+            print()
+            print('Going back. Current orient.: {}'.format(car.orientation))
+            path_brain = PathBrain(shortest_path)
+
+            # wait 5 seconds before returning back
+            time.sleep(5)
+            path_brain.think(car, maze_map=maze_map)
         break
 
     time.sleep(settings.TIME_ERROR*1)

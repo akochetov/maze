@@ -83,21 +83,15 @@ class RPi2WheelsChassis(ChassisBase):
             self.right_motor_pow[speed]
         )
 
-        lp, rp = 0, 0
-        if pid is not None:
-            lp = 100 - abs(pid) + pid / 2
-            rp = 100 - abs(pid) - pid / 2
+        if pid > 0:
+            if pid > r:
+                pid = r
+            return l, r - pid
 
-            if lp < 0:
-                lp = 0
-            if lp > 100:
-                lp = 100
-            if rp < 0:
-                rp = 0
-            if rp > 100:
-                rp = 100
-
-        return int(l * lp / 100), int(r * rp / 100)
+        if pid < 0:
+            if pid < l:
+                pid = l
+            return l + pid, r
 
     def _move(self):
         # get PID value based on sensor values
@@ -132,16 +126,16 @@ class RPi2WheelsChassis(ChassisBase):
 
             enough_time = 4 * self.turn_time * float(abs(degrees)) / 90.0
             while not stop_function() and time() - start < enough_time:
-                pass  # sleep(self.sleep_time / 20)
+                sleep(1 / 100)
 
         # breaking...
         if degrees == 180:
-            self.lmotor.rotate(True)
-            self.rmotor.rotate(False)
+            self.lmotor.rotate(True, self.left_motor_pow[self.TURN])
+            self.rmotor.rotate(False, self.right_motor_pow[self.TURN])
             sleep(self.brake_time)
         else:
-            self.lmotor.rotate(degrees == -90)
-            self.rmotor.rotate(degrees == 90)
+            self.lmotor.rotate(degrees == -90, self.left_motor_pow[self.TURN])
+            self.rmotor.rotate(degrees == 90, self.right_motor_pow[self.TURN])
             sleep(self.brake_time / 2)
 
         # move slightly fwd after turning to get sensor to the line

@@ -1,6 +1,9 @@
 # Virtual or physical maze
 VIRTUAL = 0
 
+# Shall we return with shortest path when exit is reached?
+NAVIGATE_BACK = 0
+
 # Logging
 LOG = 1
 
