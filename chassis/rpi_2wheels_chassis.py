@@ -77,20 +77,22 @@ class RPi2WheelsChassis(ChassisBase):
         # if there is no PID detected (meaning that we are at crossing)
         # then slow down
         speed = self.SLOW if pid is None else self.FAST
+        if pid is None:
+            pid = 0
 
         l, r = (
             self.left_motor_pow[speed],
             self.right_motor_pow[speed]
         )
 
-        if pid > 0:
+        if pid >= 0:
             if pid > r:
                 pid = r
             return l, int(r - pid)
 
         if pid < 0:
-            if pid < l:
-                pid = l
+            if -pid > l:
+                pid = -l
             return int(l + pid), r
 
     def _move(self):

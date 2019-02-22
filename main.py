@@ -60,8 +60,7 @@ else:
         invert=True,
         signals_window_size=settings.SIGNALS_WINDOWS_SIZE,
         state_trigger_repetitions=settings.STATE_ACTION_REPETITIONS
-        ),
-        settings.CTRL_FREQ)
+        ))
 
     sensor_pid = RPiLineSensorPID(
         settings.PID,
@@ -120,7 +119,6 @@ while not exit_loop:
 print('Stopping brain, sensors and car.')
 
 brain.stop()
-line_sensor.stop()
 car.stop()
 
 print('All stopped.')

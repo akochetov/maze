@@ -45,7 +45,7 @@ class ThinkThread(Thread):
         return self.car.sensors[0].is_straight()
 
     def _check_crossing(self, dirs):
-        if (dirs is None or
+        if self.maze_map is not None and (dirs is None or
                 Direction.LEFT in dirs or
                 Direction.RIGHT in dirs or
                 Direction.BACK in dirs):
