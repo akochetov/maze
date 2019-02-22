@@ -86,12 +86,12 @@ class RPi2WheelsChassis(ChassisBase):
         if pid > 0:
             if pid > r:
                 pid = r
-            return l, r - pid
+            return l, int(r - pid)
 
         if pid < 0:
             if pid < l:
                 pid = l
-            return l + pid, r
+            return int(l + pid), r
 
     def _move(self):
         # get PID value based on sensor values
