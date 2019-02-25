@@ -9,7 +9,7 @@ LOG = 0
 
 # control iterations per second
 CTRL_FREQ = 80
-PID_FREQ = 30
+PID_FREQ = 27
 
 # button and LED pins to control robot
 CTRL_BTN = 14
@@ -26,7 +26,6 @@ PWM = 35
 
 # line sensors
 LINE_SENSORS = [12, 11, 8, 25, 24, 23, 18]
-# LINE_SENSORS = [8, 25, 24, 23, 18]
 
 # PID coefficients, PK, IK and DK repsectively, then D fading coefficient
 # D fading means that every iteration D error will be multiplied by D fading
@@ -41,6 +40,6 @@ SIGNALS_WINDOWS_SIZE = 30
 STATE_ACTION_REPETITIONS = 5
 
 # maze map settings
-TIME_ERROR = 0.5  # / 2
+TIME_ERROR = 0.5
 TIME_TO_TURN = 0.4
 BRAKE_TIME = 1.0 / 25.0
