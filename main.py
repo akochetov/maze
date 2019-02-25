@@ -102,11 +102,16 @@ while not exit_loop:
             maze_map.save_full_path(sys.stdout)
             print()
             print('Going back. Current orient.: {}'.format(car.orientation))
-            path_brain = PathBrain(shortest_path)
+            path_brain = PathBrain(car, shortest_path)
 
             # wait 5 seconds before returning back
-            time.sleep(5)
-            path_brain.think(car, maze_map=maze_map)
+            time.sleep(3)
+            # reverse and get to the line
+            if path_brain.get_to_track():
+                # now go back with shortest path
+                path_brain.think(maze_map)
+            else:
+                print('Could NOT reverse. Returning back stopped.')
         break
 
     time.sleep(settings.TIME_ERROR*1)

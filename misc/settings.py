@@ -31,7 +31,7 @@ LINE_SENSORS = [12, 11, 8, 25, 24, 23, 18]
 # PID coefficients, PK, IK and DK repsectively, then D fading coefficient
 # D fading means that every iteration D error will be multiplied by D fading
 # PID = [1 / 125, 0, 1 / 9]
-PID = [1 / 100, 0, 1 / 20, 0.5]
+PID = [1 / 100, 0, 1 / 13.5, 0.5]
 
 # state error
 STATE_OK = 3000
