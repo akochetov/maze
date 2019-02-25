@@ -52,9 +52,8 @@ class ThinkThread(Thread):
                 dirs is None or
                 Direction.LEFT in dirs or
                 Direction.RIGHT in dirs or
-                Direction.BACK in dirs
-                )
-                ):
+                (Direction.BACK in dirs and len(dirs) == 1)
+                )):
             self.maze_map.on_crossing(self.car)
 
     def hand_search(self, car, hand_direction):
