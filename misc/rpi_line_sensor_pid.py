@@ -23,3 +23,6 @@ class RPiLineSensorPID(object):
             ret))
 
         return ret
+
+    def reset(self):
+        self.pid.reset()

@@ -4,6 +4,7 @@ from misc.direction import Direction
 from chassis.chassis_base import ChassisBase
 from misc.log import log
 
+
 class Car(object):
     """
     Car. Has sensors and has a maze reference.
@@ -98,10 +99,7 @@ class Car(object):
             return
 
         self.chassis.move()
-        # doubtfull solution, but lets try:
-        # this is required for virtual moves mainly
-        # when car made first move, sensors have to be updated
-        # to catch new data
+
         log('Reseting sensors---------')
         for sensor in self.sensors:
             sensor.reset()

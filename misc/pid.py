@@ -3,7 +3,7 @@ from misc.log import log
 
 
 class PID:
-    def __init__(self, pk, ik, dk, last_error=0.0):
+    def __init__(self, pk, ik, dk, d_fading):
         """Initiates PID with P, I and D coefficients as well
         as current percieved error (0 by default)
 
@@ -11,6 +11,8 @@ class PID:
             pk {float} -- P coefficient
             ik {float} -- I coefficient
             dk {float} -- D coefficient
+            dk_fading {float} -- how much D error will fade from one
+            call to another. 0 means it fades completely
 
         Keyword Arguments:
             last_error {float} -- current percieved error (default: {0.0})
@@ -19,19 +21,17 @@ class PID:
         self.pk = pk
         self.ik = ik
         self.dk = dk
+        self.d_fading = d_fading
 
-        self.integral = 0
-        self.last_error = last_error
-        self.before_last_error = last_error
-        self.first_call = True
-        self.reset_time()
+        self.reset()
 
-    def reset_time(self):
-        """Starts new iteration time measuring for further
-        Derivative part calculations
+    def reset(self):
+        """Resets integral and derivative errors
         """
 
-        self.iteration_time = self.__get_time()
+        self.integral = 0
+        self.last_error = 0
+        self.first_call = True
 
     def __get_time(self):
         """Incapuslated method to calcualte current time in seconds.
@@ -44,9 +44,6 @@ class PID:
         return time()
 
     def get(self, desired_value, actual_value):
-        return self.__get_simple(desired_value, actual_value)
-
-    def __get_simple(self, desired_value, actual_value):
         """Calculates output signal with PID
 
         Arguments:
@@ -60,55 +57,22 @@ class PID:
         if error == 0:
             self.integral = 0
 
-        derivative = error - self.last_error
-        self.last_error = error
+        derivative = (
+            error - self.last_error
+            )
+        self.last_error = error + self.d_fading * self.last_error
 
         if self.first_call:
             self.first_call = False
-            derivative = 0
+            self.derivative = 0
 
         log('p: {}\ti: {} d: {}'.format(
             error * self.pk,
             self.integral * self.ik,
             derivative * self.dk))
 
-        return self.pk * error + self.ik * self.integral + self.dk * derivative
-
-    def __get_advanced(self, desired_value, actual_value):
-        """Calculates output signal with PID
-
-        Arguments:
-            desired_value {float} -- Desired value of system state
-            actual_value {float} -- Actual current value of system state
-        """
-
-        iteration = self.__get_time() - self.iteration_time
-
-        error = desired_value - actual_value
-
-        if self.first_call:
-            self.before_last_error = error
-            self.first_call = False
-
-        if actual_value == desired_value:
-            # experimental - reducing I part as we drive forward correctly
-            self.integral = self.integral / 2
-        else:
-            self.integral = self.integral + (error * iteration)
-
-        derivative = (error - self.before_last_error) / iteration
-
-        # experimental - reducing D part every iteration
-        self.before_last_error += (error - self.before_last_error) / 4
-
-        if self.last_error != error:
-            self.before_last_error = self.last_error
-            self.last_error = error
-            self.reset_time()
-
-        log('p: {}\ti: {} d: {}'.format(
-            error * self.pk,
-            self.integral * self.ik,
-            derivative * self.dk))
-
-        return self.pk * error + self.ik * self.integral + self.dk * derivative
+        return (
+            self.pk * error +
+            self.ik * self.integral +
+            self.dk * derivative
+        )

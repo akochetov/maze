@@ -185,6 +185,9 @@ class RPi2WheelsChassis(ChassisBase):
         if self.rmotor is not None:
             self.rmotor.stop()
 
+        # reset pid error
+        self.sensor_pid.reset()
+
     def __del__(self):
         if self.lmotor is not None:
             self.lmotor.stop()

@@ -41,14 +41,20 @@ class ThinkThread(Thread):
         self.awake = False
 
     def stop_function(self):
-        # print('stop_function: {}'.format(bin(self.car.sensors[0].get_state())))
+        # print('stop_function: {}'.format(
+        #    bin(self.car.sensors[0].get_state())
+        #    ))
         return self.car.sensors[0].is_straight()
 
     def _check_crossing(self, dirs):
-        if self.maze_map is not None and (dirs is None or
+        if (
+            self.maze_map is not None and (
+                dirs is None or
                 Direction.LEFT in dirs or
                 Direction.RIGHT in dirs or
-                Direction.BACK in dirs):
+                Direction.BACK in dirs
+                )
+                ):
             self.maze_map.on_crossing(self.car)
 
     def hand_search(self, car, hand_direction):
