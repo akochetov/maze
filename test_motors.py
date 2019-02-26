@@ -3,8 +3,8 @@ from time import sleep
 
 lmotor = PWMMotor(13, 5, 6, pwm_frequency=40)
 rmotor = PWMMotor(19, 20, 21, pwm_frequency=40)
-lmotor.rotate(power=35)
-rmotor.rotate(power=30)
+lmotor.rotate(power=30)
+rmotor.rotate(power=33)
 sleep(5)
 lmotor.rotate(False)
 rmotor.rotate(False)

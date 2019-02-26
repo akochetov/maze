@@ -50,7 +50,7 @@ class PathBrain(BrainBase):
         self._car.move_to(Direction.BACK)
         start = time()
         enough_time = 1  # we give it 1 sec to reverse and find line
-        while not stop_function() and time() - start < enough_time:
+        while not self.stop_function() and time() - start < enough_time:
             sleep(1 / 100)
         return time() - start < enough_time
 

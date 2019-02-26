@@ -19,10 +19,10 @@ CTRL_LED = 15
 RIGHT_MOTOR = {"EN": 13, "IN1": 5, "IN2": 6}
 LEFT_MOTOR = {"EN": 19, "IN1": 20, "IN2": 21}
 
-LEFT_MOTOR_POWER = {"FAST": 28, "SLOW": 18, "TURN": 28}
-RIGHT_MOTOR_POWER = {"FAST": 33, "SLOW": 20, "TURN": 34}
+LEFT_MOTOR_POWER = {"FAST": 30, "SLOW": 18, "TURN": 30}
+RIGHT_MOTOR_POWER = {"FAST": 35, "SLOW": 20, "TURN": 35}
 
-PWM = 35
+PWM = 50
 
 # line sensors
 LINE_SENSORS = [12, 11, 8, 25, 24, 23, 18]
@@ -30,16 +30,16 @@ LINE_SENSORS = [12, 11, 8, 25, 24, 23, 18]
 # PID coefficients, PK, IK and DK repsectively, then D fading coefficient
 # D fading means that every iteration D error will be multiplied by D fading
 # PID = [1 / 125, 0, 1 / 9]
-PID = [1 / 100, 0, 1 / 13.5, 0.5]
+PID = [1 / 130, 0, 1 / 14, 0.15]
 
 # state error
 STATE_OK = 3000
 
 # how many times in a row action has to repeat to count
 SIGNALS_WINDOWS_SIZE = 30
-STATE_ACTION_REPETITIONS = 5
+STATE_ACTION_REPETITIONS = 7
 
 # maze map settings
 TIME_ERROR = 0.5
 TIME_TO_TURN = 0.4
-BRAKE_TIME = 1.0 / 25.0
+BRAKE_TIME = 1.0 / 18.0

@@ -32,6 +32,7 @@ class PID:
         self.integral = 0
         self.last_error = 0
         self.first_call = True
+        self.derivative = 0
 
     def __get_time(self):
         """Incapuslated method to calcualte current time in seconds.
@@ -57,22 +58,22 @@ class PID:
         if error == 0:
             self.integral = 0
 
-        derivative = (
-            error - self.last_error
-            )
-        self.last_error = error + self.d_fading * self.last_error
-
         if self.first_call:
             self.first_call = False
-            self.derivative = 0
+            self.last_error = error
+
+        self.derivative = (
+            error - self.last_error + self.derivative * self.d_fading
+            )
+        self.last_error = error
 
         log('p: {}\ti: {} d: {}'.format(
             error * self.pk,
             self.integral * self.ik,
-            derivative * self.dk))
+            self.derivative * self.dk))
 
         return (
             self.pk * error +
             self.ik * self.integral +
-            self.dk * derivative
+            self.dk * self.derivative
         )

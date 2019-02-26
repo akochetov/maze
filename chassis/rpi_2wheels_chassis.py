@@ -68,7 +68,7 @@ class RPi2WheelsChassis(ChassisBase):
         self.sensor_pid = sensor_pid
         self.sleep_time = 1.0 / frequency
 
-        log('Initialized RPi chassis: {}'.format(self.__dict__))
+        # log('Initialized RPi chassis: {}'.format(self.__dict__))
 
         self.move_thread = RPi2WheelsMoveThread(self)
 
@@ -124,17 +124,17 @@ class RPi2WheelsChassis(ChassisBase):
         else:
             start = time()
             # first have a sleep equal to half turn to get car started to turn
-            sleep(self.turn_time * float(abs(degrees)) / 180.0)
+            sleep(1.4 * self.turn_time * float(abs(degrees)) / 180.0)
 
-            enough_time = 4 * self.turn_time * float(abs(degrees)) / 90.0
+            enough_time = 3 * self.turn_time * float(abs(degrees)) / 90.0
             while not stop_function() and time() - start < enough_time:
-                sleep(1 / 100)
+                sleep(1 / 200)
 
         # breaking...
         if degrees == 180:
             self.lmotor.rotate(True, self.left_motor_pow[self.TURN])
             self.rmotor.rotate(False, self.right_motor_pow[self.TURN])
-            sleep(self.brake_time)
+            sleep(self.brake_time / 2)
         else:
             self.lmotor.rotate(degrees == -90, self.left_motor_pow[self.TURN])
             self.rmotor.rotate(degrees == 90, self.right_motor_pow[self.TURN])
