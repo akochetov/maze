@@ -60,12 +60,19 @@ class PathBrain(BrainBase):
         sleep(1)
         self.car.stop(False)
 
+        firstNode = True
+
         # now navigate
         for node_id in self.path:
             direction = maze_map.navigate(
                 self.path,
                 node_id,
                 self.car.orientation)
+
+            # skip first node (the end of maze)
+            if firstNode:
+                firstNode = False
+                continue
 
             # skip first turn around move
             if direction == Direction.BACK:
