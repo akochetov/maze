@@ -80,13 +80,18 @@ else:
         settings.PID_FREQ)
 
 car = Car(maze_world, chassis, [line_sensor], ORIENTATION)
-brain = HandSearchBrain(settings.CTRL_FREQ, turn_bounce_time=settings.TURN_BOUNCE_TIME, lefthand=False)
+brain = HandSearchBrain(
+    car,
+    settings.CTRL_FREQ,
+    turn_bounce_time=settings.TURN_BOUNCE_TIME,
+    lefthand=False
+    )
 
 maze_map = None
 if settings.NAVIGATE_BACK:
     maze_map = MazeMap(car, settings.TIME_ERROR, settings.TIME_TO_TURN)
 
-brain.think(car, maze_map)
+brain.think(maze_map)
 
 while not exit_loop:
     if not brain.is_still_thinking():
@@ -102,19 +107,25 @@ while not exit_loop:
             maze_map.save_full_path(sys.stdout)
             print()
             print('Going back. Current orient.: {}'.format(car.orientation))
-            path_brain = PathBrain(car, shortest_path)
 
-            # wait 5 seconds before returning back
+            path_brain = PathBrain(
+                car,
+                shortest_path,
+                settings.CTRL_FREQ,
+                turn_bounce_time=settings.TURN_BOUNCE_TIME
+                )
+
+            # wait a few seconds before returning back
             time.sleep(3)
             # reverse and get to the line
             if path_brain.get_to_track():
                 # now go back with shortest path
                 path_brain.think(maze_map)
             else:
-                print('Could NOT reverse. Returning back stopped.')
+                print('Could NOT get back to line. Returning back stopped.')
         break
 
-    time.sleep(settings.TIME_ERROR*1)
+    time.sleep(settings.TIME_ERROR * 1)
 
     if settings.VIRTUAL:
         maze_world.save(sys.stdout)
