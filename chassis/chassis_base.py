@@ -12,7 +12,7 @@ class ChassisBase(object):
         self.__moving = True
         self.__trigger_on_move()
 
-    def stop(self):
+    def stop(self, breaks=True):
         self.__moving = False
         pass
 

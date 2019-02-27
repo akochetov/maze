@@ -1,3 +1,7 @@
+from misc.direction import Direction
+from time import time
+
+
 class BrainBase(object):
     def __init__(self, car, turn_bounce_time=0):
         self.car = car

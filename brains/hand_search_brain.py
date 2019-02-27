@@ -106,6 +106,7 @@ class HandSearchBrain(BrainBase):
         if not self.check_turn_bounce():
             return True
 
+        dirs = self.car.sensors[0].get_directions()
         if self.check_crossing(dirs):
             self.maze_map.on_crossing(self.car)
 
@@ -129,8 +130,8 @@ class HandSearchBrain(BrainBase):
 
         return True
 
-    def left_hand_search(self, car):
-        return self.hand_search(car, Direction.LEFT)
+    def left_hand_search(self):
+        return self.hand_search(Direction.LEFT)
 
-    def right_hand_search(self, car):
-        return self.hand_search(car, Direction.RIGHT)
+    def right_hand_search(self):
+        return self.hand_search(Direction.RIGHT)

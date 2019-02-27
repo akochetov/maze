@@ -39,9 +39,7 @@ if settings.VIRTUAL:
     maze_file = 'maze10x10.txt'
     maze_world = VirtualWorld(maze_file)
     chassis = VirtualChassis(maze_world, settings.TIME_ERROR*1)
-    line_sensor = LineSensor(
-        VirtualLineSensorSource(maze_world, ORIENTATION),
-        settings.CTRL_FREQ)
+    line_sensor = LineSensor(VirtualLineSensorSource(maze_world, ORIENTATION))
 else:
     # physical RPi imports
     import RPi.GPIO as GPIO
