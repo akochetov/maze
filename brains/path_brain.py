@@ -37,7 +37,8 @@ class PathBrain(BrainBase):
             [Boolean] -- True if car has found a line and
             False if it hasn't yet
         """
-
+        # return True when car detects the line
+        # (directions to move left, right or fwd)
         return self._car.sensors[0].get_directions() is not None
 
     def get_to_track(self):
@@ -49,9 +50,10 @@ class PathBrain(BrainBase):
 
         self._car.move_to(Direction.BACK)
         start = time()
-        enough_time = 1  # we give it 1 sec to reverse and find line
+        enough_time = 1  # we give it 1 sec to reverse and find line max
         while not self.stop_function() and time() - start < enough_time:
             sleep(1 / 100)
+        self._car.stop()
         return time() - start < enough_time
 
     def think(self, maze_map):
@@ -71,6 +73,15 @@ class PathBrain(BrainBase):
 
             if direction is None:
                 break
+
+            # slightly move car forward so it gets straight
+            # on the line thanks to PID.
+            # This is to avoid situation when car is back on the line
+            # at an angle and so it interprets it as a first turn on
+            # the way back (mistakenly)
+            self._car.move_to(Direction.FORWARD)
+            sleep(0.5)
+            self._car.stop()
 
             self._car.move_to(direction)
             # temporary implementation with printing moves out
