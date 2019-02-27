@@ -80,7 +80,7 @@ else:
         settings.PID_FREQ)
 
 car = Car(maze_world, chassis, [line_sensor], ORIENTATION)
-brain = HandSearchBrain(settings.CTRL_FREQ, lefthand=False)
+brain = HandSearchBrain(settings.CTRL_FREQ, turn_bounce_time=settings.TURN_BOUNCE_TIME, lefthand=False)
 
 maze_map = None
 if settings.NAVIGATE_BACK:

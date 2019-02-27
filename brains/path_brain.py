@@ -53,7 +53,7 @@ class PathBrain(BrainBase):
         enough_time = 1  # we give it 1 sec to reverse and find line max
         while not self.stop_function() and time() - start < enough_time:
             sleep(1 / 100)
-        self._car.stop()
+        self._car.stop(False)
         return time() - start < enough_time
 
     def think(self, maze_map):
@@ -65,23 +65,26 @@ class PathBrain(BrainBase):
 
         self._thinking = True
 
+        # slightly move car forward so it gets straight
+        # on the line thanks to PID.
+        # This is to avoid situation when car is back on the line
+        # at an angle and so it interprets it as a first turn on
+        # the way back (mistakenly)
+        self._car.move_to(Direction.FORWARD)
+        sleep(1)
+        self._car.stop(False)
+
         for node_id in self._path:
             direction = maze_map.navigate(
                 self._path,
                 node_id,
                 self._car.orientation)
 
+            if direction == Direction.BACK:
+                continue
+
             if direction is None:
                 break
-
-            # slightly move car forward so it gets straight
-            # on the line thanks to PID.
-            # This is to avoid situation when car is back on the line
-            # at an angle and so it interprets it as a first turn on
-            # the way back (mistakenly)
-            self._car.move_to(Direction.FORWARD)
-            sleep(0.5)
-            self._car.stop()
 
             self._car.move_to(direction)
             # temporary implementation with printing moves out

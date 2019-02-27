@@ -160,10 +160,10 @@ class RPi2WheelsChassis(ChassisBase):
         self.move_thread.start()
         return True
 
-    def stop(self):
+    def stop(self, breaks=True):
         moving = self.is_moving()
 
-        if moving:
+        if breaks and moving:
             self.move_thread.exit()
             self.move_thread.join()
 

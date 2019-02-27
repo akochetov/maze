@@ -20,7 +20,7 @@ RIGHT_MOTOR = {"EN": 13, "IN1": 5, "IN2": 6}
 LEFT_MOTOR = {"EN": 19, "IN1": 20, "IN2": 21}
 
 LEFT_MOTOR_POWER = {"FAST": 30, "SLOW": 18, "TURN": 26}
-RIGHT_MOTOR_POWER = {"FAST": 34, "SLOW": 20, "TURN": 30}
+RIGHT_MOTOR_POWER = {"FAST": 34, "SLOW": 22, "TURN": 30}
 
 PWM = 50
 
@@ -36,10 +36,13 @@ PID = [1 / 130, 0, 1 / 14, 0.15]
 STATE_OK = 3000
 
 # how many times in a row action has to repeat to count
-SIGNALS_WINDOWS_SIZE = 15
+SIGNALS_WINDOWS_SIZE = 20
 STATE_ACTION_REPETITIONS = 5
 
 # maze map settings
 TIME_ERROR = 0.5
 TIME_TO_TURN = 0.38
 BRAKE_TIME = 1.0 / 17.0
+
+# if we have turn very early afte previous one - bounce back (ignore it)
+TURN_BOUNCE_TIME = 1.0

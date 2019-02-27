@@ -75,8 +75,8 @@ class Car(object):
         """
         self.rotate(False, stop_function=stop_function)
 
-    def stop(self):
-        self.chassis.stop()
+    def stop(self, breaks=True):
+        self.chassis.stop(breaks)
 
     def move_to(self, direction):
         if direction == Direction.LEFT:
