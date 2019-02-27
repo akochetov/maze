@@ -2,7 +2,7 @@
 VIRTUAL = 0
 
 # Shall we return with shortest path when exit is reached?
-NAVIGATE_BACK = 0
+NAVIGATE_BACK = 1
 
 # Logging
 LOG = 0
@@ -19,8 +19,8 @@ CTRL_LED = 15
 RIGHT_MOTOR = {"EN": 13, "IN1": 5, "IN2": 6}
 LEFT_MOTOR = {"EN": 19, "IN1": 20, "IN2": 21}
 
-LEFT_MOTOR_POWER = {"FAST": 30, "SLOW": 18, "TURN": 30}
-RIGHT_MOTOR_POWER = {"FAST": 35, "SLOW": 20, "TURN": 35}
+LEFT_MOTOR_POWER = {"FAST": 30, "SLOW": 18, "TURN": 26}
+RIGHT_MOTOR_POWER = {"FAST": 34, "SLOW": 20, "TURN": 30}
 
 PWM = 50
 
@@ -36,10 +36,10 @@ PID = [1 / 130, 0, 1 / 14, 0.15]
 STATE_OK = 3000
 
 # how many times in a row action has to repeat to count
-SIGNALS_WINDOWS_SIZE = 30
-STATE_ACTION_REPETITIONS = 7
+SIGNALS_WINDOWS_SIZE = 15
+STATE_ACTION_REPETITIONS = 5
 
 # maze map settings
 TIME_ERROR = 0.5
-TIME_TO_TURN = 0.4
-BRAKE_TIME = 1.0 / 18.0
+TIME_TO_TURN = 0.38
+BRAKE_TIME = 1.0 / 17.0
