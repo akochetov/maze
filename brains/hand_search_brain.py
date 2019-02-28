@@ -103,15 +103,21 @@ class HandSearchBrain(BrainBase):
         self.car.move()
 
     def hand_search(self, hand_direction):
+        # get options where we can go
+        dirs = self.car.sensors[0].get_directions()
+
+        # None may mean end of the maze. Nothing to do here
+        if dirs is None:
+            return False
+
+        # how long time ago we made a turn?
+        # if too soon - don't do any checks now and just go fwd
         if not self.check_turn_bounce():
             return True
 
-        dirs = self.car.sensors[0].get_directions()
+        # is this a crossing? if so - remember it
         if self.check_crossing(dirs):
             self.maze_map.on_crossing(self.car)
-
-        if dirs is None:
-            return False
 
         if len(dirs) == 0:
             dirs = [Direction.FORWARD]
