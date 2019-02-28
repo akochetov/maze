@@ -140,7 +140,7 @@ class RPiLineSensorSource(LineSensorSourceBase):
         # then maze way out found
         if (
             self.__get_recent_direction_count(self.ALL, True) >=
-            self.signals_window_size
+            self.signals_window_size * 0.9
         ):
             # Asumming that returning None means end of maze
             ret = None

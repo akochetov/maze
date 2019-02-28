@@ -108,6 +108,8 @@ class HandSearchBrain(BrainBase):
 
         # None may mean end of the maze. Nothing to do here
         if dirs is None:
+            log('Brain says: out!')
+            self.car.stop()
             return False
 
         # how long time ago we made a turn?
@@ -116,7 +118,7 @@ class HandSearchBrain(BrainBase):
             return True
 
         # is this a crossing? if so - remember it
-        if self.check_crossing(dirs):
+        if self.maze_map is not None and self.check_crossing(dirs):
             self.maze_map.on_crossing(self.car)
 
         if len(dirs) == 0:
