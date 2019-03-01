@@ -93,8 +93,6 @@ brain.think(maze_map)
 
 while not exit_loop:
     if not brain.is_still_thinking():
-        car.stop()
-
         if settings.NAVIGATE_BACK:
             maze_map.on_crossing(car)
             shortest_path = maze_map.get_shortest_path(reverse=True)

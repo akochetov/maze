@@ -23,22 +23,27 @@ class ThinkThread(Thread):
         self.awake = True
         return super().start()
 
+    def out(self):
+        # we must be out. stop the car!
+        self.brain.car.stop()
+        self.awake = False
+
     def run(self):
         while self.awake:
             sleep(self.sleep_time)
 
             if self.brain.car.is_out():
-                self.awake = False
+                self.out()
                 break
 
             if self.awake:
                 if self.lefthand:
                     if not self.brain.left_hand_search():
-                        self.awake = False
+                        self.out()
                         break
                 else:
                     if not self.brain.right_hand_search():
-                        self.awake = False
+                        self.out()
                         break
 
     def exit(self):
@@ -109,7 +114,6 @@ class HandSearchBrain(BrainBase):
         # None may mean end of the maze. Nothing to do here
         if dirs is None:
             log('Brain says: out!')
-            self.car.stop()
             return False
 
         # how long time ago we made a turn?
