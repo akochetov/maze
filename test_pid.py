@@ -1,3 +1,4 @@
+from signal import signal, SIGINT, SIGTERM
 import sys
 import os
 import time
@@ -5,12 +6,11 @@ from car import Car
 from sensors.line_sensor import LineSensor
 import misc.settings as settings
 
-# virtual imports
+from misc.orientation import Orientation
 from worlds.virtual_world import VirtualWorld
 from chassis.virtual_chassis import VirtualChassis
 from sensors.virtual_line_sensor_source import VirtualLineSensorSource
 
-# physical RPi imports
 import RPi.GPIO as GPIO
 from chassis.rpi_2wheels_chassis import RPi2WheelsChassis
 from sensors.rpi_line_sensor_source import RPiLineSensorSource
@@ -31,12 +31,11 @@ GPIO.setmode(GPIO.BCM)
 
 line_sensor = LineSensor(RPiLineSensorSource(
         settings.LINE_SENSORS,
-        ORIENTATION,
+        Orientation.SOUTH,
         invert=True,
         signals_window_size=settings.SIGNALS_WINDOWS_SIZE,
         state_trigger_repetitions=settings.STATE_ACTION_REPETITIONS
-        ),
-        settings.FREQ)
+        ))
 
 sensor_pid = RPiLineSensorPID(
         settings.PID,
@@ -53,7 +52,7 @@ chassis = RPi2WheelsChassis(
         settings.BRAKE_TIME,
         settings.PWM,
         sensor_pid,
-        settings.FREQ)
+        settings.PID_FREQ)
 
 car = Car(None, chassis, [line_sensor], ORIENTATION)
 

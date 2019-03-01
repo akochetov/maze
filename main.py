@@ -23,6 +23,12 @@ ORIENTATION = Orientation.SOUTH
 exit_loop = False
 
 
+def start():
+    global brain, led
+    brain.think(maze_map)
+    led.off()
+
+
 def exitLoop(arg1, arg2):
     global exit_loop
     exit_loop = True
@@ -43,12 +49,20 @@ if settings.VIRTUAL:
 else:
     # physical RPi imports
     import RPi.GPIO as GPIO
+    from gpiozero import Button
+    from gpiozero import LED
     from worlds.line_world import LineWorld
     from chassis.rpi_2wheels_chassis import RPi2WheelsChassis
     from sensors.rpi_line_sensor_source import RPiLineSensorSource
     from misc.rpi_line_sensor_pid import RPiLineSensorPID
 
     GPIO.setmode(GPIO.BCM)
+
+    led = LED(settings.CTRL_LED)
+    led.on()
+
+    shut_btn = Button(settings.CTRL_BTN)
+    shut_btn.when_released = start
 
     maze_world = LineWorld()
 
@@ -89,7 +103,13 @@ maze_map = None
 if settings.NAVIGATE_BACK:
     maze_map = MazeMap(car, settings.TIME_ERROR, settings.TIME_TO_TURN)
 
-brain.think(maze_map)
+if settings.VIRTUAL or len(sys.argv) > 1:
+    # if virtual - start immediately
+    start()
+else:
+    # if physical - wait for button to get pressed
+    while not brain.is_still_thinking():
+        sleep(0.01)
 
 while not exit_loop:
     if not brain.is_still_thinking():
