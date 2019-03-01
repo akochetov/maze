@@ -1,4 +1,14 @@
+"""Functions to perform graph shortest path search with A Star algorythm
+"""
+
+
 class Queue(object):
+    """Simple objects queue
+
+    Arguments:
+        object {any} -- Object to put in queue
+    """
+
     def __init__(self):
         self.queue = []
 
@@ -43,9 +53,7 @@ def get_shortest_path(edges, a, b):
             new_cost = cost_so_far[current] + edges[current][next]
             if next not in cost_so_far or new_cost < cost_so_far[next]:
                 cost_so_far[next] = new_cost
-                #priority = new_cost + heuristic(goal, next)
-                frontier.put(next)#, priority)
+                frontier.put(next)
                 came_from[next] = current
 
     return get_path(came_from, a, b)
-

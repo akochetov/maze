@@ -14,7 +14,8 @@ class Orientation:
     SOUTH = 'SOUTH'
     NORTH = 'NORTH'
 
-    # list used to change orientation by changing list index -1 for counter clock wise and +1 for clock wise rotations
+    # list used to change orientation by changing list index -1 for counter
+    # clock wise and +1 for clock wise rotations
     rotation = [NORTH, EAST, SOUTH, WEST]
 
     @staticmethod
@@ -22,7 +23,8 @@ class Orientation:
         """
         Static method. Changes orientation
         :param initial_orientation: Orientation which has to be changed
-        :param cw: ClockWise. True or False. In case of False rotates counter clock wise
+        :param cw: ClockWise. True or False. In case of False rotates counter
+        clock wise
         :return: new orientation after rotation of initial_orientation
         """
         index = Orientation.rotation.index(initial_orientation)
@@ -52,4 +54,7 @@ class Orientation:
         """
         Rotate 180 degrees
         """
-        return Orientation.rotate(Orientation.rotate(initial_orientation, False),False)
+        return Orientation.rotate(
+            Orientation.rotate(initial_orientation, False),
+            False
+            )

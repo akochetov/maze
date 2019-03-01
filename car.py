@@ -1,4 +1,3 @@
-from sensors.distance_sensor import Sensor
 from misc.orientation import Orientation
 from misc.direction import Direction
 from chassis.chassis_base import ChassisBase
