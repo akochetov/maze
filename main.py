@@ -53,7 +53,7 @@ else:
     GPIO.setup(settings.CTRL_LED, GPIO.OUT)
     GPIO.output(settings.CTRL_LED, GPIO.HIGH)
 
-    GPIO.setup(settings.CTRL_BTN, GPIO.IN)
+    GPIO.setup(settings.CTRL_BTN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     maze_world = LineWorld()
 
@@ -95,7 +95,10 @@ if settings.NAVIGATE_BACK:
     maze_map = MazeMap(car, settings.TIME_ERROR, settings.TIME_TO_TURN)
 
 if not settings.VIRTUAL and len(sys.argv)  <= 1:
-    GPIO.wait_for_edge(settings.CTRL_BTN, GPIO.RISING)
+    while not exit_loop and GPIO.wait_for_edge(settings.CTRL_BTN, GPIO.FALLING, timeout=500) is None:
+        pass
+
+    GPIO.cleanup(settings.CTRL_BTN)
 
 brain.think(maze_map)
 GPIO.output(settings.CTRL_LED, GPIO.LOW)
