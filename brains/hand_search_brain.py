@@ -66,6 +66,7 @@ class HandSearchBrain(BrainBase):
 
         super().__init__(car, turn_bounce_time)
 
+        self.thread = None
         self.lefthand = lefthand
         self.frequency = frequency
 
@@ -82,11 +83,12 @@ class HandSearchBrain(BrainBase):
         self.thread.start()
 
     def is_still_thinking(self):
-        return self.thread.awake
+        return self.thread is None or self.thread.awake
 
     def stop(self):
-        self.thread.exit()
-        self.thread.join()
+        if self.thread is not None:
+            self.thread.exit()
+            self.thread.join()
 
     def turn(self, cw):
         log('Brain says to turn clockwise: {}'.format(cw))

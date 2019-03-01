@@ -165,7 +165,8 @@ class RPi2WheelsChassis(ChassisBase):
 
         if moving:
             self.move_thread.exit()
-            self.move_thread.join()
+            if self.move_thread.is_alive():
+                self.move_thread.join()
 
         if breaks and moving:
             log('Breaking...')
