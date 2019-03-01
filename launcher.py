@@ -32,7 +32,7 @@ def when_held():
 
 
 def when_dbl():
-    global p
+    global p, led
 
     print('Dbl click detected')
     if p is not None:
@@ -40,6 +40,9 @@ def when_dbl():
         p.wait()
         p = None
         print('Process terminated')
+        led.on()
+        sleep(1)
+        led.off()
 
 
 def when_released():
