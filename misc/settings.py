@@ -2,7 +2,7 @@
 VIRTUAL = 0
 
 # Shall we return with shortest path when exit is reached?
-NAVIGATE_BACK = 0
+NAVIGATE_BACK = 1
 
 # Logging
 LOG = 0
@@ -40,7 +40,7 @@ SIGNALS_WINDOWS_SIZE = 20
 STATE_ACTION_REPETITIONS = 5
 
 # maze map settings
-TIME_ERROR = 1.0
+TIME_ERROR = 0.35
 TIME_TO_TURN = 0.38
 BRAKE_TIME = 1.0 / 17.0
 

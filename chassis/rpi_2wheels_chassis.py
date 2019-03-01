@@ -146,7 +146,7 @@ class RPi2WheelsChassis(ChassisBase):
         # sleep(self.brake_time)
 
         self.stop()
-
+        super().rotate(degrees, stop_function)
         log('Turning finished.')
 
     def is_moving(self):

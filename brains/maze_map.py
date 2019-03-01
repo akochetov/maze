@@ -59,6 +59,7 @@ class MazePath(object):
         self.next_node_id = 0
         self.current_node = MazeNode(self.next_node_id, [0, 0])
         self.nodes = dict()
+        self.nodes[self.next_node_id] = self.current_node
         self.edges = MazeEdgeDict()
         self.path = [self.current_node]
         self.time_error = time_error
@@ -256,13 +257,7 @@ class MazeMap(object):
 
         # fetch next node id from path
         next_node_id = path[ind + 1]
-        next_node = None
-
-        # get node by node ID
-        for node in self.path.nodes[current_node_id]:
-            if node.id == next_node_id:
-                next_node = node
-                break
+        next_node = self.path.nodes[next_node_id]
 
         # find difference of nodes coordinates
         x = next_node.coordinates[0] - current_node.coordinates[0]
@@ -302,8 +297,9 @@ class MazeMap(object):
         x_range = [0, 0]
         y_range = [0, 0]
 
-        time_inc = self.time_error  # * 2
-
+        time_inc = self.time_error
+        print(self.path.edges.__dict__)
+        print(list(map(lambda x: x.id, self.path.path)))
         # first we find lefr-and-right-most as well as
         # top-and-bottom-most values of coordinates
         for node in self.path.path:
@@ -377,11 +373,13 @@ class MazeMap(object):
                             coord_map[jj][j] = 'XX'
                     except:
                         pass
-
-            # add node (crossing) id on the map
-            coord_map[yr + yir][xr + xir] = (
-                        '0'+str(node.id)
-                        ) if node.id < 10 else str(node.id)
+            try:
+                # add node (crossing) id on the map
+                coord_map[yr + yir][xr + xir] = (
+                            '0'+str(node.id)
+                            ) if node.id < 10 else str(node.id)
+            except:
+                pass
             x += xi
             y += yi
 

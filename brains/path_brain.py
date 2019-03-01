@@ -57,7 +57,7 @@ class PathBrain(BrainBase):
         # at an angle and so it interprets it as a first turn on
         # the way back (mistakenly)
         self.car.move_to(Direction.FORWARD)
-        sleep(1)
+        sleep(0.5)
         self.car.stop(False)
 
         # now navigate
