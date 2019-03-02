@@ -129,7 +129,10 @@ class MazePath(object):
 
         # fetch only those nodes that have connections to prev visited node
         # TODO: this will not work for mazes with cycles!!
-        edges = list(map(lambda x: x.node_b == prev_node, self.edges))
+        edges = list(filter(
+                lambda x: x.node_b == prev_node,
+                self.edges.get_edges().values()
+                ))
 
         for edge in edges:
             node = edge.node_a

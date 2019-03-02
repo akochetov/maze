@@ -76,8 +76,10 @@ class RPiLineSensorSource(LineSensorSourceBase):
         self.__stack.erase()
 
     def is_straight(self):
-        state = self.get_state()
-        return state & self.STRAIGHT > 0
+        return self.get_state() & self.STRAIGHT > 0
+
+    def is_turned(self):
+        return self.get_state() & (self.LEFT + self.RIGHT) > 0
 
     def get_state(self):
         ret = 0

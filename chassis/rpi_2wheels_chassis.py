@@ -127,7 +127,7 @@ class RPi2WheelsChassis(ChassisBase):
             sleep(1.4 * self.turn_time * float(abs(degrees)) / 180.0)
 
             enough_time = 3 * self.turn_time * float(abs(degrees)) / 90.0
-            while not stop_function() and time() - start < enough_time:
+            while not stop_function(degrees) and time() - start < enough_time:
                 sleep(1 / 200)
 
         # breaking...

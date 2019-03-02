@@ -11,6 +11,9 @@ class LineSensorSourceBase(object):
     def is_straight(self):
         pass
 
+    def is_turned(self):
+        pass
+
     def get_directions(self):
         pass
 
