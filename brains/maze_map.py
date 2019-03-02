@@ -125,7 +125,14 @@ class MazePath(object):
         return [x, y]
 
     def find_node(self, pos):
-        for node in self.nodes.values():
+        prev_node = self.get_last_visited_node()
+
+        # fetch only those nodes that have connections to prev visited node
+        # TODO: this will not work for mazes with cycles!!
+        edges = list(map(lambda x: x.node_b == prev_node, self.edges))
+
+        for edge in edges:
+            node = edge.node_a
             coord = node.coordinates
             if (coord[0] - self.time_error <= pos[0] and
                     pos[0] <= coord[0] + self.time_error and
