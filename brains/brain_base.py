@@ -17,7 +17,7 @@ class BrainBase(object):
     def stop(self):
         pass
 
-    def stop_function(self, degrees=180):
+    def stop_function(self):
         """Function used to detect when it is time to finish turn.
         It basically checks if car is now on a straight line
 
@@ -25,10 +25,8 @@ class BrainBase(object):
             [Boolean] -- True if car is on straight line and
             turn has to be stopped
         """
-        if degrees == 180:
-            return self.car.sensors[0].is_straight()
-        else:
-            return self.car.sensors[0].is_turned()
+
+        return self.car.sensors[0].is_straight()
 
     def check_crossing(self, dirs):
         """Returns True if car is on crossing

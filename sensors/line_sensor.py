@@ -20,9 +20,6 @@ class LineSensor(object):
     def is_straight(self):
         return self.source.is_straight()
 
-    def is_turned(self):
-        return self.source.is_turned()
-
     def get_value(self):
         return self.source.get_value()
 

@@ -15,7 +15,7 @@ class PathBrain(BrainBase):
         self.__thinking = False
         self.__sleep_time = 1.0 / frequency
 
-    def stop_function(self, degrees=180):
+    def stop_function(self):
         """This function is used to know where to stop car
         when reversing from maze exit zone
 
