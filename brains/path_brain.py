@@ -15,7 +15,7 @@ class PathBrain(BrainBase):
         self.__thinking = False
         self.__sleep_time = 1.0 / frequency
 
-    def stop_function(self):
+    def return_stop_function(self):
         """This function is used to know where to stop car
         when reversing from maze exit zone
 
@@ -37,8 +37,8 @@ class PathBrain(BrainBase):
         self.car.move_to(Direction.BACK)
         start = time()
         enough_time = 1  # we give it 1 sec to reverse and find line max
-        while not self.stop_function() and time() - start < enough_time:
-            sleep(1 / 100)
+        while not self.return_stop_function() and time() - start < enough_time:
+            sleep(1 / 200)
         self.car.stop(False)
         return time() - start < enough_time
 
@@ -71,7 +71,7 @@ class PathBrain(BrainBase):
             if direction is None:
                 break
 
-            self.car.move_to(direction)
+            self.car.move_to(direction, self.stop_function)
             self.update_turn_time()
 
             # temporary implementation with printing moves out
@@ -83,7 +83,7 @@ class PathBrain(BrainBase):
                 if self.check_crossing(dirs) and self.check_turn_bounce():
                     break
                 sleep(self.__sleep_time)
-
+        self.car.move_to(Direction.BACK, self.stop_function)
         self.__thinking = False
 
     def is_still_thinking(self):

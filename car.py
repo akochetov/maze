@@ -77,13 +77,13 @@ class Car(object):
     def stop(self, breaks=True):
         self.chassis.stop(breaks)
 
-    def move_to(self, direction):
+    def move_to(self, direction, stop_function=None):
         if direction == Direction.LEFT:
-            self.rotate_ccw()
+            self.rotate_ccw(stop_function=stop_function)
         if direction == Direction.RIGHT:
-            self.rotate_cw()
+            self.rotate_cw(stop_function=stop_function)
         if direction == Direction.BACK:
-            self.turn_around()
+            self.turn_around(stop_function=stop_function)
 
         self.move()
 

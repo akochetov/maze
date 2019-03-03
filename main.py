@@ -136,7 +136,7 @@ while not exit_loop:
             if path_brain.get_to_track():
                 # now go back with shortest path
                 path_brain.think(maze_map)
-                path_brain.get_to_track()
+                # path_brain.get_to_track()
             else:
                 print('Could NOT get back to line. Returning back stopped.')
         break
