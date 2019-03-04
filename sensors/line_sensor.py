@@ -17,11 +17,11 @@ class LineSensor(object):
     def reset(self):
         self.source.reset()
 
-    def is_straight(self):
-        return self.source.is_straight()
+    def is_straight(self, state):
+        return self.source.is_straight(state)
 
-    def is_turned(self):
-        return self.source.is_turned()
+    def is_turned(self, state):
+        return self.source.is_turned(state)
 
     def get_value(self, state):
         return self.source.get_value(state)
