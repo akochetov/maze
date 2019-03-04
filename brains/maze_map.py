@@ -308,8 +308,7 @@ class MazeMap(object):
         y_range = [0, 0]
 
         time_inc = self.time_error
-        print(self.path.edges.__dict__)
-        print(list(map(lambda x: x.id, self.path.path)))
+
         # first we find lefr-and-right-most as well as
         # top-and-bottom-most values of coordinates
         for node in self.path.path:

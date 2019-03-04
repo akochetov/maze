@@ -72,13 +72,10 @@ class RPi2WheelsChassis(ChassisBase):
 
         self.move_thread = RPi2WheelsMoveThread(self)
 
-    def _pid_to_power(self, pid):
+    def _pid_to_power(self, pid, is_turning):
         # go fast by default
-        # if there is no PID detected (meaning that we are at crossing)
-        # then slow down
-        speed = self.SLOW if pid is None else self.FAST
-        if pid is None:
-            pid = 0
+        # if we are at crossing - slow down!
+        speed = self.SLOW if is_turning else self.FAST
 
         l, r = (
             self.left_motor_pow[speed],
@@ -98,9 +95,9 @@ class RPi2WheelsChassis(ChassisBase):
     def _move(self):
         # get PID value based on sensor values
         # this is to get robot rolling straight
-        pid = self.sensor_pid.get_pid()
+        pid, is_turning = self.sensor_pid.get_pid()
 
-        l, r = self._pid_to_power(pid)
+        l, r = self._pid_to_power(pid, is_turning)
 
         log('Power {} {}'.format(l, r))
 

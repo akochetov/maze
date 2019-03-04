@@ -23,8 +23,13 @@ class VirtualLineSensorSource(LineSensorSourceBase):
         super().__init__(orientation)
         self.maze = maze_world
 
-    def is_straight(self):
-        return self.get_state() == self.STRAIGHT
+    def is_straight(self, state):
+        return state == self.STRAIGHT
+
+    def is_turned(self, state):
+        return (
+            state == self.LEFT or
+            state == self.RIGHT)
 
     def get_state(self):
         """

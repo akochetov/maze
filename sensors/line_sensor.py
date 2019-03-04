@@ -20,8 +20,11 @@ class LineSensor(object):
     def is_straight(self):
         return self.source.is_straight()
 
-    def get_value(self):
-        return self.source.get_value()
+    def is_turned(self):
+        return self.source.is_turned()
+
+    def get_value(self, state):
+        return self.source.get_value(state)
 
     def get_state(self):
         return self.source.get_state()

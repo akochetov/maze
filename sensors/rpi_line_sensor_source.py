@@ -75,8 +75,13 @@ class RPiLineSensorSource(LineSensorSourceBase):
     def reset(self):
         self.__stack.erase()
 
-    def is_straight(self):
-        return self.get_state() & self.STRAIGHT > 0
+    def is_straight(self, state):
+        return state & self.STRAIGHT > 0
+
+    def is_turned(self, state):
+        return (
+            state & self.LEFT > 0 or
+            state & self.RIGHT)
 
     def get_state(self):
         ret = 0
@@ -90,20 +95,13 @@ class RPiLineSensorSource(LineSensorSourceBase):
         self.__stack.put(ret)
         return ret
 
-    def get_value(self, data=None):
-        sensors_data = self.get_state() if data is None else data
-
-        if (
-            sensors_data == 0 or
-            sensors_data == (1 << (self.__pins_number - 1))
-        ):
-            return None
-
+    def get_value(self, state):
         a, b = 0, 0
         for i in range(0, self.__pins_number):
-            c = (sensors_data & (1 << i)) / (2 ** i)
+            c = (state & (1 << i)) / (2 ** i)
             a += 1000 * c * i
             b += c
+
         return a / b
 
     def get_directions(self):
