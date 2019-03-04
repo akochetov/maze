@@ -102,6 +102,9 @@ class RPiLineSensorSource(LineSensorSourceBase):
             a += 1000 * c * i
             b += c
 
+        if b == 0:
+            b = 1
+
         return a / b
 
     def get_directions(self):

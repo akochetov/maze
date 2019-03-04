@@ -105,6 +105,7 @@ if not settings.VIRTUAL and len(sys.argv) <= 1:
 
     GPIO.cleanup(settings.CTRL_BTN)
 
+start_time = time.time()
 brain.think(maze_map)
 
 if not settings.VIRTUAL:
@@ -112,6 +113,7 @@ if not settings.VIRTUAL:
 
 while not exit_loop:
     if not brain.is_still_thinking():
+        print('Maze time: {}'.format(time.time()-start_time))
         if settings.NAVIGATE_BACK:
             maze_map.on_crossing(car)
             shortest_path = maze_map.get_shortest_path(reverse=True)
