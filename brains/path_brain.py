@@ -38,7 +38,7 @@ class PathBrain(BrainBase):
         start = time()
         enough_time = 1  # we give it 1 sec to reverse and find line max
         while not self.return_stop_function() and time() - start < enough_time:
-            sleep(1 / 200)
+            pass
         self.car.stop(False)
         return time() - start < enough_time
 
@@ -60,12 +60,18 @@ class PathBrain(BrainBase):
         sleep(0.5)
         self.car.stop(False)
 
+        first_move = True
         # now navigate
         for node_id in self.path:
             direction = maze_map.navigate(
                 self.path,
                 node_id,
                 self.car.orientation)
+
+            # skip first FWD after turning around
+            # if first_move:
+            #     first_move = False
+            #     continue
 
             # if we finished full path?
             if direction is None:
