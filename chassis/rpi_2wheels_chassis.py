@@ -119,7 +119,7 @@ class RPi2WheelsChassis(ChassisBase):
         else:
             start = time()
             # first have a sleep equal to half turn to get car started to turn
-            sleep(self.turn_time * float(abs(degrees)) / 180.0)
+            sleep(1.5 * self.turn_time * float(abs(degrees)) / 180.0)
 
             enough_time = 3 * self.turn_time * float(abs(degrees)) / 90.0
             while not stop_function() and time() - start < enough_time:
