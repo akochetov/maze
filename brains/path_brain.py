@@ -57,10 +57,12 @@ class PathBrain(BrainBase):
         # at an angle and so it interprets it as a first turn on
         # the way back (mistakenly)
         self.car.move_to(Direction.FORWARD)
+        self.update_turn_time()
+        # disable brake at turns
+        self.car.set_brake_status(False)
         sleep(0.5)
         self.car.stop(False)
 
-        first_move = True
         # now navigate
         for node_id in self.path:
             direction = maze_map.navigate(
@@ -68,17 +70,14 @@ class PathBrain(BrainBase):
                 node_id,
                 self.car.orientation)
 
-            # skip first FWD after turning around
-            # if first_move:
-            #     first_move = False
-            #     continue
-
             # if we finished full path?
             if direction is None:
                 break
 
             self.car.move_to(direction, self.stop_function)
             self.update_turn_time()
+            # disable brake at turns
+            self.car.set_brake_status(False)
 
             # temporary implementation with printing moves out
             print('car.move({})'.format(direction))
@@ -86,7 +85,9 @@ class PathBrain(BrainBase):
             # wait for crossing
             while True:
                 dirs = self.car.sensors[0].get_directions()
-                if self.check_crossing(dirs) and self.check_turn_bounce():
+                ok_to_turn = self.check_turn_bounce()
+                self.car.set_brake_status(ok_to_turn)
+                if self.check_crossing(dirs) and ok_to_turn:
                     break
                 sleep(self.__sleep_time)
         self.car.move_to(Direction.BACK, self.stop_function)
