@@ -24,6 +24,12 @@ class Car(object):
 
         self.sensors = sensors
 
+    def get_brake_status(self):
+        return self.chassis.do_turn_brake
+
+    def set_brake_status(self, new_status):
+        self.chassis.do_turn_brake = new_status
+
     def turn_around(self, stop_function=None):
         """
         Car turning.

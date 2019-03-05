@@ -68,14 +68,12 @@ class RPi2WheelsChassis(ChassisBase):
         self.sensor_pid = sensor_pid
         self.sleep_time = 1.0 / frequency
 
-        # log('Initialized RPi chassis: {}'.format(self.__dict__))
-
         self.move_thread = RPi2WheelsMoveThread(self)
 
     def _pid_to_power(self, pid, is_turning):
         # go fast by default
         # if we are at crossing - slow down!
-        speed = self.SLOW if is_turning else self.FAST
+        speed = self.SLOW if (is_turning and self.do_turn_brake) else self.FAST
 
         l, r = (
             self.left_motor_pow[speed],
@@ -121,11 +119,11 @@ class RPi2WheelsChassis(ChassisBase):
         else:
             start = time()
             # first have a sleep equal to half turn to get car started to turn
-            sleep(1.4 * self.turn_time * float(abs(degrees)) / 180.0)
+            sleep(self.turn_time * float(abs(degrees)) / 180.0)
 
             enough_time = 3 * self.turn_time * float(abs(degrees)) / 90.0
             while not stop_function() and time() - start < enough_time:
-                pass  # sleep(1 / 200)
+                pass
 
         # breaking...
         if degrees == 180:

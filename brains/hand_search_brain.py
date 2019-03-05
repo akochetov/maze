@@ -98,6 +98,8 @@ class HandSearchBrain(BrainBase):
         else:
             self.car.rotate_ccw(stop_function=self.stop_function)
         self.update_turn_time()
+        # disable brake at turns
+        self.car.set_brake_status(False)
         log('Brain says: forward')
         self.car.move()
 
@@ -106,6 +108,8 @@ class HandSearchBrain(BrainBase):
         self.car.stop()
         self.car.turn_around(stop_function=self.stop_function)
         self.update_turn_time()
+        # disable brake at turns
+        self.car.set_brake_status(False)
         log('Brain says: forward')
         self.car.move()
 
@@ -122,6 +126,9 @@ class HandSearchBrain(BrainBase):
         # if too soon - don't do any checks now and just go fwd
         if not self.check_turn_bounce():
             return True
+
+        # enable brake at turns
+        self.car.set_brake_status(True)
 
         # is this a crossing? if so - remember it
         if self.maze_map is not None and self.check_crossing(dirs):
