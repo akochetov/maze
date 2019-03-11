@@ -30,7 +30,7 @@ class SignalStack(object):
 
 class RPiLineSensorSource(LineSensorSourceBase):
     '''
-    RPi implementation of digital line sensor with 5 IRs in line
+    RPi implementation of digital line sensor with 5-7 IRs in line
     '''
     ALL = 0b11111
     LEFT = 0b10000
@@ -58,18 +58,21 @@ class RPiLineSensorSource(LineSensorSourceBase):
         self.__stack = SignalStack(signals_window_size)
         self.__sensors = sensors
         self.__invert = invert
-        self.__pins_number = len(self.__sensors)
+        self.__sensors_number = len(self.__sensors)
         self.setup()
 
     def setup(self):
         for sensor in self.__sensors:
             GPIO.setup(sensor, GPIO.IN)
 
-        self.LEFT = 1 << (self.__pins_number - 1)
-        self.STRAIGHT = 0b1 << (self.__pins_number // 2)
-        self.FORWARD = 0b111 << (self.__pins_number // 2 - 1)
+        self.update_dirs()
+
+    def update_dirs(self):
+        self.LEFT = 1 << (self.__sensors_number - 1)
+        self.STRAIGHT = 0b1 << (self.__sensors_number // 2)
+        self.FORWARD = 0b111 << (self.__sensors_number // 2 - 1)
         self.ALL = 0
-        for i in range(0, self.__pins_number):
+        for i in range(0, self.__sensors_number):
             self.ALL += 1 << i
 
     def reset(self):
@@ -85,19 +88,19 @@ class RPiLineSensorSource(LineSensorSourceBase):
 
     def get_state(self):
         ret = 0
-        for i in range(0, self.__pins_number):
+        for i in range(0, self.__sensors_number):
             inp = GPIO.input(self.__sensors[i])
             if self.__invert:
-                ret += abs(inp - 1) << (self.__pins_number - i - 1)
+                ret += abs(inp - 1) << (self.__sensors_number - i - 1)
             else:
-                ret += inp << (self.__pins_number - i - 1)
+                ret += inp << (self.__sensors_number - i - 1)
 
         self.__stack.put(ret)
         return ret
 
     def get_value(self, state):
         a, b = 0, 0
-        for i in range(0, self.__pins_number):
+        for i in range(0, self.__sensors_number):
             c = (state & (1 << i)) / (2 ** i)
             a += 1000 * c * i
             b += c

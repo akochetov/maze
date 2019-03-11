@@ -22,4 +22,9 @@ echo "Installing RPI.GPIO 0.6.3..."
 sudo apt-get remove RPi.GPIO
 sudo pip3 install RPi.GPIO==0.6.3
 
-echo "Done."
+echo "Setting up spidev..."
+sudo sed -i -e 's/#dtparam=spi=on/dtparam=spi=on/g' /boot/config.txt
+sudo pip install spidev
+sudo pip3 install spidev
+
+echo "Done. Please reboot now."

@@ -8,8 +8,8 @@ import sys
 from threading import Thread
 
 # constants
-hold_timeout = 6 # seconds
-button_back_timeout = 10 # seconds
+hold_timeout = 6  # seconds
+button_back_timeout = 10  # seconds
 dbl_press_time = 0.25  # in seconds
 p = None
 down = 0

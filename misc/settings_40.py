@@ -25,7 +25,7 @@ RIGHT_MOTOR_POWER = {"FAST": 42, "SLOW": 18, "TURN": 42}
 
 PWM = 40
 
-# line sensors
+# line sensors pins for digital module
 LINE_SENSORS = [12, 11, 8, 25, 24, 23, 18]
 
 # PID coefficients, PK, IK and DK repsectively, then D fading coefficient
