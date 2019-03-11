@@ -33,7 +33,7 @@ class SPiLineSensorSource(RPiLineSensorSource):
         super().__init__(
             sensors,
             orientation,
-            invert=False,
+            invert,
             signals_window_size,
             state_trigger_repetitions)
 
