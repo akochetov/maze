@@ -46,6 +46,7 @@ else:
     from worlds.line_world import LineWorld
     from chassis.rpi_2wheels_chassis import RPi2WheelsChassis
     from sensors.rpi_line_sensor_source import RPiLineSensorSource
+    from sensors.spi_line_sensor_source import SPiLineSensorSource
     from misc.rpi_line_sensor_pid import RPiLineSensorPID
 
     GPIO.setmode(GPIO.BCM)
@@ -57,13 +58,29 @@ else:
 
     maze_world = LineWorld()
 
-    line_sensor = LineSensor(RPiLineSensorSource(
+    line_sensor_source = None
+    if settings.SENSOR_TYPE == settings.SENSOR_SPI:
+        line_sensor_source = SPiLineSensorSource(
+        settings.SPI_LINE_SENSOR_CHANNELS,
+        Orientation.SOUTH,
+        settings.SPI_LINE_SENSOR_PARAMS["MIN"],
+        settings.SPI_LINE_SENSOR_PARAMS["MID"],
+        settings.SPI_LINE_SENSOR_PARAMS["MAX"],
+        invert=True,
+        signals_window_size=settings.SIGNALS_WINDOWS_SIZE,
+        state_trigger_repetitions=settings.STATE_ACTION_REPETITIONS
+        )
+
+    if settings.SENSOR_TYPE == settings.SENSOR_GPIO:
+        line_sensor_source = RPiLineSensorSource(
         settings.LINE_SENSORS,
         ORIENTATION,
         invert=True,
         signals_window_size=settings.SIGNALS_WINDOWS_SIZE,
         state_trigger_repetitions=settings.STATE_ACTION_REPETITIONS
-        ))
+        )
+
+    line_sensor = LineSensor(line_sensor_source)
 
     sensor_pid = RPiLineSensorPID(
         settings.PID,

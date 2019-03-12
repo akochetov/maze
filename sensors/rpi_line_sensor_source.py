@@ -55,10 +55,10 @@ class RPiLineSensorSource(LineSensorSourceBase):
         self.last_state = None
         self.out_reps = 0
 
-        self.__stack = SignalStack(signals_window_size)
-        self.__sensors = sensors
-        self.__invert = invert
-        self.__sensors_number = len(self.__sensors)
+        self.stack = SignalStack(signals_window_size)
+        self.sensors = sensors
+        self.invert = invert
+        self.sensors_number = len(self.sensors)
         self.setup()
 
     def setup(self):
@@ -68,15 +68,15 @@ class RPiLineSensorSource(LineSensorSourceBase):
         self.update_dirs()
 
     def update_dirs(self):
-        self.LEFT = 1 << (self.__sensors_number - 1)
-        self.STRAIGHT = 0b1 << (self.__sensors_number // 2)
-        self.FORWARD = 0b111 << (self.__sensors_number // 2 - 1)
+        self.LEFT = 1 << (self.sensors_number - 1)
+        self.STRAIGHT = 0b1 << (self.sensors_number // 2)
+        self.FORWARD = 0b111 << (self.sensors_number // 2 - 1)
         self.ALL = 0
-        for i in range(0, self.__sensors_number):
+        for i in range(0, self.sensors_number):
             self.ALL += 1 << i
 
     def reset(self):
-        self.__stack.erase()
+        self.stack.erase()
 
     def is_straight(self, state):
         return state & self.STRAIGHT > 0
@@ -88,19 +88,19 @@ class RPiLineSensorSource(LineSensorSourceBase):
 
     def get_state(self):
         ret = 0
-        for i in range(0, self.__sensors_number):
-            inp = GPIO.input(self.__sensors[i])
+        for i in range(0, self.sensors_number):
+            inp = GPIO.input(self.sensors[i])
             if self.__invert:
-                ret += abs(inp - 1) << (self.__sensors_number - i - 1)
+                ret += abs(inp - 1) << (self.sensors_number - i - 1)
             else:
-                ret += inp << (self.__sensors_number - i - 1)
+                ret += inp << (self.sensors_number - i - 1)
 
-        self.__stack.put(ret)
+        self.stack.put(ret)
         return ret
 
     def get_value(self, state):
         a, b = 0, 0
-        for i in range(0, self.__sensors_number):
+        for i in range(0, self.sensors_number):
             c = (state & (1 << i)) / (2 ** i)
             a += 1000 * c * i
             b += c
@@ -115,34 +115,34 @@ class RPiLineSensorSource(LineSensorSourceBase):
         state = self.get_state()
 
         # can we go FORWARD?
-        if self.__find_direction(state, self.FORWARD):
+        if self.find_direction(state, self.FORWARD):
             ret.append(Direction.FORWARD)
 
         # are we OFF road?
         if (
-            self.__find_direction(state, self.OFF, True) or
+            self.find_direction(state, self.OFF, True) or
             (
-                self.__find_direction(state, self.FORWARD) and
-                not self.__find_direction(state, self.LEFT) and
-                not self.__find_direction(state, self.RIGHT)
+                self.find_direction(state, self.FORWARD) and
+                not self.find_direction(state, self.LEFT) and
+                not self.find_direction(state, self.RIGHT)
             )
         ):
             # we are OFF now, but we were just FWD (meaning we are to go BACK)
-            if self.__find_recent_direction(self.FORWARD):
+            if self.find_recent_direction(self.FORWARD):
                 ret.append(Direction.BACK)
 
             # we are OFF or FWD now, but we just had crossing with LEFT turn
-            if self.__find_recent_direction(self.LEFT):
+            if self.find_recent_direction(self.LEFT):
                 ret.append(Direction.LEFT)
 
             # we are OFF or FWD now, but we just had crossing with RIGHT turn
-            if self.__find_recent_direction(self.RIGHT):
+            if self.find_recent_direction(self.RIGHT):
                 ret.append(Direction.RIGHT)
 
         # if all prev are mainly ALL and we are still at ALL,
         # then maze way out found
         if (
-            self.__get_recent_direction_count(self.ALL, True) >=
+            self.get_recent_direction_count(self.ALL, True) >=
             self.signals_window_size
         ):
             # Asumming that returning None means end of maze
@@ -150,20 +150,20 @@ class RPiLineSensorSource(LineSensorSourceBase):
 
         return ret
 
-    def __find_recent_direction(self, direction, exact_check=False):
+    def find_recent_direction(self, direction, exact_check=False):
         return (
-            self.__get_recent_direction_count(direction, exact_check) >=
+            self.get_recent_direction_count(direction, exact_check) >=
             self.state_trigger_repetitions
             )
 
-    def __get_recent_direction_count(self, direction, exact_check=False):
+    def get_recent_direction_count(self, direction, exact_check=False):
         counter = 0
-        for dir in self.__stack.get_items():
-            if self.__find_direction(dir, direction, exact_check):
+        for dir in self.stack.get_items():
+            if self.find_direction(dir, direction, exact_check):
                 counter += 1
         return counter
 
-    def __find_direction(self, state, direction, exact_check=False):
+    def find_direction(self, state, direction, exact_check=False):
         if exact_check:
             return state == direction
         else:

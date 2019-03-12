@@ -25,6 +25,11 @@ RIGHT_MOTOR_POWER = {"FAST": 42, "SLOW": 18, "TURN": 42}
 
 PWM = 40
 
+# sensor types
+SENSOR_SPI = "SPI"
+SENSOR_GPIO = "GPIO"
+SENSOR_TYPE = SENSOR_SPI
+
 # line sensors pins for digital module
 LINE_SENSORS = [12, 11, 8, 25, 24, 23, 18]
 

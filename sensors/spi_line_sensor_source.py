@@ -42,12 +42,12 @@ class SPiLineSensorSource(RPiLineSensorSource):
             (value_threshold - value_min) / (value_max - value_min))
         self.value_max = value_max
         # variable to store last read normalized (0..1 float per sensor) state
-        self.float_state = [0] * self.__sensors_number
+        self.float_state = [0] * self.sensors_number
 
     def setup(self):
         # open SPI bus
         self.spi = spidev.SpiDev()
-        self.spi.open(self.SPI_DEVICE)
+        self.spi.open(*self.SPI_DEVICE)
         self.spi.max_speed_hz = self.SPI_SPEED
 
         # update direction values
@@ -91,19 +91,19 @@ class SPiLineSensorSource(RPiLineSensorSource):
     def get_state(self):
         ret = 0
 
-        for i in range(0, self.__sensors_number):
+        for i in range(0, self.sensors_number):
             # get value from SPI channel
-            self.float_state[i] = self.normalize(spi_read(self.__sensors[i]))
+            self.float_state[i] = self.normalize(self.spi_read(self.sensors[i]))
 
             # convert it to binary output
             inp = self.input_binary(self.float_state[i])
 
-            if self.__invert:
-                ret += abs(inp - 1) << (self.__sensors_number - i - 1)
+            if self.invert:
+                ret += abs(inp - 1) << (self.sensors_number - i - 1)
             else:
-                ret += inp << (self.__sensors_number - i - 1)
+                ret += inp << (self.sensors_number - i - 1)
 
-        self.__stack.put(ret)
+        self.stack.put(ret)
         return ret
 
     def is_straight(self, state):
@@ -116,7 +116,7 @@ class SPiLineSensorSource(RPiLineSensorSource):
 
     def get_value(self, state):
         a, b = 0, 0
-        for i in range(0, self.__sensors_number):
+        for i in range(0, self.sensors_number):
             c = self.normalize(self.float_state[i])
             a += 1000 * c * i
             b += c

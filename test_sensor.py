@@ -18,7 +18,7 @@ def k_means(samples, sample_clusters, clusters):
             amounts[sample_clusters[s]] += 1
 
         for i in range(0, len(clusters)):
-            ret[i] = round(sums[i] / amounts[i])
+            ret[i] = round(sums[i] / amounts[i]) if amounts[i] != 0 else 0
 
         return ret
 
@@ -45,17 +45,17 @@ GPIO.setmode(GPIO.BCM)
 line_sensor = None
 SPI = False
 SPI_channels = [0, 1, 2, 3, 4, 5, 6]
-k_means_clusters = [500, 900]
-test_time = 10
+clusters = [500, 900]
+test_time = 1
 sleep_time = 1 / 100
 
-if SPI:
-    line_sensor = SPiLineSensorSource(
+if not SPI:
+    line_sensor = RPiLineSensorSource(
         settings.LINE_SENSORS,
         Orientation.SOUTH,
         invert=True)
 else:
-    line_sensor = RPiLineSensorSource(
+    line_sensor = SPiLineSensorSource(
         settings.SPI_LINE_SENSOR_CHANNELS,
         Orientation.SOUTH,
         settings.SPI_LINE_SENSOR_PARAMS["MIN"],
