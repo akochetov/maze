@@ -64,7 +64,6 @@ else:
         settings.SPI_LINE_SENSOR_CHANNELS,
         Orientation.SOUTH,
         settings.SPI_LINE_SENSOR_PARAMS["MIN"],
-        settings.SPI_LINE_SENSOR_PARAMS["MID"],
         settings.SPI_LINE_SENSOR_PARAMS["MAX"],
         invert=True,
         signals_window_size=settings.SIGNALS_WINDOWS_SIZE,

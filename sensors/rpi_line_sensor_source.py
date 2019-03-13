@@ -62,7 +62,7 @@ class RPiLineSensorSource(LineSensorSourceBase):
         self.setup()
 
     def setup(self):
-        for sensor in self.__sensors:
+        for sensor in self.sensors:
             GPIO.setup(sensor, GPIO.IN)
 
         self.update_dirs()
@@ -90,7 +90,7 @@ class RPiLineSensorSource(LineSensorSourceBase):
         ret = 0
         for i in range(0, self.sensors_number):
             inp = GPIO.input(self.sensors[i])
-            if self.__invert:
+            if self.invert:
                 ret += abs(inp - 1) << (self.sensors_number - i - 1)
             else:
                 ret += inp << (self.sensors_number - i - 1)

@@ -24,7 +24,6 @@ class SPiLineSensorSource(RPiLineSensorSource):
             sensors,
             orientation,
             value_min,
-            value_threshold,
             value_max,
             invert=False,
             signals_window_size=10,
@@ -38,8 +37,6 @@ class SPiLineSensorSource(RPiLineSensorSource):
             state_trigger_repetitions)
 
         self.value_min = value_min
-        self.threshold = (
-            (value_threshold - value_min) / (value_max - value_min))
         self.value_max = value_max
         # variable to store last read normalized (0..1 float per sensor) state
         self.float_state = [0] * self.sensors_number
@@ -78,25 +75,24 @@ class SPiLineSensorSource(RPiLineSensorSource):
             calibrated values and value read from SPI channel
         '''
 
-        if value < self.value_min:
-            value = self.value_min
         if value > self.value_max:
             value = self.value_max
 
-        return (self.value_min + value) / (self.value_max - self.value_min)
+        return (self.value_max - value) / (self.value_max - self.value_min)
 
     def input_binary(self, value):
-        return int(value > self.threshold)
+        return int(value > self.value_min)
 
     def get_state(self):
         ret = 0
 
         for i in range(0, self.sensors_number):
             # get value from SPI channel
-            self.float_state[i] = self.normalize(self.spi_read(self.sensors[i]))
+            data = self.spi_read(self.sensors[i])
+            self.float_state[i] = self.normalize(data)
 
             # convert it to binary output
-            inp = self.input_binary(self.float_state[i])
+            inp = self.input_binary(data)
 
             if self.invert:
                 ret += abs(inp - 1) << (self.sensors_number - i - 1)
@@ -117,7 +113,8 @@ class SPiLineSensorSource(RPiLineSensorSource):
     def get_value(self, state):
         a, b = 0, 0
         for i in range(0, self.sensors_number):
-            c = self.normalize(self.float_state[i])
+            c = self.float_state[i]
+            print(c)
             a += 1000 * c * i
             b += c
 

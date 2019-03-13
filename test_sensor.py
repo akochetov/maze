@@ -43,9 +43,7 @@ def k_means(samples, sample_clusters, clusters):
 GPIO.setmode(GPIO.BCM)
 
 line_sensor = None
-SPI = False
-SPI_channels = [0, 1, 2, 3, 4, 5, 6]
-clusters = [500, 900]
+SPI = True
 test_time = 1
 sleep_time = 1 / 100
 
@@ -59,30 +57,35 @@ else:
         settings.SPI_LINE_SENSOR_CHANNELS,
         Orientation.SOUTH,
         settings.SPI_LINE_SENSOR_PARAMS["MIN"],
-        settings.SPI_LINE_SENSOR_PARAMS["MID"],
         settings.SPI_LINE_SENSOR_PARAMS["MAX"],
         invert=True)
 
 print('Calibrating line sensors. Move sensor \
     line above the line to see readings:')
 
-samples = [0] * int(test_time / sleep_time) * len(SPI_channels)
-sample_clusters = [0] * int(test_time / sleep_time) * len(SPI_channels)
+samples = [0] * int(test_time / sleep_time) * len(settings.SPI_LINE_SENSOR_CHANNELS)
+sample_clusters = [0] * int(test_time / sleep_time) * len(settings.SPI_LINE_SENSOR_CHANNELS)
 k = 0
-
+min = 1023
+max = 0
 for i in range(int(test_time / sleep_time)):
     if SPI:
-        for i in SPI_channels:
+        for i in settings.SPI_LINE_SENSOR_CHANNELS:
             samples[k] = line_sensor.spi_read(i)
+            if samples[k] < min:
+                min = samples[k]
+            if samples[k] > max:
+                max = samples[k]
+            print(samples[k])
             k += 1
 
     data = line_sensor.get_state()
 
-    print(bin(data))
+    print('{}\t{}'.format(bin(data), line_sensor.get_value(data)))
     sleep(sleep_time)
 
 print('Calibration values: {}'.format(
-    k_means(samples, sample_clusters, clusters)))
+    k_means(samples, sample_clusters, [min, max])))
 print('Test finished.')
 
 GPIO.cleanup()
