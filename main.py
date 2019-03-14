@@ -61,23 +61,23 @@ else:
     line_sensor_source = None
     if settings.SENSOR_TYPE == settings.SENSOR_SPI:
         line_sensor_source = SPiLineSensorSource(
-        settings.SPI_LINE_SENSOR_CHANNELS,
-        Orientation.SOUTH,
-        settings.SPI_LINE_SENSOR_PARAMS["MIN"],
-        settings.SPI_LINE_SENSOR_PARAMS["MAX"],
-        invert=True,
-        signals_window_size=settings.SIGNALS_WINDOWS_SIZE,
-        state_trigger_repetitions=settings.STATE_ACTION_REPETITIONS
-        )
+            settings.SPI_LINE_SENSOR_CHANNELS,
+            Orientation.SOUTH,
+            settings.SPI_LINE_SENSOR_PARAMS["MIN"],
+            settings.SPI_LINE_SENSOR_PARAMS["MAX"],
+            invert=True,
+            signals_window_size=settings.SIGNALS_WINDOWS_SIZE,
+            state_trigger_repetitions=settings.STATE_ACTION_REPETITIONS
+            )
 
     if settings.SENSOR_TYPE == settings.SENSOR_GPIO:
         line_sensor_source = RPiLineSensorSource(
-        settings.LINE_SENSORS,
-        ORIENTATION,
-        invert=True,
-        signals_window_size=settings.SIGNALS_WINDOWS_SIZE,
-        state_trigger_repetitions=settings.STATE_ACTION_REPETITIONS
-        )
+            settings.LINE_SENSORS,
+            ORIENTATION,
+            invert=True,
+            signals_window_size=settings.SIGNALS_WINDOWS_SIZE,
+            state_trigger_repetitions=settings.STATE_ACTION_REPETITIONS
+            )
 
     line_sensor = LineSensor(line_sensor_source)
 
@@ -106,6 +106,7 @@ brain = HandSearchBrain(
     lefthand=False
     )
 
+path_brain = None
 maze_map = None
 if settings.NAVIGATE_BACK:
     maze_map = MazeMap(car, settings.TIME_ERROR, settings.TIME_TO_TURN)
@@ -128,7 +129,7 @@ if not settings.VIRTUAL:
     GPIO.output(settings.CTRL_LED, GPIO.LOW)
 
 while not exit_loop:
-    if not brain.is_still_thinking():
+    if not brain.is_still_thinking() and path_brain is None:
         print('Maze time: {}'.format(time.time()-start_time))
         if settings.NAVIGATE_BACK:
             maze_map.on_crossing(car)
@@ -151,15 +152,18 @@ while not exit_loop:
             # wait a few seconds before returning back
             time.sleep(3)
             # reverse and get to the line
-            if path_brain.get_to_track():
-                # now go back with shortest path
-                path_brain.think(maze_map)
-                # path_brain.get_to_track()
-            else:
-                print('Could NOT get back to line. Returning back stopped.')
+            path_brain.get_to_track()
+            # now go back with shortest path
+            path_brain.think(maze_map)
+        else:
+            # finish straight away since there is no navigation back
+            break
+
+    if path_brain is not None and not path_brain.is_still_thinking():
+        # we got back - exit now
         break
 
-    time.sleep(settings.TIME_ERROR * 1)
+    time.sleep(settings.TIME_ERROR)
 
     if settings.VIRTUAL:
         maze_world.save(sys.stdout)
@@ -168,6 +172,8 @@ while not exit_loop:
 
 print('Stopping brain, sensors and car.')
 
+if path_brain is not None:
+    path_brain.stop()
 brain.stop()
 car.stop()
 

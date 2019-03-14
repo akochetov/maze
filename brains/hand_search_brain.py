@@ -1,53 +1,10 @@
 from brains.brain_base import BrainBase
+from brains.brain_base import ThinkThread
 from misc.direction import Direction
 from misc.log import log
 from threading import Thread
 from time import sleep
 from time import time
-
-
-class ThinkThread(Thread):
-    def __init__(
-            self,
-            brain,
-            frequency,
-            lefthand
-            ):
-        super().__init__()
-
-        self.brain = brain
-        self.lefthand = lefthand
-        self.sleep_time = 1.0 / frequency
-
-    def start(self):
-        self.awake = True
-        return super().start()
-
-    def out(self):
-        # we must be out. stop the car!
-        self.brain.car.stop()
-        self.awake = False
-
-    def run(self):
-        while self.awake:
-            sleep(self.sleep_time)
-
-            if self.brain.car.is_out():
-                self.out()
-                break
-
-            if self.awake:
-                if self.lefthand:
-                    if not self.brain.left_hand_search():
-                        self.out()
-                        break
-                else:
-                    if not self.brain.right_hand_search():
-                        self.out()
-                        break
-
-    def exit(self):
-        self.awake = False
 
 
 class HandSearchBrain(BrainBase):
@@ -69,6 +26,12 @@ class HandSearchBrain(BrainBase):
         self.thread = None
         self.lefthand = lefthand
         self.frequency = frequency
+
+    def iterate(self, maze_map=None):
+        return (
+            self.brain.left_hand_search()
+            if self.lefthand else
+            self.brain.right_hand_search())
 
     def think(self, maze_map=None):
         """Finds the way out using left or right hand searches

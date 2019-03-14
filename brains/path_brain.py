@@ -1,4 +1,5 @@
 from brains.brain_base import BrainBase
+from brains.brain_base import ThinkThread
 from misc.direction import Direction
 from time import sleep
 from time import time
@@ -12,8 +13,9 @@ class PathBrain(BrainBase):
         super().__init__(car, turn_bounce_time)
 
         self.path = path
-        self.__thinking = False
-        self.__sleep_time = 1.0 / frequency
+        self.thread = None
+        self.sleep_time = 1.0 / frequency
+        self.current_node = None
 
     def return_stop_function(self):
         """This function is used to know where to stop car
@@ -42,14 +44,47 @@ class PathBrain(BrainBase):
         self.car.stop(False)
         return time() - start < enough_time
 
+    def iterate(self, maze_map=None):
+        # now navigate
+        if self.current_node is None:
+            self.current_node = self.path[0]
+        else:
+            ind = self.path.find(self.current_node)
+            # last node in path - stop
+            if ind == len(self.path) - 1:
+                self.car.move_to(Direction.BACK, self.stop_function)
+                return False
+            self.current_node = self.path[ind + 1]
+
+        # is it crossing?
+        dirs = self.car.sensors[0].get_directions()
+        ok_to_turn = self.check_turn_bounce()
+        self.car.set_brake_status(ok_to_turn)
+
+        if self.check_crossing(dirs) and ok_to_turn:
+            direction = maze_map.navigate(
+                self.path,
+                self.current_node,
+                self.car.orientation)
+
+            # if we finished full path?
+            if direction is None:
+                return False
+
+            self.car.move_to(direction, self.stop_function)
+            self.update_turn_time()
+            # disable brake at turns
+            self.car.set_brake_status(False)
+
+            # temporary implementation with printing moves out
+            print('car.move({})'.format(direction))
+
     def think(self, maze_map):
         """This returns car back with given algorythm (e.g. shortest path)
 
         Arguments:
             maze_map {MazeMap} -- maze map with visited nodes and route
         """
-
-        self.__thinking = True
 
         # slightly move car forward so it gets straight
         # on the line thanks to PID.
@@ -63,35 +98,14 @@ class PathBrain(BrainBase):
         sleep(0.5)
         self.car.stop(False)
 
-        # now navigate
-        for node_id in self.path:
-            direction = maze_map.navigate(
-                self.path,
-                node_id,
-                self.car.orientation)
-
-            # if we finished full path?
-            if direction is None:
-                break
-
-            self.car.move_to(direction, self.stop_function)
-            self.update_turn_time()
-            # disable brake at turns
-            self.car.set_brake_status(False)
-
-            # temporary implementation with printing moves out
-            print('car.move({})'.format(direction))
-
-            # wait for crossing
-            while True:
-                dirs = self.car.sensors[0].get_directions()
-                ok_to_turn = self.check_turn_bounce()
-                self.car.set_brake_status(ok_to_turn)
-                if self.check_crossing(dirs) and ok_to_turn:
-                    break
-                sleep(self.__sleep_time)
-        self.car.move_to(Direction.BACK, self.stop_function)
-        self.__thinking = False
+        self.maze_map = maze_map
+        self.thread = ThinkThread(self, self.frequency, self.lefthand)
+        self.thread.start()
 
     def is_still_thinking(self):
-        return self.__thinking
+        return self.thread is None or self.thread.awake
+
+    def stop(self):
+        if self.thread is not None:
+            self.thread.exit()
+            self.thread.join()

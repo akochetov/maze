@@ -2,6 +2,44 @@ from misc.direction import Direction
 from time import time
 
 
+class ThinkThread(Thread):
+    def __init__(
+            self,
+            brain,
+            frequency,
+            lefthand
+            ):
+        super().__init__()
+
+        self.brain = brain
+        self.lefthand = lefthand
+        self.sleep_time = 1.0 / frequency
+
+    def start(self):
+        self.awake = True
+        return super().start()
+
+    def stop(self):
+        # we must be out. stop the car!
+        self.brain.car.stop()
+        self.awake = False
+
+    def run(self):
+        while self.awake:
+            sleep(self.sleep_time)
+
+            if self.brain.car.is_out():
+                self.stop()
+                break
+
+            if self.awake and not self.brain.iterate():
+                self.stop()
+                break
+
+    def exit(self):
+        self.awake = False
+
+
 class BrainBase(object):
     def __init__(self, car, turn_bounce_time=0):
         self.car = car
@@ -9,6 +47,9 @@ class BrainBase(object):
         self.update_turn_time()
 
     def think(self, maze_map=None):
+        pass
+
+    def iterate(self):
         pass
 
     def is_still_thinking(self):
