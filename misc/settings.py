@@ -16,7 +16,7 @@ CTRL_BTN = 14
 CTRL_LED = 15
 
 # motors config
-RIGHT_MOTOR = {"EN": 26, "IN1": 5, "IN2": 6}
+RIGHT_MOTOR = {"EN": 13, "IN1": 5, "IN2": 6}
 LEFT_MOTOR = {"EN": 19, "IN1": 20, "IN2": 21}
 
 # 
@@ -39,10 +39,10 @@ SPI_LINE_SENSOR_PARAMS = {"MIN": 950, "MAX": 1023}
 
 # PID coefficients, PK, IK and DK repsectively, then D fading coefficient
 # D fading means that every iteration D error will be multiplied by D fading
-PID = [1 / 30, 0, 1 / 15, 0]
+PID = [1 / 20, 10000, 3 / 2, 0]
 
 # state error
-STATE_OK = 3000
+STATE_OK = 2000
 
 # how many times in a row action has to repeat to count
 SIGNALS_WINDOWS_SIZE = 20
