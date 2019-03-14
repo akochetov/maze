@@ -1,4 +1,4 @@
-from signal import signal, SIGINT, SIGTERM
+from signal import signal, SIGINT, SIGTERM, SIGUSR1
 import sys
 import os
 import time

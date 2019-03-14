@@ -14,7 +14,7 @@ class PathBrain(BrainBase):
 
         self.path = path
         self.thread = None
-        self.sleep_time = 1.0 / frequency
+        self.frequency = frequency
         self.current_node = None
 
     def return_stop_function(self):
@@ -99,7 +99,7 @@ class PathBrain(BrainBase):
         self.car.stop(False)
 
         self.maze_map = maze_map
-        self.thread = ThinkThread(self, self.frequency, self.lefthand)
+        self.thread = ThinkThread(self, self.frequency)
         self.thread.start()
 
     def is_still_thinking(self):

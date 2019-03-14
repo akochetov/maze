@@ -1,18 +1,17 @@
 from misc.direction import Direction
-from time import time
+from time import time, sleep
+from threading import Thread
 
 
 class ThinkThread(Thread):
     def __init__(
             self,
             brain,
-            frequency,
-            lefthand
+            frequency
             ):
         super().__init__()
 
         self.brain = brain
-        self.lefthand = lefthand
         self.sleep_time = 1.0 / frequency
 
     def start(self):

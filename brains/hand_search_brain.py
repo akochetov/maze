@@ -29,9 +29,9 @@ class HandSearchBrain(BrainBase):
 
     def iterate(self, maze_map=None):
         return (
-            self.brain.left_hand_search()
+            self.left_hand_search()
             if self.lefthand else
-            self.brain.right_hand_search())
+            self.right_hand_search())
 
     def think(self, maze_map=None):
         """Finds the way out using left or right hand searches
@@ -42,7 +42,7 @@ class HandSearchBrain(BrainBase):
         """
 
         self.maze_map = maze_map
-        self.thread = ThinkThread(self, self.frequency, self.lefthand)
+        self.thread = ThinkThread(self, self.frequency)
         self.thread.start()
 
     def is_still_thinking(self):

@@ -2,7 +2,7 @@ import misc.settings as settings
 from gpiozero import Button, LED
 from subprocess import check_call
 from subprocess import Popen
-from signal import pause
+from signal import pause, SIGUSR1
 from time import time, sleep
 import sys
 
@@ -54,7 +54,7 @@ def when_released():
     else:
         print('Button pressed. Starting process.')
         if p is None:
-            p = Popen([sys.executable, '/opt/maze/main.py > robot.log'])
+            p = Popen([sys.executable, '/opt/maze/main.py'])
             led.on()
         else:
             print('Button pressed. Sending signal.')
