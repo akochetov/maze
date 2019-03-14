@@ -95,9 +95,9 @@ class SPiLineSensorSource(RPiLineSensorSource):
             inp = self.input_binary(data)
 
             if self.invert:
-                ret += abs(inp - 1) << (self.sensors_number - i - 1)
+                ret += abs(inp - 1) << i
             else:
-                ret += inp << (self.sensors_number - i - 1)
+                ret += inp << i
 
         self.stack.put(ret)
         return ret
@@ -112,10 +112,11 @@ class SPiLineSensorSource(RPiLineSensorSource):
 
     def get_value(self, state):
         a, b = 0, 0
+        n = 4000.0 / self.sensors_number
         for i in range(0, self.sensors_number):
-            c = self.float_state[i]
-            print(c)
-            a += 1000 * c * i
+            c = self.float_state[i] ** 3
+
+            a += n * c * i
             b += c
 
         if b == 0:
