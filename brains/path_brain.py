@@ -48,13 +48,7 @@ class PathBrain(BrainBase):
         # now navigate
         if self.current_node is None:
             self.current_node = self.path[0]
-        else:
-            ind = self.path.find(self.current_node)
-            # last node in path - stop
-            if ind == len(self.path) - 1:
-                self.car.move_to(Direction.BACK, self.stop_function)
-                return False
-            self.current_node = self.path[ind + 1]
+            self.car.move()
 
         # is it crossing?
         dirs = self.car.sensors[0].get_directions()
@@ -62,13 +56,21 @@ class PathBrain(BrainBase):
         self.car.set_brake_status(ok_to_turn)
 
         if self.check_crossing(dirs) and ok_to_turn:
-            direction = maze_map.navigate(
+            ind = self.path.index(self.current_node)
+            # last node in path - stop
+            if ind == len(self.path) - 1:
+                self.car.move_to(Direction.BACK, self.stop_function)
+                return False
+            self.current_node = self.path[ind + 1]
+
+            direction = self.maze_map.navigate(
                 self.path,
                 self.current_node,
                 self.car.orientation)
 
             # if we finished full path?
             if direction is None:
+                self.car.move_to(Direction.BACK, self.stop_function)
                 return False
 
             self.car.move_to(direction, self.stop_function)
@@ -78,6 +80,7 @@ class PathBrain(BrainBase):
 
             # temporary implementation with printing moves out
             print('car.move({})'.format(direction))
+        return True
 
     def think(self, maze_map):
         """This returns car back with given algorythm (e.g. shortest path)
