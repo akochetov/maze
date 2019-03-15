@@ -63,8 +63,18 @@ else:
 print('Calibrating line sensors. Move sensor \
     line above the line to see readings:')
 
-samples = [0] * int(test_time / sleep_time) * len(settings.SPI_LINE_SENSOR_CHANNELS)
-sample_clusters = [0] * int(test_time / sleep_time) * len(settings.SPI_LINE_SENSOR_CHANNELS)
+samples = (
+    [0] *
+    int(test_time / sleep_time) *
+    len(settings.SPI_LINE_SENSOR_CHANNELS)
+    )
+
+sample_clusters = (
+    [0] *
+    int(test_time / sleep_time) *
+    len(settings.SPI_LINE_SENSOR_CHANNELS)
+    )
+
 k = 0
 min = 1023
 max = 0
