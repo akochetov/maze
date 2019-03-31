@@ -2,7 +2,7 @@
 VIRTUAL = 0
 
 # Shall we return with shortest path when exit is reached?
-NAVIGATE_BACK = 1
+NAVIGATE_BACK = 0
 
 # Logging
 LOG = 0
@@ -20,8 +20,8 @@ RIGHT_MOTOR = {"EN": 13, "IN1": 5, "IN2": 6}
 LEFT_MOTOR = {"EN": 19, "IN1": 20, "IN2": 21}
 
 # Maze time: 31.254401445388794
-LEFT_MOTOR_POWER = {"FAST": 59, "SLOW": 15, "TURN": 56}
-RIGHT_MOTOR_POWER = {"FAST": 62, "SLOW": 18, "TURN": 62}
+LEFT_MOTOR_POWER = {"FAST": 79, "SLOW": 15, "TURN": 76}
+RIGHT_MOTOR_POWER = {"FAST": 82, "SLOW": 18, "TURN": 82}
 
 PWM = 30
 
@@ -50,8 +50,8 @@ STATE_ACTION_REPETITIONS = 2
 
 # maze map settings
 TIME_ERROR = 0.4
-TIME_TO_TURN = 0.25
-BRAKE_TIME = 1.0 / 13.0
+TIME_TO_TURN = 0.23
+BRAKE_TIME = 1.0 / 12.0
 
 # if we have turn very early afte previous one - bounce back (ignore it)
-TURN_BOUNCE_TIME = 0.8
+TURN_BOUNCE_TIME = 0.6

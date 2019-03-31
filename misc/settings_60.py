@@ -54,4 +54,4 @@ TIME_TO_TURN = 0.25
 BRAKE_TIME = 1.0 / 13.0
 
 # if we have turn very early afte previous one - bounce back (ignore it)
-TURN_BOUNCE_TIME = 0.8
+TURN_BOUNCE_TIME = 0.6
