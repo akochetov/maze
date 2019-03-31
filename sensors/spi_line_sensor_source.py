@@ -104,7 +104,7 @@ class SPiLineSensorSource(RPiLineSensorSource):
 
     def is_straight(self, state):
         # return state & self.STRAIGHT > 0
-        return state == self.STRAIGHT
+        return state & self.FORWARD > 0
 
     def is_turned(self, state):
         return (

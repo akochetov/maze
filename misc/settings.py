@@ -19,9 +19,9 @@ CTRL_LED = 15
 RIGHT_MOTOR = {"EN": 13, "IN1": 5, "IN2": 6}
 LEFT_MOTOR = {"EN": 19, "IN1": 20, "IN2": 21}
 
-# Maze time: 31.254401445388794
-LEFT_MOTOR_POWER = {"FAST": 79, "SLOW": 15, "TURN": 76}
-RIGHT_MOTOR_POWER = {"FAST": 82, "SLOW": 18, "TURN": 82}
+# Maze time: 36.558846950531006
+LEFT_MOTOR_POWER = {"FAST": 39, "SLOW": 15, "TURN": 36}
+RIGHT_MOTOR_POWER = {"FAST": 42, "SLOW": 18, "TURN": 42}
 
 PWM = 30
 
@@ -49,9 +49,9 @@ SIGNALS_WINDOWS_SIZE = 15
 STATE_ACTION_REPETITIONS = 2
 
 # maze map settings
-TIME_ERROR = 0.4
-TIME_TO_TURN = 0.23
-BRAKE_TIME = 1.0 / 12.0
+TIME_ERROR = 0.5
+TIME_TO_TURN = 0.4
+BRAKE_TIME = 1.0 / 30.0
 
 # if we have turn very early afte previous one - bounce back (ignore it)
-TURN_BOUNCE_TIME = 0.6
+TURN_BOUNCE_TIME = 0.8
