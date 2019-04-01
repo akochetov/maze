@@ -118,6 +118,14 @@ class RPiLineSensorSource(LineSensorSourceBase):
         if self.find_direction(state, self.FORWARD):
             ret.append(Direction.FORWARD)
 
+        # we are OFF or FWD now, but we just had crossing with LEFT turn
+        if self.find_recent_direction(self.LEFT):
+            ret.append(Direction.LEFT)
+
+        # we are OFF or FWD now, but we just had crossing with RIGHT turn
+        if self.find_recent_direction(self.RIGHT):
+            ret.append(Direction.RIGHT)
+
         # are we OFF road?
         if (
             self.find_direction(state, self.OFF, True) or
@@ -132,12 +140,16 @@ class RPiLineSensorSource(LineSensorSourceBase):
                 ret.append(Direction.BACK)
 
             # we are OFF or FWD now, but we just had crossing with LEFT turn
-            if self.find_recent_direction(self.LEFT):
-                ret.append(Direction.LEFT)
+            #if self.find_recent_direction(self.LEFT):
+            #    ret.append(Direction.LEFT)
 
             # we are OFF or FWD now, but we just had crossing with RIGHT turn
-            if self.find_recent_direction(self.RIGHT):
-                ret.append(Direction.RIGHT)
+            #if self.find_recent_direction(self.RIGHT):
+            #    ret.append(Direction.RIGHT)
+        else:
+            if Direction.LEFT in ret and Direction.RIGHT in ret:
+                ret.remove(Direction.LEFT)
+                ret.remove(Direction.RIGHT)
 
         # if all prev are mainly ALL and we are still at ALL,
         # then maze way out found

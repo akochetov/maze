@@ -140,7 +140,7 @@ class RPi2WheelsChassis(ChassisBase):
         # self.rmotor.rotate() # True, self.right_motor_pow[self.TURN])
         # sleep(self.brake_time)
 
-        self.stop(breaks=False)
+        self.stop(breaks=True)
         super().rotate(degrees, stop_function)
         log('Turning finished.')
 
