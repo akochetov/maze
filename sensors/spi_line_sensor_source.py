@@ -115,7 +115,7 @@ class SPiLineSensorSource(RPiLineSensorSource):
         a, b = 0, 0
         n = 4000.0 / self.sensors_number
         for i in range(0, self.sensors_number):
-            c = self.float_state[i] ** 4
+            c = self.float_state[i] ** 5
 
             a += n * c * i
             b += c

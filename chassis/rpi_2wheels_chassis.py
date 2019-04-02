@@ -129,18 +129,18 @@ class RPi2WheelsChassis(ChassisBase):
         if degrees == 180:
             self.lmotor.rotate(True, self.left_motor_pow[self.TURN])
             self.rmotor.rotate(False, self.right_motor_pow[self.TURN])
-            sleep(0)#self.brake_time / 2)
+            sleep(self.brake_time / 4)
         else:
             self.lmotor.rotate(degrees == -90, self.left_motor_pow[self.TURN])
             self.rmotor.rotate(degrees == 90, self.right_motor_pow[self.TURN])
-            sleep(0)#self.brake_time / 2)
+            sleep(self.brake_time / 4)
 
         # move slightly fwd after turning to get sensor to the line
         # self.lmotor.rotate() # True, self.left_motor_pow[self.TURN])
         # self.rmotor.rotate() # True, self.right_motor_pow[self.TURN])
         # sleep(self.brake_time)
 
-        self.stop(breaks=True)
+        self.stop(breaks=False)
         super().rotate(degrees, stop_function)
         log('Turning finished.')
 

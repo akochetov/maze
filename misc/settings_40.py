@@ -8,8 +8,8 @@ NAVIGATE_BACK = 0
 LOG = 0
 
 # control iterations per second
-CTRL_FREQ = 100
-PID_FREQ = 25
+CTRL_FREQ = 200
+PID_FREQ = 30
 
 # button and LED pins to control robot
 CTRL_BTN = 14
@@ -19,11 +19,11 @@ CTRL_LED = 15
 RIGHT_MOTOR = {"EN": 13, "IN1": 5, "IN2": 6}
 LEFT_MOTOR = {"EN": 19, "IN1": 20, "IN2": 21}
 
-# Maze time: 30.55213761329651
-LEFT_MOTOR_POWER = {"FAST": 39, "SLOW": 15, "TURN": 37}
-RIGHT_MOTOR_POWER = {"FAST": 42, "SLOW": 18, "TURN": 42}
+# Maze time: 27.54425597190857
+LEFT_MOTOR_POWER = {"FAST": 35, "SLOW": 10, "TURN": 35}
+RIGHT_MOTOR_POWER = {"FAST": 44, "SLOW": 15, "TURN": 44}
 
-PWM = 30
+PWM = 50
 
 # sensor types
 SENSOR_SPI = "SPI"
@@ -39,19 +39,19 @@ SPI_LINE_SENSOR_PARAMS = {"MIN": 965, "MAX": 1023}
 
 # PID coefficients, PK, IK and DK repsectively, then D fading coefficient
 # D fading means that every iteration D error will be multiplied by D fading
-PID = [1 / 20, 1 / 10000, 1 / 2.7, 0]
+PID = [1 / 25, 1 / 10000, 1 / 2.45, 0]
 
 # state error
-STATE_OK = 1650
+STATE_OK = 1690
 
 # how many times in a row action has to repeat to count
 SIGNALS_WINDOWS_SIZE = 15
-STATE_ACTION_REPETITIONS = 2
+STATE_ACTION_REPETITIONS = 3
 
 # maze map settings
 TIME_ERROR = 0.5
-TIME_TO_TURN = 0.2
-BRAKE_TIME = 1.0 / 18.0
+TIME_TO_TURN = 0.27
+BRAKE_TIME = 1.0 / 20.0
 
 # if we have turn very early afte previous one - bounce back (ignore it)
-TURN_BOUNCE_TIME = 0.6
+TURN_BOUNCE_TIME = 0.5
