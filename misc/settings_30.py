@@ -39,19 +39,19 @@ SPI_LINE_SENSOR_PARAMS = {"MIN": 965, "MAX": 1023}
 
 # PID coefficients, PK, IK and DK repsectively, then D fading coefficient
 # D fading means that every iteration D error will be multiplied by D fading
-PID = [1 / 22, 1 / 10000, 1 / 2.7, 0]
+PID = [1 / 25, 1 / 10000, 1 / 2.45, 0]
 
 # state error
-STATE_OK = 1700
+STATE_OK = 1690
 
 # how many times in a row action has to repeat to count
-SIGNALS_WINDOWS_SIZE = 15
+SIGNALS_WINDOWS_SIZE = 17
 STATE_ACTION_REPETITIONS = 4
 
 # maze map settings
-TIME_ERROR = 0.5
-TIME_TO_TURN = 0.27
-BRAKE_TIME = 1.0 / 30.0
+TIME_ERROR = 0.35
+TIME_TO_TURN = 0.3
+BRAKE_TIME = 1.0 / 35.0
 
 # if we have turn very early afte previous one - bounce back (ignore it)
 TURN_BOUNCE_TIME = 0.5

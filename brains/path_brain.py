@@ -27,7 +27,8 @@ class PathBrain(BrainBase):
         """
         # return True when car detects the line
         # (directions to move left, right or fwd)
-        return self.car.sensors[0].get_directions() is not None
+        # return self.car.sensors[0].get_directions() is not None
+        return self.car.sensors[0].is_straight()
 
     def get_to_track(self):
         """Reveres from maze exit (black box) back to line
@@ -35,6 +36,9 @@ class PathBrain(BrainBase):
         Arguments:
             car {Car} -- car instance
         """
+        # TODO: temporary shit code. needs refactoring
+        turn_time = self.car.chassis.turn_time
+        self.car.chassis.turn_time = turn_time * 0.8
 
         self.car.move_to(Direction.BACK)
         start = time()
@@ -42,6 +46,9 @@ class PathBrain(BrainBase):
         while not self.return_stop_function() and time() - start < enough_time:
             pass
         self.car.stop(False)
+
+        self.car.chassis.turn_time = turn_time
+
         return time() - start < enough_time
 
     def iterate(self, maze_map=None):

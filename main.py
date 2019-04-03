@@ -1,4 +1,5 @@
 from signal import signal, SIGINT, SIGTERM, SIGUSR1
+from subprocess import check_call
 import sys
 import os
 import time
@@ -38,6 +39,9 @@ signal(SIGINT, exitLoop)
 signal(SIGTERM, exitLoop)
 # setup signal to launch car at button press
 signal(SIGUSR1, go)
+# raise prio of process
+check_call('sudo renice -n -20 {}'.format(os.getpid()), shell=True)
+
 
 maze_world = None
 chassis = None
