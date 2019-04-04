@@ -69,7 +69,7 @@ else:
         line_sensor_source = SPiLineSensorSource(
             settings.SPI_LINE_SENSOR_CHANNELS,
             Orientation.SOUTH,
-            SPI_LINE_SENSOR_MIN_MAX,
+            settings.SPI_LINE_SENSOR_MIN_MAX,
             invert=True,
             signals_window_size=settings.SIGNALS_WINDOWS_SIZE,
             state_trigger_repetitions=settings.STATE_ACTION_REPETITIONS

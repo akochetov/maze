@@ -56,7 +56,7 @@ else:
     line_sensor = SPiLineSensorSource(
         settings.SPI_LINE_SENSOR_CHANNELS,
         Orientation.SOUTH,
-        SPI_LINE_SENSOR_MIN_MAX,
+        settings.SPI_LINE_SENSOR_MIN_MAX,
         invert=True)
 
 print('Calibrating line sensors. Move sensor \

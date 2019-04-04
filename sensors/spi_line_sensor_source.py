@@ -79,7 +79,8 @@ class SPiLineSensorSource(RPiLineSensorSource):
         value_min = self.sensors_min_max[sensor_index]["MIN"]
 
         if value > value_max:
-            value = value_max
+            return 0
+            # value = value_max
 
         return (value_max - value) / (value_max - value_min)
 
@@ -126,14 +127,14 @@ class SPiLineSensorSource(RPiLineSensorSource):
 
     def get_value(self, state):
         a, b = 0, 0
-        n = 4000.0 / self.sensors_number
+        n = 4000.0 / (self.sensors_number - 1)
         for i in range(0, self.sensors_number):
-            c = self.float_state[i] ** 5
+            c = self.float_state[i]
 
             a += n * c * i
             b += c
 
         if b == 0:
-            b = 1
+            return 0
 
         return a / b
