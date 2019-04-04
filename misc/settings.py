@@ -35,7 +35,7 @@ LINE_SENSORS = [12, 11, 8, 25, 24, 23, 18]
 
 # SPI sensor parameters
 SPI_LINE_SENSOR_CHANNELS = [0, 1, 2, 3, 4, 5, 6]
-SPI_LINE_SENSOR_PARAMS = {"MIN": 965, "MAX": 1023}
+SPI_LINE_SENSOR_PARAMS = {"MIN": 970, "MAX": 1023}
 
 # PID coefficients, PK, IK and DK repsectively, then D fading coefficient
 # D fading means that every iteration D error will be multiplied by D fading
