@@ -23,8 +23,7 @@ class SPiLineSensorSource(RPiLineSensorSource):
             self,
             sensors,
             orientation,
-            value_min,
-            value_max,
+            sensors_min_max,
             invert=False,
             signals_window_size=10,
             state_trigger_repetitions=1
@@ -36,8 +35,8 @@ class SPiLineSensorSource(RPiLineSensorSource):
             signals_window_size,
             state_trigger_repetitions)
 
-        self.value_min = value_min
-        self.value_max = value_max
+        self.sensors_min_max = sensors_min_max
+
         # variable to store last read normalized (0..1 float per sensor) state
         self.float_state = [0] * self.sensors_number
 
@@ -64,24 +63,38 @@ class SPiLineSensorSource(RPiLineSensorSource):
         data = ((adc[1] & 3) << 8) + adc[2]
         return data
 
-    def normalize(self, value):
+    def normalize(self, sensor_index, value):
         '''Converts SPI value to 0..1 calculated from max-min calibrated values
 
         Arguments:
-            val {int} -- value read from SPI channel
+            sensor_index {int} - which sensor has to be normalized basing
+            on it's individual settings
+            value {int} -- value read from SPI channel
 
         Returns:
             [float] -- value 0..1 calculated from max-min
             calibrated values and value read from SPI channel
         '''
+        value_max = self.sensors_min_max[sensor_index]["MAX"]
+        value_min = self.sensors_min_max[sensor_index]["MIN"]
 
-        if value > self.value_max:
-            value = self.value_max
+        if value > value_max:
+            value = value_max
 
-        return (self.value_max - value) / (self.value_max - self.value_min)
+        return (value_max - value) / (value_max - value_min)
 
-    def input_binary(self, value):
-        return int(value > self.value_min)
+    def input_binary(self, sensor_index, value):
+        '''Converts SPI value to binary state, either 0 or 1
+
+        Arguments:
+            sensor_index {int} - which sensor has to be normalized basing
+            on it's individual settings
+            value {int} -- value read from SPI channel
+
+        Returns:
+            [int] - 1 if no line, 0 if there is a line
+        '''
+        return int(value > self.sensors_min_max[sensor_index]["MIN"])
 
     def get_state(self):
         ret = 0
@@ -89,10 +102,10 @@ class SPiLineSensorSource(RPiLineSensorSource):
         for i in range(0, self.sensors_number):
             # get value from SPI channel
             data = self.spi_read(self.sensors[i])
-            self.float_state[i] = self.normalize(data)
+            self.float_state[i] = self.normalize(i, data)
 
             # convert it to binary output
-            inp = self.input_binary(data)
+            inp = self.input_binary(i, data)
 
             if self.invert:
                 ret += abs(inp - 1) << i
