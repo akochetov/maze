@@ -59,7 +59,7 @@ STATE_ACTION_REPETITIONS = 3
 # maze map settings
 TIME_ERROR = 0.3
 TIME_TO_TURN = 0.3
-BRAKE_TIME = 1.0 / 22.0
+BRAKE_TIME = 1.0 / 25.0
 
 # if we have turn very early afte previous one - bounce back (ignore it)
 TURN_BOUNCE_TIME = 0.5
