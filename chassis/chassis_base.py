@@ -6,7 +6,7 @@ class ChassisBase(object):
         self.__moving = False
         self.do_turn_brake = True
 
-    def rotate(self, degrees, stop_function=None):
+    def rotate(self, degrees, stop_function=None, stand_on_line=False):
         self.__trigger_on_rotate()
 
     def move(self):

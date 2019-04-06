@@ -102,7 +102,7 @@ class RPi2WheelsChassis(ChassisBase):
         self.lmotor.rotate(True, l)
         self.rmotor.rotate(True, r)
 
-    def rotate(self, degrees, stop_function=None):
+    def rotate(self, degrees, stop_function=None, stand_on_line=False):
         self.stop()
 
         log('Stopped. Turning...')
@@ -111,8 +111,27 @@ class RPi2WheelsChassis(ChassisBase):
             self.lmotor.rotate(False, self.left_motor_pow[self.TURN])
             self.rmotor.rotate(True, self.right_motor_pow[self.TURN])
         else:
-            self.lmotor.rotate(degrees == 90, self.left_motor_pow[self.TURN])
-            self.rmotor.rotate(degrees == -90, self.right_motor_pow[self.TURN])
+            lpow = self.left_motor_pow[self.TURN] - (
+                self.left_motor_pow[self.TURN] *
+                0.2 *
+                int(degrees == -90) *
+                int(stand_on_line)
+            )
+
+            rpow = self.right_motor_pow[self.TURN] - (
+                self.right_motor_pow[self.TURN] *
+                0.2 *
+                int(degrees == 90) *
+                int(stand_on_line)
+            )
+
+            self.lmotor.rotate(
+                degrees == 90,
+                lpow)
+            self.rmotor.rotate(
+                degrees == -90,
+                rpow
+            )
 
         if stop_function is None:
             sleep(self.turn_time * float(abs(degrees)) / 90.0)

@@ -66,7 +66,10 @@ class Car(object):
                 sensor.source.orientation, cw
                 )
             sensor.reset()
-        self.chassis.rotate(90 if cw else -90, stop_function=stop_function)
+        self.chassis.rotate(
+            90 if cw else -90,
+            stop_function=stop_function,
+            self.sensors[0].is_turned())
 
     def rotate_cw(self, stop_function=None):
         """
