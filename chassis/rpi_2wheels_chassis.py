@@ -73,7 +73,7 @@ class RPi2WheelsChassis(ChassisBase):
     def _pid_to_power(self, pid, is_turning):
         # go fast by default
         # if we are at crossing - slow down!
-        speed = self.SLOW if (is_turning and self.do_turn_brake) else self.FAST
+        speed = self.FAST # self.SLOW if (is_turning and self.do_turn_brake) else self.FAST
 
         l, r = (
             self.left_motor_pow[speed],
@@ -102,7 +102,7 @@ class RPi2WheelsChassis(ChassisBase):
         self.lmotor.rotate(True, l)
         self.rmotor.rotate(True, r)
 
-    def rotate(self, degrees, stop_function=None, stand_on_line=False):
+    def rotate(self, degrees, stop_function=None):
         self.stop()
 
         log('Stopped. Turning...')
@@ -111,26 +111,12 @@ class RPi2WheelsChassis(ChassisBase):
             self.lmotor.rotate(False, self.left_motor_pow[self.TURN])
             self.rmotor.rotate(True, self.right_motor_pow[self.TURN])
         else:
-            lpow = self.left_motor_pow[self.TURN] - (
-                self.left_motor_pow[self.TURN] *
-                0.2 *
-                int(degrees == -90) *
-                int(stand_on_line)
-            )
-
-            rpow = self.right_motor_pow[self.TURN] - (
-                self.right_motor_pow[self.TURN] *
-                0.2 *
-                int(degrees == 90) *
-                int(stand_on_line)
-            )
-
             self.lmotor.rotate(
                 degrees == 90,
-                lpow)
+                self.left_motor_pow[self.TURN])
             self.rmotor.rotate(
                 degrees == -90,
-                rpow
+                self.right_motor_pow[self.TURN]
             )
 
         if stop_function is None:

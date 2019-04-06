@@ -56,7 +56,7 @@ class VirtualChassis(ChassisBase):
     def super_move(self):
         super().move()
 
-    def rotate(self, degrees, stop_function=None, stand_on_line=False):
+    def rotate(self, degrees, stop_function=None):
         super().rotate(degrees)
         sleep(
             float(self.move_duration_sec) *
