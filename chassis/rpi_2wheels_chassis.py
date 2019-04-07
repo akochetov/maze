@@ -103,7 +103,7 @@ class RPi2WheelsChassis(ChassisBase):
         self.rmotor.rotate(True, r)
 
     def rotate(self, degrees, stop_function=None):
-        self.stop()
+        # self.stop()
 
         log('Stopped. Turning...')
 
