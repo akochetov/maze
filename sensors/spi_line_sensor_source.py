@@ -123,7 +123,7 @@ class SPiLineSensorSource(RPiLineSensorSource):
     def is_turned(self, state):
         return (
             state & self.LEFT > 0 or
-            state & self.RIGHT)
+            state & self.RIGHT > 0)
 
     def get_value(self, state):
         a, b = 0, 0
