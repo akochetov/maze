@@ -73,7 +73,7 @@ class RPi2WheelsChassis(ChassisBase):
     def _pid_to_power(self, pid, is_turning):
         # go fast by default
         # if we are at crossing - slow down!
-        speed = self.FAST # self.SLOW if (is_turning and self.do_turn_brake) else self.FAST
+        speed = self.FAST
 
         l, r = (
             self.left_motor_pow[speed],
