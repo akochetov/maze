@@ -2,13 +2,13 @@
 VIRTUAL = 0
 
 # Shall we return with shortest path when exit is reached?
-NAVIGATE_BACK = 1
+NAVIGATE_BACK = 0
 
 # Logging
 LOG = 0
 
 # control iterations per second
-CTRL_FREQ = 200
+CTRL_FREQ = 100
 PID_FREQ = 100
 
 # button and LED pins to control robot
@@ -20,10 +20,10 @@ RIGHT_MOTOR = {"EN": 13, "IN1": 5, "IN2": 6}
 LEFT_MOTOR = {"EN": 19, "IN1": 20, "IN2": 21}
 
 # Maze time: 27.54425597190857
-LEFT_MOTOR_POWER = {"FAST": 100, "SLOW": 100, "TURN": 100}
+LEFT_MOTOR_POWER = {"FAST": 90, "SLOW": 90, "TURN": 90}
 RIGHT_MOTOR_POWER = {"FAST": 100, "SLOW": 100, "TURN": 100}
 
-PWM = 50
+PWM = 25
 
 # sensor types
 SENSOR_SPI = "SPI"
@@ -54,12 +54,12 @@ STATE_OK = 2000
 
 # how many times in a row action has to repeat to count
 SIGNALS_WINDOWS_SIZE = 20
-STATE_ACTION_REPETITIONS = 1
+STATE_ACTION_REPETITIONS = 2
 
 # maze map settings
 TIME_ERROR = 0.15
 TIME_TO_TURN = 0.2
-BRAKE_TIME = 1.0 / 100.0
+BRAKE_TIME = 1.0 / 60.0
 
 # if we have turn very early afte previous one - bounce back (ignore it)
-TURN_BOUNCE_TIME = 0.25
+TURN_BOUNCE_TIME = 0.3

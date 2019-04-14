@@ -8,11 +8,11 @@ class SPiLineSensorSource(RPiLineSensorSource):
     SPi implementation of digital line sensor with 5-7 IRs in line
     working over SPI
     '''
-    ALL = 0b11111
-    LEFT = 0b10000
-    RIGHT = 0b1
-    FORWARD = 0b01110
-    STRAIGHT = 0b00100
+    ALL = 0b1111111
+    LEFT = 0b1110000
+    RIGHT = 0b111
+    FORWARD = 0b0011100
+    STRAIGHT = 0b0001000
     OFF = 0
 
     # SPI bus params
@@ -48,6 +48,9 @@ class SPiLineSensorSource(RPiLineSensorSource):
 
         # update direction values
         self.update_dirs()
+
+    def update_dirs(self):
+        pass
 
     def spi_read(self, channel):
         '''Read data from specific SPI channel
@@ -138,3 +141,13 @@ class SPiLineSensorSource(RPiLineSensorSource):
             return 0
 
         return a / b
+
+    def find_direction(self, state, direction, exact_check=False):
+        if exact_check:
+            return state == direction
+        else:
+            if direction in [self.LEFT, self.RIGHT]:
+                return state & direction == direction or state == direction
+            else:
+                return state & direction > 0 or state == direction
+
