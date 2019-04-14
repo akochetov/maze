@@ -103,9 +103,8 @@ class RPi2WheelsChassis(ChassisBase):
         self.rmotor.rotate(True, r)
 
     def rotate(self, degrees, stop_function=None):
-        # self.stop()
-
-        log('Stopped. Turning...')
+        self.stop()
+        log('Turning...')
 
         if degrees == 180:
             self.lmotor.rotate(False, self.left_motor_pow[self.TURN])
@@ -140,11 +139,6 @@ class RPi2WheelsChassis(ChassisBase):
             self.rmotor.rotate(degrees == 90, self.right_motor_pow[self.TURN])
             sleep(self.brake_time)
 
-        # move slightly fwd after turning to get sensor to the line
-        # self.lmotor.rotate() # True, self.left_motor_pow[self.TURN])
-        # self.rmotor.rotate() # True, self.right_motor_pow[self.TURN])
-        # sleep(self.brake_time)
-
         self.stop(breaks=False)
         super().rotate(degrees, stop_function)
         log('Turning finished.')
@@ -177,9 +171,6 @@ class RPi2WheelsChassis(ChassisBase):
             self.lmotor.stop()
             self.lmotor.stop()
             log('Breakin done.')
-
-        # if moving:
-        #    self.move_thread.join()
 
         if self.lmotor is not None:
             self.lmotor.stop()
