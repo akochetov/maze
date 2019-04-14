@@ -147,7 +147,10 @@ class RPiLineSensorSource(LineSensorSourceBase):
             if self.find_recent_direction(self.RIGHT):
                 ret.append(Direction.RIGHT)
         else:
-            if self.find_direction(state, self.LEFT) and self.find_direction(state, self.RIGHT):
+            if (
+                self.find_direction(state, self.LEFT) and
+                self.find_direction(state, self.RIGHT)
+            ):
                 if Direction.LEFT in ret:
                     ret.remove(Direction.LEFT)
                 if Direction.RIGHT in ret:
